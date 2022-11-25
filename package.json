@@ -1,0 +1,101 @@
+{
+    "name": "AzBoTz-MD",
+    "version": "0.0.0",
+    "description": "Simple Whatsapp Bot With Esm Module",
+    "depecrated": false,
+    "main": "index.js",
+    "type": "module",
+    "directories": {
+        "lib": "lib",
+        "src": "src",
+        "plugins": "plugins"
+    },
+    "scripts": {
+        "start": "node index.js",
+        "test": "node test.js",
+        "test2": "nodemon index.js"
+    },
+    "keywords": [
+        "whatsapp-bot",
+        "Games-wabot"
+    ],
+    "homepage": "https://github.com/AzRyCb",
+    "author": {
+        "name": "AzRyCb"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AzRyCb/AzBoTz-MD.git"
+    },
+    "bugs": {
+        "url": "https://github.com/AzRyCb/AzBoTz-MD/issues"
+    },
+    "license": "GPL-3.0-or-later",
+    "dependencies": {
+        "@adiwajshing/baileys": "github:amiruldev20/baileys",
+        "@bochilteam/scraper": "latest",
+        "@ffmpeg-installer/ffmpeg": "latest",
+        "@ibaraki-douji/pixivts": "latest",
+        "@hapi/boom": "latest",
+        "awesome-phonenumber": "latest",
+        "axios": "latest",
+        "booru": "latest",
+        "base64-to-image": "latest",
+        "brainly-scraper": "latest",
+        "brainly-scraper-v2": "latest",
+        "canvacord": "latest",
+        "cfonts": "latest",
+        "chalk": "latest",
+        "cheerio": "latest",
+        "deepai": "latest",
+        "dhn-api": "latest",
+        "didyoumean": "latest",
+        "emoji-api": "latest",
+        "feedid": "latest",
+        "file-type": "latest",
+        "fluent-ffmpeg": "latest",
+        "formdata-node": "latest",
+        "genius-lyrics": "latest",
+        "genshin": "latest",
+        "googleapis": "latest",
+        "hxz-api": "latest",
+        "human-readable": "latest",
+        "image-to-base64": "latest",
+        "jsdom": "latest",
+        "jimp": "latest",
+        "link-preview-js": "latest",
+        "lodash": "latest",
+        "lowdb": "latest",
+        "lolcatjs": "latest",
+        "lyrics-finder": "latest",
+        "moment-timezone": "latest",
+        "mongoose": "latest",
+        "mime-types": "latest",
+        "node-fetch": "latest",
+        "node-webpmux": "latest",
+        "node-gtts": "latest",
+        "nhentai-node-api": "latest",
+        "ocr-space-api-wrapper": "latest",
+        "pino": "latest",
+        "pino-pretty": "latest",
+        "qrcode": "latest",
+        "qrcode-terminal": "latest",
+        "social-downloader-cherry": "latest",
+        "social_media_downloader": "latest",
+        "soundcloud-downloader": "latest",
+        "similarity": "latest",
+        "spinnies": "latest",
+        "socket.io": "latest",
+        "syntax-error": "latest",
+        "translate-google": "latest",
+        "translate-google-api": "latest",
+        "url-regex-safe": "latest",
+        "xfarr-api": "^2.0.0",
+        "yargs": "latest",
+        "yt-search": "latest",
+        "zs-extract": "latest"
+    },
+    "optionalDependencies": {
+        "wa-sticker-formatter": "latest"
+    }
+}

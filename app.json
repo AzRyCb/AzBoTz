@@ -1,0 +1,14 @@
+{
+  "name": "AzBoTz-Md",
+  "description": "Simple WhatsApp Bot Wih ESM Module",
+  "repository": "https://github.com/AzRyCb/AzBoTz-Md",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["whatsapp-bot", "games-wabot", "AzBoTz"],
+  "buildpacks": [
+    {"url": "heroku/nodejs"},
+    {"url": "https://github.com/AzRyCb/heroku-ffmpeg​"},
+    {"url": "https://github.com/AzRyCb/heroku-imagemagick​"},
+    {"url": "https://github.com/AzRyCb/heroku-buildpack-libwebp​"},
+    {"url": "https://github.com/clhuang/heroku-buildpack-webp-binaries​"}
+  ]
+}  
