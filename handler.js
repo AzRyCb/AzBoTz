@@ -88,15 +88,15 @@ export async function handler(chatUpdate) {
 
 
                 if (!isNumber(user.money))user.money = 0
-                //if (!isNumber(user.health))user.health = 100
-                //if (!isNumber(user.potion))user.potion = 0
+                if (!isNumber(user.health))user.health = 100
+                if (!isNumber(user.potion))user.potion = 0
 
                 if (!isNumber(user.bank)) user.bank = 0
                 if (!isNumber(user.atm)) user.atm = 0
                 if (!isNumber(user.fullatm)) user.fullatm = Infinity
 
                 if (!isNumber(user.robo)) user.robo = 0
-/*
+
                 if (!isNumber(user.trash))user.trash = 0
                 if (!isNumber(user.wood))user.wood = 0
                 if (!isNumber(user.rock))user.rock = 0
@@ -148,7 +148,7 @@ export async function handler(chatUpdate) {
 
                 if (!isNumber(user.lastweekly))user.lastweekly = 0
                 if (!isNumber(user.lastmonthly))user.lastmonthly = 0
-                */
+                
             } else
                 db.data.users[m.sender] = {
                     exp: 0,
@@ -171,14 +171,14 @@ export async function handler(chatUpdate) {
                     languageSimi: m.sender.startsWith('62') ? 'id' : 'en', 
                     languageCountry: m.sender.startsWith('62') ? 'Indonesia' : 'English',
                     
-                    //health: 100,
-                    //potion: 10,
+                    health: 100,
+                    potion: 10,
                     money: 0,
                     fullatm: Infinity,
                     atm: 0,
                     bank: 0,
                     robo: 0,
-                    /*
+                    
                     trash: 0,
                     wood: 0,
                     rock: 0,
@@ -227,7 +227,7 @@ export async function handler(chatUpdate) {
                     lasthunt: 0,
                     lastweekly: 0,
                     lastmonthly: 0,
-                    */
+                    
                 }
             let chat = db.data.chats[m.chat]
             if (typeof chat !== 'object')
