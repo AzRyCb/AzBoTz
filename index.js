@@ -7,7 +7,7 @@ import { setupMaster, fork } from 'cluster'
 import { watchFile, unwatchFile } from 'fs'
 import cfonts from 'cfonts';
 import { createInterface } from 'readline'
-import Helper from './lib/helper.js'
+import Helper from './System/lib/helper.js'
 
 // https://stackoverflow.com/a/50052194
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -77,4 +77,4 @@ function start(file) {
 }
 
 start('main.js')
-require("http").createServer((_, res) => res.end("Uptime!")).listen(8080)
+//require("http").createServer((_, res) => res.end("Uptime!")).listen(8080)

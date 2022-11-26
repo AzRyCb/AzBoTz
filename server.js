@@ -4,7 +4,7 @@ import { createServer } from 'http'
 import { Server } from 'socket.io'
 import { toBuffer } from 'qrcode'
 import fetch from 'node-fetch'
-import Helper from './lib/helper.js'
+import Helper from './System/lib/helper.js'
 
 function connect(conn, PORT) {
     let app = global.app = express()

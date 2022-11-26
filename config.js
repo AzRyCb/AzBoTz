@@ -25,6 +25,7 @@ global.set = {
   nameown: '「 Oᴡɴᴇʀ 」',
   packname: 'Create by AzBoTz-MD',
   author: '+62 838-7917-5089',
+  ownerjbot: ['6281358919344'],
 
   //setting
   lolkey: "ed78c137a46873c5b8e5fe3b",
@@ -33,7 +34,7 @@ global.set = {
   wm2: '꒷︶꒷꒥꒷ ‧₊˚ ꒰ฅ˘օառɛʀ˘ฅ ꒱ ‧₊˚꒷︶꒷꒥꒷',
   multiplier: 69, // The higher, The harder levelup
   ephemeral: '7',// 86400 = 24jam, kalo ingin di hilangkan ganti '86400' jadi 'null' atau ''
-  prems: JSON.parse(readFileSync('./src/premium.json')), // Premium user has unlimited limit
+  prems: JSON.parse(readFileSync('./System/premium.json')), // Premium user has unlimited limit
 
   //link sosmed
   ig: 'https://www.instagram.com/notifikasi_pemberitahuan',
@@ -58,8 +59,8 @@ global.set = {
   //gambar
   fla: 'https://flamingtext.com/net-fu/proxy_form.cgi?script=chrominium-logo&_loc=generate&imageoutput=true&script=water-logo&doScale=true&scaleWidth=500&scaleHeight=500&fontsize=100&fillTextType=0&backgroundColor=%23101820&text=',
   qrgc: 'https://telegra.ph/file/97eec795fd58f4d658ac6.jpg',
-  logobot: readFileSync('./src/chatbot.png'), // logo chatbot,
-  thumb: readFileSync('./src/logo.jpg'),
+  logobot: readFileSync('./System/src/chatbot.png'), // logo chatbot,
+  thumb: readFileSync('./System/src/logo.jpg'),
   logo: "https://telegra.ph/file/6b4b8ae2ba7f244626a6d.jpg",
 
   //tampilan
@@ -152,7 +153,7 @@ global.set = {
 -Neoxr-
 '5VC9rvNx'
 */
-global.rpg = {
+global.set.rpg = {
   emoticon(string) {
     string = string.toLowerCase()
     let emot = {

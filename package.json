@@ -6,8 +6,8 @@
     "main": "index.js",
     "type": "module",
     "directories": {
-        "lib": "lib",
-        "src": "src",
+        "system/lib": "system/lib",
+        "system/src": "system/src",
         "plugins": "plugins"
     },
     "scripts": {

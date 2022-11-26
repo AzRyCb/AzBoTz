@@ -3,6 +3,7 @@ process.on('uncaughtException', console.error)
 
 import './config.js'
 import Connection from './System/lib/connection.js'
+//import jadibot from './system/lib/jadibot.js'
 import Helper from './System/lib/helper.js'
 import db from './System/lib/database.js'
 import { spawn } from 'child_process'
@@ -12,9 +13,24 @@ import { tmpdir, platform } from 'os'
 import { promises as fs } from 'fs'
 import { join } from 'path'
 
+//-- module eksternal
+import cp, {exec as _exec} from 'child_process'
+import { promisify } from 'util'
+import { readdirSync } from 'fs'
+import chalk from 'chalk'
+
+//-- GLOBAL NEW
+global.set = {
+conect: Connection,
+//jbot: jadibot
+}
+
+const opts = Helper.opts
+const exec = promisify(_exec).bind(cp)
 const TIME = 1000 * 60 * 3
 const __dirname = Helper.__dirname(import.meta)
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
+const myses = `system/${Helper.opts._[0] || ''}sessions`
 
 protoType()
 serialize()
@@ -41,24 +57,47 @@ const conn = Object.defineProperty(Connection, 'conn', {
 loadPluginFiles(pluginFolder, pluginFilter, {
   logger: conn.logger,
   recursiveRead: false
-})//.then(_ => console.log(Object.keys(plugins)))
+}).then(_ => console.log(Object.keys(plugins)))
   .catch(console.error)
 
+if (opts['clearses']) {
+setInterval(async () => {
+try {
+await exec(`find ${myses} ! -name creds.json -maxdepth 1 -type f -delete`)
+let sesi = readdirSync('system/data/jadibot').filter(v => !isNaN(v))
+if (!sesi.length) return 
+for (let i of sesi) {
+await exec(`find system/jadibot/${i} ! -name creds.json -maxdepth 1 -type f -delete`)
+}
+console.log(chalk.green("\n[Info] : Session lama telah terhapus\n"))
+} catch {
+console.log(chalk.red("\n[Info] : Gagal mnghapus session lama\n"))
+}
+}, 300 * 1000)
+}
 
 if (!opts['test']) {
   setInterval(async () => {
+  console.log("WRITE DATABASE")
     await Promise.allSettled([
       db.data ? db.write() : Promise.reject('db.data is null'),
       (opts['autocleartmp'] || opts['cleartmp']) ? clearTmp() : Promise.resolve()
     ])
     Connection.store.writeToFile(Connection.storeFile)
-  }, 60 * 1000)
+
+// Connection.store.writeToFile(Connection.storeFile)
+if (!fs.existsSync('system/jadibot')) return 
+let listSampah = fs.readdirSync('system/jadibot').filter(v => isNaN(v))
+if (!listSampah.length) return 
+for (let namaSampah of listSampah) fs.promises.rmdir('system/jadibot/' + namaSampah).catch(_=>_)
+}, 60 * 1000)
 }
+
 if (opts['server']) (await import('./server.js')).default(conn, PORT)
 
 /* Clear */
 async function clearTmp() {
-  const tmp = [tmpdir(), join(__dirname, '../tmp')]
+  const tmp = [tmpdir(), join(__dirname, '../System/tmp')]
   const filename = []
 
   await Promise.allSettled(tmp.map(async (dir) => {

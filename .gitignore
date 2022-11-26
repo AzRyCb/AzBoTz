@@ -129,7 +129,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-sessions/
-data.store.json
+system/sessions/
+system/data.store.json
 database.json
 package-lock.json
