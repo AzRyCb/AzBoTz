@@ -2,12 +2,12 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 process.on('uncaughtException', console.error)
 
 import './config.js'
-import Connection from './lib/connection.js'
-import Helper from './lib/helper.js'
-import db from './lib/database.js'
+import Connection from './System/lib/connection.js'
+import Helper from './System/lib/helper.js'
+import db from './System/lib/database.js'
 import { spawn } from 'child_process'
-import { protoType, serialize } from './lib/simple.js'
-import { plugins, loadPluginFiles, reload, pluginFolder, pluginFilter } from './lib/plugins.js'
+import { protoType, serialize } from './System/lib/simple.js'
+import { plugins, loadPluginFiles, reload, pluginFolder, pluginFilter } from './System/lib/plugins.js'
 import { tmpdir, platform } from 'os'
 import { promises as fs } from 'fs'
 import { join } from 'path'
@@ -29,7 +29,7 @@ Object.assign(global, {
 
 // global.opts['db'] = process.env['db']
 
-/** @type {import('./lib/connection.js').Socket} */
+/** @type {import('./System/lib/connection.js').Socket} */
 const conn = Object.defineProperty(Connection, 'conn', {
   value: await Connection.conn,
   enumerable: true,
@@ -121,7 +121,7 @@ async function _quickTest() {
     gm,
     find
   }
-  // require('./lib/sticker').support = s
+  // require('./System/lib/sticker').support = s
   Object.freeze(global.support)
 
   if (!s.ffmpeg) (conn?.logger || console).warn('Please install ffmpeg for sending videos (pkg install ffmpeg)')
