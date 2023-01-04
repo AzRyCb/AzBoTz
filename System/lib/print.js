@@ -1,11 +1,12 @@
+// @ts-check
 import { WAMessageStubType } from '@adiwajshing/baileys'
 import PhoneNumber from 'awesome-phonenumber'
 import chalk from 'chalk'
 import { watchFile } from 'fs'
-import Helper from './helper.js'
 import db from './database.js'
 
-const terminalImage = Helper.opts['img'] ? (await import('terminal-image')).default : ''
+const { opts, __filename } = (await import('./helper.js')).default 
+const terminalImage = opts['img'] ? (await import('terminal-image')).default : ''
 const urlRegex = (await import('url-regex-safe')).default({ strict: false })
 
 export default async function (m, conn = { user: {} }) {
@@ -15,8 +16,8 @@ export default async function (m, conn = { user: {} }) {
   // let ansi = '\x1b['
   let img
   try {
-    if (Helper.opts['img'])
-      img = /sticker|image/gi.test(m.mtype) ? await terminalImage.buffer(await m.download()) : false
+    if (opts['img'])
+      img = /image/gi.test(m.mtype) ? await terminalImage.buffer(await m.download()) : false
   } catch (e) {
     console.error(e)
   }
@@ -90,7 +91,7 @@ ${chalk.green('%s')} ${chalk.yellow('%s%s')} ${chalk.blueBright('to')} ${chalk.g
   // if (m.quoted) console.log(m.msg.contextInfo)
 }
 
-let file = Helper.__filename(import.meta.url)
+let file = __filename(import.meta.url)
 watchFile(file, () => {
   console.log(chalk.redBright("Update 'lib/print.js'"))
 })

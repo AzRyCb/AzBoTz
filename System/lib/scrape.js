@@ -1,11 +1,14 @@
-import axios from 'axios'
-import cheerio from'cheerio'
-import fetch from 'node-fetch'
-import qs from 'qs'
-import request from 'request'
+import axios from 'axios'//post
+import request from 'axios'
+import {load} from'cheerio'
+import fetch from 'node-fetch' //gkbs
+import {stringify} from 'qs'
+//import request from 'request'//gkbs
 import { JSDOM } from 'jsdom'
-import cookie from "cookie";
-import FormData from "form-data";
+import cookie from "cookie"; //gkgert
+import FormData from "form-data"; //cek aj
+
+const {get} = axios
 
 async function post1(url, formdata = {}, cookies) {
 	var encode = encodeURIComponent;
@@ -65,7 +68,7 @@ async function tp(url, text) {
 	hasilcookie = Object.entries(hasilcookie)
 		.map(([name, value]) => cookie.serialize(name, value))
 		.join("; ");
-	var $ = cheerio.load(caritoken);
+	var $ = load(caritoken);
 	var token = $('input[name="token"]').attr("value");
 	var form = new FormData();
 	if (typeof text === "string") text = [text];
@@ -108,7 +111,8 @@ function post(url, formdata) {
         body: new URLSearchParams(Object.entries(formdata))
     })
 }
-const ytIdRegex = /(?:http(?:s|):\/\/|)(?:(?:www\.|)youtube(?:\-nocookie|)\.com\/(?:shorts\/)?(?:watch\?.*(?:|\&)v=|embed\/|v\/)|youtu\.be\/)([-_0-9A-Za-z]{11})/
+
+const ytIdRegex = /(?:http(?:s|):\/\/|)(?:(?:www\.|)?youtube(?:\-nocookie|)\.com\/(?:shorts\/)?(?:watch\?.*(?:|\&)v=|embed\/|v\/)?|youtu\.be\/)([-_0-9A-Za-z]{11})/
 
 /**
  * Download YouTube Video via y2mate
@@ -147,7 +151,7 @@ async function yt(url, quality, type, bitrate, server = 'en68') {
     }
     let filesize = list[quality]
     let id = /var k__id = "(.*?)"/.exec(document.body.innerHTML) || ['', '']
-    let thumb = document.querySelector('img').src
+    let thumbnail = document.querySelector('img').src
     let title = document.querySelector('b').innerHTML
     let res2 = await post(`https://www.y2mate.com/mates/${server}/convert`, {
         type: 'youtube',
@@ -162,7 +166,7 @@ async function yt(url, quality, type, bitrate, server = 'en68') {
     let KB = parseFloat(filesize) * (1000 * /MB$/.test(filesize))
     return {
         dl_link: /<a.+?href="(.+?)"/.exec(json2.result)[1],
-        thumb,
+        thumbnail,
         title,
         filesizeF: filesize,
         filesize: KB
@@ -194,7 +198,7 @@ const UserAgent = () => {
 	}
 	})
 	.then(({ data }) => {
-	var $ =cheerio.load(data)
+	var $ =load(data)
 	ttdata = JSON.parse($('script#__NEXT_DATA__').get()[0].children[0].data)
 	meta = ttdata.props.pageProps.itemInfo.itemStruct
 	resolve({meta})
@@ -205,7 +209,7 @@ const UserAgent = () => {
 	async function dafontSearch(query) {
 		const base = 'https://www.dafont.com'
 		const res = await axios.get(`${base}/search.php?q=${query}`)
-		const $ = cheerio.load(res.data)
+		const $ = load(res.data)
 		const hasil = []
 		const total = $('div.dffont2').text().replace(` fonts on DaFont for ${query}`, '') 
 		$('div').find('div.container > div > div.preview').each(function(a, b) {
@@ -223,7 +227,7 @@ const UserAgent = () => {
 		
 		async function dafontDown(link) {
 		const des = await axios.get(link)
-		const sup = cheerio.load(des.data)
+		const sup = load(des.data)
 		const result = []
 		let style = sup('div').find('div.container > div > div.lv1right.dfbg').text() 
 		let judul = sup('div').find('div.container > div > div.lv1left.dfbg').text()
@@ -243,7 +247,7 @@ const UserAgent = () => {
 	//tiktok
 	async function tiktok2(Url) {
 		return new Promise (async (resolve, reject) => {
-			await axios.request({
+			await request({
 				url: "https://ttdownloader.com/",
 				method: "GET",
 				headers: {
@@ -253,7 +257,7 @@ const UserAgent = () => {
 					"cookie": "_ga=GA1.2.1240046717.1620835673; PHPSESSID=i14curq5t8omcljj1hlle52762; popCookie=1; _gid=GA1.2.1936694796.1623913934"
 				}
 			}).then(respon => {
-				const $ = cheerio.load(respon.data)
+				const $ = load(respon.data)
 				const token = $('#token').attr('value')
 				axios({
 					url: "https://ttdownloader.com/req/",
@@ -267,7 +271,7 @@ const UserAgent = () => {
 						"cookie": "_ga=GA1.2.1240046717.1620835673; PHPSESSID=i14curq5t8omcljj1hlle52762; popCookie=1; _gid=GA1.2.1936694796.1623913934"
 					}
 				}).then(res => {
-					const ch = cheerio.load(res.data)
+					const ch = load(res.data)
 					const result = {
 						status: res.status,
 						result: {
@@ -286,12 +290,12 @@ const UserAgent = () => {
 	
 		return new Promise((resolve, rejecet) => {
 	
-			axios.get('https://musicaldown.com/id', {
+			get('https://musicaldown.com/id', {
 				headers: {
 					'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'
 				}
 			}).then(res => {
-				const $ = cheerio.load(res.data)
+				const $ = load(res.data)
 				const url_name = $("#link_url").attr("name")
 				const token_name = $("#submit-form > div").find("div:nth-child(1) > input[type=hidden]:nth-child(2)").attr("name")
 				const token_ = $("#submit-form > div").find("div:nth-child(1) > input[type=hidden]:nth-child(2)").attr("value")
@@ -301,7 +305,7 @@ const UserAgent = () => {
 					[`${token_name}`]: token_,
 					verify: verify
 				}
-			axios.request({
+			request({
 				url: 'https://musicaldown.com/id/download',
 				method: 'post',
 				data: new URLSearchParams(Object.entries(data)),
@@ -310,8 +314,8 @@ const UserAgent = () => {
 					'cookie': res.headers["set-cookie"]
 				}
 			}).then(respon => {
-				const ch = cheerio.load(respon.data)
-			axios.request({
+				const ch = load(respon.data)
+			request({
 				url: 'https://musicaldown.com/id/mp3',
 				method: 'post',
 				headers: {
@@ -319,7 +323,7 @@ const UserAgent = () => {
 					'cookie': res.headers["set-cookie"]
 				}
 			}).then(resaudio => { 
-				const hc = cheerio.load(resaudio.data)       
+				const hc = load(resaudio.data)       
 				const result = {
 					creator: 'Arya-kun >///<',
 					video: ch('body > div.welcome.section > div > div:nth-child(2) > div.col.s12.l8 > a:nth-child(5)').attr('href'),
@@ -346,7 +350,7 @@ const UserAgent = () => {
 					"cookie": "PHPSESSID=69ce1f8034b1567b99297eee2396c308; _ga=GA1.2.1360894709.1632723147; _gid=GA1.2.1782417082.1635161653"
 				}
 			}).then((src) => {
-				let a = cheerio.load(src.data)
+				let a = load(src.data)
 				let token = a('#token').attr('value')
 				axios({
 					url: 'https://aiovideodl.ml/wp-json/aio-dl/video-data/',
@@ -369,7 +373,7 @@ async function squotes(input) {
         fetch('https://jagokata.com/kata-bijak/kata-' + input.replace(/\s/g, '_') + '.html?page=1')
             .then(res => res.text())
             .then(res => {
-                const $ = cheerio.load(res)
+                const $ = load(res)
                 let data = []
                 $('div[id="main"]').find('ul[id="citatenrijen"] > li').each(function (index, element) {
                     let x = $(this).find('div[class="citatenlijst-auteur"] > a').text().trim()
@@ -389,7 +393,7 @@ async function squotes(input) {
 async function sjoox(query) {
     return new Promise((resolve, reject) => {
         const time = Math.floor(new Date() / 1000)
-        axios.get('http://api.joox.com/web-fcgi-bin//web_search?lang=id&country=id&type=0&search_input=' + query + '&pn=1&sin=0&ein=29&_=' + time)
+        get('http://api.joox.com/web-fcgi-bin//web_search?lang=id&country=id&type=0&search_input=' + query + '&pn=1&sin=0&ein=29&_=' + time)
             .then(({ data }) => {
                 let result = []
                 let hasil = []
@@ -401,7 +405,7 @@ async function sjoox(query) {
                 for (let i = 0; i < data.itemlist.length; i++) {
                     const get = 'http://api.joox.com/web-fcgi-bin/web_get_songinfo?songid=' + ids[i]
                     promoses.push(
-                        axios.get(get, {
+                        get(get, {
                             headers: {
                                 Cookie: 'wmid=142420656; user_type=1; country=id; session_key=2a5d97d05dc8fe238150184eaf3519ad;'
                             }
@@ -432,7 +436,7 @@ async function sjoox(query) {
 /* New Line */
 async function stiktok(url) {
     return new Promise(async (resolve, reject) => {
-        axios.get('https://ttdownloader.com/', {
+        get('https://ttdownloader.com/', {
             headers: {
                 "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
                 "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
@@ -440,7 +444,7 @@ async function stiktok(url) {
             }
         })
             .then(({ data }) => {
-                const $ = cheerio.load(data)
+                const $ = load(data)
                 let token = $('#token').attr('value')
                 let config = {
                     'url': url,
@@ -457,7 +461,7 @@ async function stiktok(url) {
                     }
                 })
                     .then(({ data }) => {
-                        const $ = cheerio.load(data)
+                        const $ = load(data)
                         resolve({
                             nowm: $('div:nth-child(2) > div.download > a').attr('href'),
                             wm: $('div:nth-child(3) > div.download > a').attr('href'),
@@ -478,7 +482,7 @@ async function stwitter(url) {
         fetch('https://twdown.net/download.php', { method: 'POST', body: params })
             .then(res => res.text())
             .then(res => {
-                const $ = cheerio.load(res);
+                const $ = load(res);
                 let data = []
                 $('div.container').find('tbody > tr > td').each(function (index, element) {
                     let x = $(this).find('a').attr('href')
@@ -498,7 +502,7 @@ async function stwitter(url) {
 /* New Line */
 async function sigdl(url) {
     return new Promise(async (resolve, reject) => {
-        axios.request({
+        request({
             url: 'https://www.instagramsave.com/download-instagram-videos.php',
             method: 'GET',
             headers: {
@@ -507,7 +511,7 @@ async function sigdl(url) {
             }
         })
             .then(({ data }) => {
-                const $ = cheerio.load(data)
+                const $ = load(data)
                 const token = $('#token').attr('value')
                 let config = {
                     headers: {
@@ -522,7 +526,7 @@ async function sigdl(url) {
                         'token': token
                     }
                 }
-                axios.post('https://www.instagramsave.com/system/action.php', qs.stringify(config.data), { headers: config.headers })
+                post('https://www.instagramsave.com/system/action.php', stringify(config.data), { headers: config.headers })
                     .then(({ data }) => {
                         resolve(data.medias)
                     })
@@ -535,7 +539,7 @@ async function sigdl(url) {
 /* New Line */
 async function sigstory(username) {
     return new Promise(async (resolve, reject) => {
-        axios.request({
+        request({
             url: 'https://www.instagramsave.com/instagram-story-downloader.php',
             method: 'GET',
             headers: {
@@ -544,7 +548,7 @@ async function sigstory(username) {
             }
         })
             .then(({ data }) => {
-                const $ = cheerio.load(data)
+                const $ = load(data)
                 const token = $('#token').attr('value')
                 let config = {
                     headers: {
@@ -559,7 +563,7 @@ async function sigstory(username) {
                         'token': token
                     }
                 }
-                axios.post('https://www.instagramsave.com/system/action.php', qs.stringify(config.data), { headers: config.headers })
+                post('https://www.instagramsave.com/system/action.php', stringify(config.data), { headers: config.headers })
                     .then(({ data }) => {
                         resolve(data.medias)
                     })
@@ -575,7 +579,7 @@ async function spin(url) {
         let form = new URLSearchParams()
         form.append('url', url)
         let html = await (await fetch('https://pinterestvideodownloader.com/', { method: 'POST', body: form })).text()
-        $ = cheerio.load(html)
+        $ = load(html)
         let data = []
         $('table > tbody > tr').each(function (i, e) {
             if ($($(e).find('td')[0]).text() != '') data.push({
@@ -601,13 +605,13 @@ let is = {
 /* New Line */
 async function s_token(host) {
     return new Promise(async (resolve, reject) => {
-        axios.request({
+        request({
             url: host, method: 'GET', headers: {
                 "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
                 "cookie": "PHPSESSID=ugpgvu6fgc4592jh7ht9d18v49; _ga=GA1.2.1126798330.1625045680; _gid=GA1.2.1475525047.1625045680; __gads=ID=92b58ed9ed58d147-221917af11ca0021:T=1625045679:RT=1625045679:S=ALNI_MYnQToDW3kOUClBGEzULNjeyAqOtg"
             }
         }).then(({ data }) => {
-            let $ = cheerio.load(data)
+            let $ = load(data)
             let token = $('#token').attr('value')
             resolve(token)
         })
@@ -640,7 +644,7 @@ async function sfacebook(url) {
                 "cookie": "PHPSESSID=69ce1f8034b1567b99297eee2396c308; _ga=GA1.2.1360894709.1632723147; _gid=GA1.2.1782417082.1635161653"
             }
         }).then((src) => {
-            let a = cheerio.load(src.data)
+            let a = load(src.data)
             let token = a('#token').attr('value')
             axios({
                 url: 'https://aiovideodl.ml/wp-json/aio-dl/video-data/',
@@ -661,8 +665,8 @@ async function sfacebook(url) {
 /* New Line */
 async function szippydl(urls) {
     return new Promise((resolve, reject) => {
-        axios.get(urls).then(({ data }) => {
-            const $ = cheerio.load(data)
+        get(urls).then(({ data }) => {
+            const $ = load(data)
             const li = $.html()
             const po = $('#dlbutton').next().html()
             const le = po.split(';')[0]
@@ -690,11 +694,11 @@ const randomarray = async (array) => {
 /* New Line */
 async function srexdl(query) {
 	return new Promise((resolve) => {
-		axios.get('https://rexdl.com/?s=' + query)
+		get('https://rexdl.com/?s=' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const judul = [];
 				const jenis = [];
 				const date = [];
@@ -731,21 +735,21 @@ async function srexdl(query) {
 /* New Line */
 async function srexdldown(link) {
 	return new Promise((resolve) => {
-		axios.get(link)
+		get(link)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const link = [];
 				const url = [];
 				const link_name = [];
 				const judul = $('#page > div > div > div > section > div:nth-child(2) > article > div > h1.post-title').text();
 				const plink = $('#page > div > div > div > section > div:nth-child(2) > center:nth-child(3) > h2 > span > a').attr('href')
-				axios.get(plink)
+				get(plink)
 					.then(({
 						data
 					}) => {
-						const $$ = cheerio.load(data)
+						const $$ = load(data)
 						$$('#dlbox > ul.dl > a > li > span').each(function(a, b) {
 							let deta = $$(b).text();
 							link_name.push(deta)
@@ -775,11 +779,11 @@ async function srexdldown(link) {
 /* New Line */
 async function smerdekanews() {
 	return new Promise((resolve) => {
-		axios.get('https://www.merdeka.com/peristiwa/')
+		get('https://www.merdeka.com/peristiwa/')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const judul = [];
 				const upload = [];
 				const link = [];
@@ -808,11 +812,11 @@ async function smerdekanews() {
 /* New Line */
 async function smetronews() {
 	return new Promise((resolve) => {
-		axios.get('https://www.metrotvnews.com/news')
+		get('https://www.metrotvnews.com/news')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const judul = [];
 				const desc = [];
 				const link = [];
@@ -848,11 +852,11 @@ async function smetronews() {
 /* New Line */
 async function sasupanfilm(query) {
 	return new Promise((resolve) => {
-		axios.get(`https://asupanfilm.link/?search=${query}`)
+		get(`https://asupanfilm.link/?search=${query}`)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const judul = [];
 				const desc = [];
 				const thumb = [];
@@ -888,11 +892,11 @@ async function sasupanfilm(query) {
 /* New Line */
 async function sasupanfilminfo(link) {
 	return new Promise((resolve) => {
-		axios.get(link)
+		get(link)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const info = {
 					judul: $('body > div > div:nth-child(5) > div.card-body.p-2 > ul > li:nth-child(1)').text(),
 					thumb: $('body > div > div.card.mb-3 > div.card-footer > a').attr('href'),
@@ -916,21 +920,21 @@ async function sasupanfilminfo(link) {
 /* New Line */
 async function sstickersearch(query) {
 	return new Promise((resolve) => {
-		axios.get(`https://getstickerpack.com/stickers?query=${query}`)
+		get(`https://getstickerpack.com/stickers?query=${query}`)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const link = [];
 				$('#stickerPacks > div > div:nth-child(3) > div > a').each(function(a, b) {
 					link.push($(b).attr('href'))
 				})
 				let rand = link[Math.floor(Math.random() * link.length)]
-				axios.get(rand)
+				get(rand)
 					.then(({
 						data
 					}) => {
-						const $$ = cheerio.load(data)
+						const $$ = load(data)
 						const url = [];
 						$$('#stickerPack > div > div.row > div > img').each(function(a, b) {
 							url.push($$(b).attr('src').split('&d=')[0])
@@ -950,27 +954,27 @@ async function sstickersearch(query) {
 /* New Line */
 async function srandomtt(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://brainans.com/search?query=' + query)
+		get('https://brainans.com/search?query=' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const luser = $('#search-container > div:nth-child(1) > div.content__text > a').attr('href')
-				axios.get('https://brainans.com/' + luser)
+				get('https://brainans.com/' + luser)
 					.then(({
 						data
 					}) => {
-						const $$ = cheerio.load(data)
+						const $$ = load(data)
 						let vlink = [];
 						$$('#videos_container > div > div.content__list.grid.infinite_scroll.cards > div > div > a').each(function(a, b) {
 							vlink.push('https://brainans.com/' + $$(b).attr('href'))
 						})
 						randomarray(vlink).then(res => {
-							axios.get(res)
+							get(res)
 								.then(({
 									data
 								}) => {
-									const $$$ = cheerio.load(data)
+									const $$$ = load(data)
 									resolve({
 										username: $$$('#card-page > div > div.row > div > div > div > div > div.main__user-desc.align-self-center.ml-2 > a').text(),
 										caption: $$$('#card-page > div > div.row > div > div > div.main__info.mb-4 > div.main__list').text(),
@@ -989,11 +993,11 @@ async function srandomtt(query) {
 /* New Line */
 async function strendtwit(country) {
 	return new Promise((resolve, reject) => {
-		axios.get(`https://getdaytrends.com/${country}/`)
+		get(`https://getdaytrends.com/${country}/`)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const hastag = [];
 				const tweet = [];
 				const result = [];
@@ -1025,12 +1029,12 @@ async function strendtwit(country) {
 
 async function pinterest(querry){
 	return new Promise(async(resolve,reject) => {
-		 axios.get('https://id.pinterest.com/search/pins/?autologin=true&q=' + querry, {
+		 get('https://id.pinterest.com/search/pins/?autologin=true&q=' + querry, {
 			headers: {
 			"cookie" : "_auth=1; _b=\"AVna7S1p7l1C5I9u0+nR3YzijpvXOPc6d09SyCzO+DcwpersQH36SmGiYfymBKhZcGg=\"; _pinterest_sess=TWc9PSZHamJOZ0JobUFiSEpSN3Z4a2NsMk9wZ3gxL1NSc2k2NkFLaUw5bVY5cXR5alZHR0gxY2h2MVZDZlNQalNpUUJFRVR5L3NlYy9JZkthekp3bHo5bXFuaFZzVHJFMnkrR3lTbm56U3YvQXBBTW96VUgzVUhuK1Z4VURGKzczUi9hNHdDeTJ5Y2pBTmxhc2owZ2hkSGlDemtUSnYvVXh5dDNkaDN3TjZCTk8ycTdHRHVsOFg2b2NQWCtpOWxqeDNjNkk3cS85MkhhSklSb0hwTnZvZVFyZmJEUllwbG9UVnpCYVNTRzZxOXNJcmduOVc4aURtM3NtRFo3STlmWjJvSjlWTU5ITzg0VUg1NGhOTEZzME9SNFNhVWJRWjRJK3pGMFA4Q3UvcHBnWHdaYXZpa2FUNkx6Z3RNQjEzTFJEOHZoaHRvazc1c1UrYlRuUmdKcDg3ZEY4cjNtZlBLRTRBZjNYK0lPTXZJTzQ5dU8ybDdVS015bWJKT0tjTWYyRlBzclpiamdsNmtpeUZnRjlwVGJXUmdOMXdTUkFHRWloVjBMR0JlTE5YcmhxVHdoNzFHbDZ0YmFHZ1VLQXU1QnpkM1FqUTNMTnhYb3VKeDVGbnhNSkdkNXFSMXQybjRGL3pyZXRLR0ZTc0xHZ0JvbTJCNnAzQzE0cW1WTndIK0trY05HV1gxS09NRktadnFCSDR2YzBoWmRiUGZiWXFQNjcwWmZhaDZQRm1UbzNxc21pV1p5WDlabm1UWGQzanc1SGlrZXB1bDVDWXQvUis3elN2SVFDbm1DSVE5Z0d4YW1sa2hsSkZJb1h0MTFpck5BdDR0d0lZOW1Pa2RDVzNySWpXWmUwOUFhQmFSVUpaOFQ3WlhOQldNMkExeDIvMjZHeXdnNjdMYWdiQUhUSEFBUlhUVTdBMThRRmh1ekJMYWZ2YTJkNlg0cmFCdnU2WEpwcXlPOVZYcGNhNkZDd051S3lGZmo0eHV0ZE42NW8xRm5aRWpoQnNKNnNlSGFad1MzOHNkdWtER0xQTFN5Z3lmRERsZnZWWE5CZEJneVRlMDd2VmNPMjloK0g5eCswZUVJTS9CRkFweHc5RUh6K1JocGN6clc1JmZtL3JhRE1sc0NMTFlpMVErRGtPcllvTGdldz0=; _ir=0"
 		}
 			}).then(({ data }) => {
-		const $ = cheerio.load(data)
+		const $ = load(data)
 		const result = [];
 		const hasil = [];
    		 $('div > a').get().map(b => {
@@ -1050,14 +1054,14 @@ async function pinterest(querry){
 /* New Line */
 async function spinterest2(querry) {
 	return new Promise(async (resolve, reject) => {
-		axios.get('https://id.pinterest.com/search/pins/?autologin=true&q=' + querry, {
+		get('https://id.pinterest.com/search/pins/?autologin=true&q=' + querry, {
 			headers: {
 				"cookie": "_auth=1; _b=\"AVna7S1p7l1C5I9u0+nR3YzijpvXOPc6d09SyCzO+DcwpersQH36SmGiYfymBKhZcGg=\"; _pinterest_sess=TWc9PSZHamJOZ0JobUFiSEpSN3Z4a2NsMk9wZ3gxL1NSc2k2NkFLaUw5bVY5cXR5alZHR0gxY2h2MVZDZlNQalNpUUJFRVR5L3NlYy9JZkthekp3bHo5bXFuaFZzVHJFMnkrR3lTbm56U3YvQXBBTW96VUgzVUhuK1Z4VURGKzczUi9hNHdDeTJ5Y2pBTmxhc2owZ2hkSGlDemtUSnYvVXh5dDNkaDN3TjZCTk8ycTdHRHVsOFg2b2NQWCtpOWxqeDNjNkk3cS85MkhhSklSb0hwTnZvZVFyZmJEUllwbG9UVnpCYVNTRzZxOXNJcmduOVc4aURtM3NtRFo3STlmWjJvSjlWTU5ITzg0VUg1NGhOTEZzME9SNFNhVWJRWjRJK3pGMFA4Q3UvcHBnWHdaYXZpa2FUNkx6Z3RNQjEzTFJEOHZoaHRvazc1c1UrYlRuUmdKcDg3ZEY4cjNtZlBLRTRBZjNYK0lPTXZJTzQ5dU8ybDdVS015bWJKT0tjTWYyRlBzclpiamdsNmtpeUZnRjlwVGJXUmdOMXdTUkFHRWloVjBMR0JlTE5YcmhxVHdoNzFHbDZ0YmFHZ1VLQXU1QnpkM1FqUTNMTnhYb3VKeDVGbnhNSkdkNXFSMXQybjRGL3pyZXRLR0ZTc0xHZ0JvbTJCNnAzQzE0cW1WTndIK0trY05HV1gxS09NRktadnFCSDR2YzBoWmRiUGZiWXFQNjcwWmZhaDZQRm1UbzNxc21pV1p5WDlabm1UWGQzanc1SGlrZXB1bDVDWXQvUis3elN2SVFDbm1DSVE5Z0d4YW1sa2hsSkZJb1h0MTFpck5BdDR0d0lZOW1Pa2RDVzNySWpXWmUwOUFhQmFSVUpaOFQ3WlhOQldNMkExeDIvMjZHeXdnNjdMYWdiQUhUSEFBUlhUVTdBMThRRmh1ekJMYWZ2YTJkNlg0cmFCdnU2WEpwcXlPOVZYcGNhNkZDd051S3lGZmo0eHV0ZE42NW8xRm5aRWpoQnNKNnNlSGFad1MzOHNkdWtER0xQTFN5Z3lmRERsZnZWWE5CZEJneVRlMDd2VmNPMjloK0g5eCswZUVJTS9CRkFweHc5RUh6K1JocGN6clc1JmZtL3JhRE1sc0NMTFlpMVErRGtPcllvTGdldz0=; _ir=0"
 			}
 		}).then(({
 			data
 		}) => {
-			const $ = cheerio.load(data)
+			const $ = load(data)
 			const result = [];
 			const hasil = [];
 			$('div > a').get().map(b => {
@@ -1077,11 +1081,11 @@ async function spinterest2(querry) {
 /* New Line */
 async function szerochan(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://www.zerochan.net/search?q=' + query)
+		get('https://www.zerochan.net/search?q=' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const judul = [];
 				const result = [];
 				const id = [];
@@ -1108,11 +1112,11 @@ async function szerochan(query) {
 /* New Line */
 async function shappymoddl(link) {
 	return new Promise((resolve, reject) => {
-		axios.get(link)
+		get(link)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const link = [];
 				const jlink = [];
 				const result = [];
@@ -1148,11 +1152,11 @@ async function shappymoddl(link) {
 /* New Line */
 async function sgoredl(link) {
 	return new Promise(async (resolve, reject) => {
-		axios.get(link)
+		get(link)
 			.then(({
 				data
 			}) => {
-				const $$ = cheerio.load(data)
+				const $$ = load(data)
 				const format = {
 					judul: $$('div.single-main-container > div > div.bb-col.col-content > div > div > div > div > header > h1').text(),
 					views: $$('div.single-main-container > div > div.bb-col.col-content > div > div > div > div > div.s-post-meta-block.bb-mb-el > div > div > div.col-r.d-table-cell.col-md-6.col-sm-6.text-right-sm > div > span > span.count').text(),
@@ -1172,14 +1176,14 @@ async function sgoredl(link) {
 /* New Line */
 async function schara(query) {
 	return new Promise((resolve, reject) => {
-		axios.get(`https://www.anime-planet.com/characters/all?name=${query}&sort=likes&order=desc`)
+		get(`https://www.anime-planet.com/characters/all?name=${query}&sort=likes&order=desc`)
 			.then((data) => {
-				const $ = cheerio.load(data.data)
+				const $ = load(data.data)
 				const linkp = $('#siteContainer > table > tbody > tr:nth-child(1) > td.tableCharInfo > a').attr('href')
-				axios.get('https://www.anime-planet.com' + linkp)
+				get('https://www.anime-planet.com' + linkp)
 					.then((data) => {
 						//console.log(data.data)
-						const $$ = cheerio.load(data.data)
+						const $$ = load(data.data)
 						resolve({
 							nama: $$('#siteContainer > h1').text(),
 							gender: $$('#siteContainer > section.pure-g.entryBar > div:nth-child(1)').text().split('\nGender: ')[1],
@@ -1198,9 +1202,9 @@ async function schara(query) {
 /* New Line */
 async function sanime(query) {
 	return new Promise((resolve, reject) => {
-		axios.get(`https://www.anime-planet.com/anime/all?name=${query}`)
+		get(`https://www.anime-planet.com/anime/all?name=${query}`)
 			.then((data) => {
-				const $ = cheerio.load(data.data)
+				const $ = load(data.data)
 				const result = [];
 				const judul = [];
 				const link = [];
@@ -1231,9 +1235,9 @@ async function sanime(query) {
 /* New Line */
 async function smanga(query) {
 	return new Promise((resolve, reject) => {
-		axios.get(`https://www.anime-planet.com/manga/all?name=${query}`)
+		get(`https://www.anime-planet.com/manga/all?name=${query}`)
 			.then((data) => {
-				const $ = cheerio.load(data.data)
+				const $ = load(data.data)
 				const result = [];
 				const judul = [];
 				const link = [];
@@ -1264,10 +1268,10 @@ async function smanga(query) {
 /* New Line */
 async function sjob(query) {
 	return new Promise((resolve, reject) => {
-		axios.get(`https://www.jobstreet.co.id/id/job-search/${query}-jobs/`)
+		get(`https://www.jobstreet.co.id/id/job-search/${query}-jobs/`)
 			.then((data) => {
 				//console.log(data.data)
-				const $ = cheerio.load(data.data)
+				const $ = load(data.data)
 				const job = [];
 				const perusahaan = [];
 				const daerah = [];
@@ -1311,11 +1315,11 @@ async function sjob(query) {
 /* New Line */
 async function sanoboys(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://anoboy.media/?s=' + query)
+		get('https://anoboy.media/?s=' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const format = [];
 				const link = [];
 				const judul = [];
@@ -1356,11 +1360,11 @@ async function sanoboys(query) {
 /* New Line */
 async function sanoboydl(query) {
 	return new Promise((resolve, reject) => {
-		axios.get(query)
+		get(query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				resolve({
 					judul: $('body > div.wrap > div.container > div.pagetitle > h1').text(),
 					uptime: $('body > div.wrap > div.container > div.pagetitle > div > div > span > time').text(),
@@ -1386,9 +1390,9 @@ async function sanoboydl(query) {
 /* New Line */
 async function sfilm(query) {
 	return new Promise((resolve, reject) => {
-		axios.get(`http://167.99.71.200/?s=${query}`)
+		get(`http://167.99.71.200/?s=${query}`)
 			.then((data) => {
-				const $ = cheerio.load(data.data)
+				const $ = load(data.data)
 				const judul = [];
 				const genre = [];
 				const thumb = [];
@@ -1431,9 +1435,9 @@ async function sfilm(query) {
 /* New Line */
 async function swebtoons(query) {
 	return new Promise((resolve, reject) => {
-		axios.get(`https://www.webtoons.com/id/search?keyword=${query}`)
+		get(`https://www.webtoons.com/id/search?keyword=${query}`)
 			.then((data) => {
-				const $ = cheerio.load(data.data)
+				const $ = load(data.data)
 				const judul = [];
 				const genre = [];
 				const author = [];
@@ -1497,7 +1501,7 @@ async function ssoundcloud(link) {
 		request(options, async function(error, response, body) {
 			console.log(body)
 			if (error) throw new Error(error);
-			const $ = cheerio.load(body)
+			const $ = load(body)
 			resolve({
 				judul: $('#header > div > div > div.col-lg-8 > div > table > tbody > tr > td:nth-child(2)').text(),
 				download_count: $('#header > div > div > div.col-lg-8 > div > table > tbody > tr > td:nth-child(3)').text(),
@@ -1524,7 +1528,7 @@ async function sigdl2(link) {
 		};
 		request(options, async function(error, response, body) {
 			if (error) throw new Error(error);
-			const $ = cheerio.load(body)
+			const $ = load(body)
 			const result = [];
 			$('#downloadBox > a').each(function(a, b) {
 				result.push($(b).attr('href'))
@@ -1571,11 +1575,11 @@ async function sigstalk(username) {
 /* New Line */
 async function sgempa() {
 	return new Promise(async (resolve, reject) => {
-		axios.get('https://www.bmkg.go.id/gempabumi/gempabumi-dirasakan.bmkg')
+		get('https://www.bmkg.go.id/gempabumi/gempabumi-dirasakan.bmkg')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const drasa = [];
 				$('table > tbody > tr:nth-child(1) > td:nth-child(6) > span').get().map((rest) => {
 					dir = $(rest).text();
@@ -1608,11 +1612,11 @@ async function sgempa() {
 /* New Line */
 async function scariresep(query) {
 	return new Promise(async (resolve, reject) => {
-		axios.get('https://resepkoki.id/?s=' + query)
+		get('https://resepkoki.id/?s=' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const link = [];
 				const judul = [];
 				const upload_date = [];
@@ -1644,11 +1648,11 @@ async function scariresep(query) {
 /* New Line */
 async function sbacaresep(query) {
 	return new Promise(async (resolve, reject) => {
-		axios.get(query)
+		get(query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const abahan = [];
 				const atakaran = [];
 				const atahap = [];
@@ -1700,15 +1704,15 @@ async function sbacaresep(query) {
 /* New Line */
 async function ssearchgore(query) {
 	return new Promise(async (resolve, reject) => {
-		axios.get('https://seegore.com/?s=' + query).then(dataa => {
-			const $$$ = cheerio.load(dataa)
+		get('https://seegore.com/?s=' + query).then(dataa => {
+			const $$$ = load(dataa)
 			let pagina = $$$('#main > div.container.main-container > div > div.bb-col.col-content > div > div > div > div > nav > ul > li:nth-child(4) > a').text();
 			let slink = 'https://seegore.com/?s=' + query
-			axios.get(slink)
+			get(slink)
 				.then(({
 					data
 				}) => {
-					const $ = cheerio.load(data)
+					const $ = load(data)
 					const link = [];
 					const judul = [];
 					const uploader = [];
@@ -1752,21 +1756,21 @@ async function srandomgore() {
 	return new Promise(async (resolve, reject) => {
 		let randvid = Math.floor(Math.random() * 218) + 1
 			let slink = 'https://seegore.com/gore/'
-		axios.get(slink)
+		get(slink)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const link = [];
 				const result = [];
 				const username = [];
 				const linkp = $(`#post-items > li:nth-child(${randvid}) > article > div.post-thumbnail > a`).attr('href')
 				const thumbb = $(`#post-items > li:nth-child(${randvid}) > article > div.post-thumbnail > a > div > img`).attr('src')
-				axios.get(linkp)
+				get(linkp)
 					.then(({
 						data
 					}) => {
-						const $$ = cheerio.load(data)
+						const $$ = load(data)
 						const format = {
 							judul: $$('div.single-main-container > div > div.bb-col.col-content > div > div > div > div > header > h1').text(),
 							views: $$('div.single-main-container > div > div.bb-col.col-content > div > div > div > div > div.s-post-meta-block.bb-mb-el > div > div > div.col-r.d-table-cell.col-md-6.col-sm-6.text-right-sm > div > span > span.count').text(),
@@ -1815,7 +1819,7 @@ async function stextmakervid(text1, style) {
 		};
 		request(options, async function(error, response, body) {
 			if (error) throw new Error(error);
-			const $ = cheerio.load(body)
+			const $ = load(body)
 			const result = {
 				url: $('div.btn-group > a').attr('href')
 			}
@@ -1827,11 +1831,11 @@ async function stextmakervid(text1, style) {
 /* New Line */
 async function sapkmirror(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://www.apkmirror.com/?post_type=app_release&searchtype=apk&s=' + query)
+		get('https://www.apkmirror.com/?post_type=app_release&searchtype=apk&s=' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const nama = [];
 				const developer = [];
 				const lupdate = [];
@@ -1887,11 +1891,11 @@ async function sapkmirror(query) {
 /* New Line */
 async function ssfiledown(link) {
 	return new Promise((resolve, reject) => {
-		axios.get(link)
+		get(link)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const nama = $('body > div.w3-row-padding.w3-container.w3-white > div > div:nth-child(2) > b').text();
 				const size = $('#download').text().split('Download File')
 				const desc = $('body > div.w3-row-padding.w3-container.w3-white > div > div:nth-child(7) > center > h1').text();
@@ -1926,11 +1930,11 @@ async function ssfiledown(link) {
 /* New Line */
 async function sandroid1(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://an1.com/tags/MOD/?story=' + query + '&do=search&subaction=search')
+		get('https://an1.com/tags/MOD/?story=' + query + '&do=search&subaction=search')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const nama = [];
 				const link = [];
 				const rating = [];
@@ -1977,12 +1981,12 @@ async function sandroid1(query) {
 /* New Line */
 async function sapkmody(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://apkmody.io/?s=' + query)
+		get('https://apkmody.io/?s=' + query)
 			.then(({
 				data
 			}) => {
 				//console.log(data)
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const nama = [];
 				const link = [];
 				const mod = [];
@@ -2023,11 +2027,11 @@ async function sapkmody(query) {
 /* New Line */
 async function shappymod(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://www.happymod.com/search.html?q=' + query)
+		get('https://www.happymod.com/search.html?q=' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const nama = [];
 				const link = [];
 				const rating = [];
@@ -2066,11 +2070,11 @@ async function shappymod(query) {
 /* New Line */
 async function sghuser(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://github.com/search?q=' + query + '&type=users')
+		get('https://github.com/search?q=' + query + '&type=users')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const username = [];
 				const link = [];
 				const result = [];
@@ -2099,11 +2103,11 @@ async function sghuser(query) {
 /* New Line */
 async function sghfollower(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://github.com/' + query + '?tab=followers')
+		get('https://github.com/' + query + '?tab=followers')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const link = [];
 				const result = [];
 				const username = [];
@@ -2132,11 +2136,11 @@ async function sghfollower(query) {
 /* New Line */
 async function sghfollowing(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://github.com/' + query + '?tab=following')
+		get('https://github.com/' + query + '?tab=following')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const link = [];
 				const result = [];
 				const username = [];
@@ -2166,14 +2170,14 @@ async function sghfollowing(query) {
 async function scorona(country) {
 	if (!country) return loghandler.noinput;
 	try {
-		const res = await axios.request(`https://www.worldometers.info/coronavirus/country/` + country, {
+		const res = await request(`https://www.worldometers.info/coronavirus/country/` + country, {
 			method: "GET",
 			headers: {
 				"User-Agent": "Mozilla/5.0 (Linux; Android 9; Redmi 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Mobile Safari/537.36"
 			}
 		});
 		let result = {};
-		const $ = cheerio.load(res.data);
+		const $ = load(res.data);
 		result.status = res.status
 		result.negara = $("div").find("h1").text().slice(3).split(/ /g)[0];
 		result.total_kasus = $("div#maincounter-wrap").find("div.maincounter-number > span").eq(0).text() + " total";
@@ -2194,14 +2198,14 @@ async function scorona(country) {
 async function smangatoon(search) {
 	if (!search) return "No Querry Input! Bakaa >\/\/<";
 	try {
-		const res = await axios.get(`https://mangatoon.mobi/en/search?word=${search}`, {
+		const res = await get(`https://mangatoon.mobi/en/search?word=${search}`, {
 			method: "GET",
 			headers: {
 				"User-Agent": "Mozilla/5.0 (Linux; Android 9; Redmi 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Mobile Safari/537.36"
 			}
 		});
 		const hasil = [];
-		const $ = cheerio.load(res.data);
+		const $ = load(res.data);
 		$('div.recommend-item').each(function(a, b) {
 			let comic_name = $(b).find('div.recommend-comics-title > span').text();
 			let comic_type = $(b).find('div.comics-type > span').text().slice(1).split(/ /g).join("");
@@ -2230,9 +2234,9 @@ async function spalingmurah(produk) {
 		return new TypeError("No Querry Input! Bakaaa >\/\/<")
 	}
 	try {
-		const res = await axios.get(`https://palingmurah.net/pencarian-produk/?term=` + produk)
+		const res = await get(`https://palingmurah.net/pencarian-produk/?term=` + produk)
 		const hasil = []
-		const $ = cheerio.load(res.data)
+		const $ = load(res.data)
 		$('div.ui.card.wpj-card-style-2 ').each(function(a, b) {
 			let url = $(b).find('a.image').attr('href')
 			let img = $(b).find('img.my_image.lazyload').attr('data-src')
@@ -2259,11 +2263,11 @@ async function spalingmurah(produk) {
 /* New Line */
 async function smediafire(query) {
 	return new Promise((resolve, reject) => {
-		axios.get(query)
+		get(query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const judul = $('body > div.mf-dlr.page.ads-alternate > div.content > div.center > div > div.dl-btn-cont > div.dl-btn-labelWrap > div.promoDownloadName.notranslate > div').text();
 				const size = $('body > div.mf-dlr.page.ads-alternate > div.content > div.center > div > div.dl-info > ul > li:nth-child(1) > span').text();
 				const upload_date = $('body > div.mf-dlr.page.ads-alternate > div.content > div.center > div > div.dl-info > ul > li:nth-child(2) > span').text();
@@ -2285,11 +2289,11 @@ async function smediafire(query) {
 async function sartinama(query) {
 	return new Promise((resolve, reject) => {
 		queryy = query.replace(/ /g, '+')
-		axios.get('https://www.primbon.com/arti_nama.php?nama1=' + query + '&proses=+Submit%21+')
+		get('https://www.primbon.com/arti_nama.php?nama1=' + query + '&proses=+Submit%21+')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const result = $('#body').text();
 				const result2 = result.split('\n      \n        \n        \n')[0]
 				const result4 = result2.split('ARTI NAMA')[1]
@@ -2305,11 +2309,11 @@ async function sartinama(query) {
 async function sdrakor(query) {
 	return new Promise((resolve, reject) => {
 		let queryy = query.replace(/ /g, '+')
-		axios.get('https://drakorasia.net/?s=' + queryy + '&post_type=post')
+		get('https://drakorasia.net/?s=' + queryy + '&post_type=post')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const result = [];
 				const link = [];
 				const judul = [];
@@ -2338,11 +2342,11 @@ async function sdrakor(query) {
 /* New Line */
 async function swattpad(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://www.wattpad.com/search/' + query)
+		get('https://www.wattpad.com/search/' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const result = [];
 				const linkk = [];
 				const judull = [];
@@ -2390,11 +2394,11 @@ async function swattpad(query) {
 /* New Line */
 async function sdewabatch(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://dewabatch.com/?s=' + query)
+		get('https://dewabatch.com/?s=' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const result = [];
 				const linkk = [];
 				const judull = [];
@@ -2426,11 +2430,11 @@ async function sdewabatch(query) {
 /* New Line */
 async function skiryu(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://kiryuu.id/?s=' + query)
+		get('https://kiryuu.id/?s=' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const result = [];
 				const linkk = [];
 				const judull = [];
@@ -2462,11 +2466,11 @@ async function skiryu(query) {
 /* New Line */
 async function ssfilesearch(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://sfile.mobi/search.php?q=' + query + '&search=Search')
+		get('https://sfile.mobi/search.php?q=' + query + '&search=Search')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const result = [];
 				const link = [];
 				const neme = [];
@@ -2499,11 +2503,11 @@ async function ssfilesearch(query) {
 /* New Line */
 async function scarigc(nama) {
 	return new Promise((resolve, reject) => {
-		axios.get('http://ngarang.com/link-grup-wa/daftar-link-grup-wa.php?search=' + nama + '&searchby=name')
+		get('http://ngarang.com/link-grup-wa/daftar-link-grup-wa.php?search=' + nama + '&searchby=name')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data);
+				const $ = load(data);
 				const result = [];
 				const lnk = [];
 				const nm = [];
@@ -2529,8 +2533,8 @@ async function scarigc(nama) {
 
 /* New Line */
 async function swikisearch(query) {
-	const res = await axios.get(`https://id.m.wikipedia.org/w/index.php?search=${query}`)
-	const $ = cheerio.load(res.data)
+	const res = await get(`https://id.m.wikipedia.org/w/index.php?search=${query}`)
+	const $ = load(res.data)
 	const hasil = []
 	let wiki = $('#mf-section-0').find('p').text()
 	let thumb = $('#mf-section-0').find('div > div > a > img').attr('src')
@@ -2548,20 +2552,20 @@ async function swikisearch(query) {
 /* New Line */
 async function sdevianart(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://www.deviantart.com/search?q=' + query)
+		get('https://www.deviantart.com/search?q=' + query)
 			.then(({
 				data
 			}) => {
-				const $$ = cheerio.load(data)
+				const $$ = load(data)
 				// let no = ''
 				$$('#root > div.hs1JI > div > div._3WsM9 > div > div > div:nth-child(3) > div > div > div:nth-child(1) > div > div:nth-child(1) > div > section > a').each(function(c, d) {
 					let no = $$(d).attr('href')
 				})
-				axios.get(no)
+				get(no)
 					.then(({
 						data
 					}) => {
-						const $ = cheerio.load(data)
+						const $ = load(data)
 						const result = [];
 						$('#root > main > div > div._2QovI > div._2rKEX._17aAh._1bdC8 > div > div._2HK_1 > div._1lkTS > div > img').each(function(a, b) {
 							result.push($(b).attr('src'))
@@ -2577,21 +2581,21 @@ async function sdevianart(query) {
 async function skonachan(chara) {
 	return new Promise((resolve, reject) => {
 		let text = chara.replace(' ', '_')
-		axios.get('https://konachan.net/post?tags=' + text + '+')
+		get('https://konachan.net/post?tags=' + text + '+')
 			.then(({
 				data
 			}) => {
-				const $$ = cheerio.load(data)
+				const $$ = load(data)
 				const no = [];
 				$$('div.pagination > a').each(function(c, d) {
 					no.push($$(d).text())
 				})
 				let mat = Math.floor(Math.random() * no.length)
-				axios.get('https://konachan.net/post?page=' + mat + '&tags=' + text + '+')
+				get('https://konachan.net/post?page=' + mat + '&tags=' + text + '+')
 					.then(({
 						data
 					}) => {
-						const $ = cheerio.load(data)
+						const $ = load(data)
 						const result = [];
 						$('#post-list > div.content > div:nth-child(4) > ul > li > a.directlink.largeimg').each(function(a, b) {
 							result.push($(b).attr('href'))
@@ -2606,11 +2610,11 @@ async function skonachan(chara) {
 /* New Line */
 async function swallpapercave(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://wallpapercave.com/search?q=' + query)
+		get('https://wallpapercave.com/search?q=' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const result = [];
 				$('div.imgrow > a').each(function(a, b) {
 					if (!$(b).find('img').attr('src').includes('.gif')) {
@@ -2626,11 +2630,11 @@ async function swallpapercave(query) {
 /* New Line */
 async function swallpapercraft(query) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://wallpaperscraft.com/search/?query=' + query)
+		get('https://wallpaperscraft.com/search/?query=' + query)
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const result = [];
 				$('span.wallpapers__canvas').each(function(a, b) {
 					result.push($(b).find('img').attr('src'))
@@ -2644,11 +2648,11 @@ async function swallpapercraft(query) {
 /* New Line */
 async function swallpaperhd(chara) {
 	return new Promise((resolve, reject) => {
-		axios.get('https://wall.alphacoders.com/search.php?search=' + chara + '&filter=4K+Ultra+HD')
+		get('https://wall.alphacoders.com/search.php?search=' + chara + '&filter=4K+Ultra+HD')
 			.then(({
 				data
 			}) => {
-				const $ = cheerio.load(data)
+				const $ = load(data)
 				const result = [];
 				$('div.boxgrid > a > picture').each(function(a, b) {
 					result.push($(b).find('img').attr('src').replace('thumbbig-', ''))
@@ -2743,12 +2747,15 @@ export default {
      * @param {String} url YouTube Video URL
      * @param {String} server (avaiable: `id4`, `en60`, `en61`, `en68`)
      */
-    yta(url, server = 'en68') { return yt(url, '128kbps', 'mp3', '128', server) },
+    yta(url, server = 'en406') { return yt(url, '128kbps', 'mp3', '128', server) },
     /**
      * Download YouTube Video as Video via y2mate
      * @param {String} url YouTube Video URL
      * @param {String} server (avaiable: `id4`, `en60`, `en61`, `en68`)
      */
-    ytv(url, server = 'en68') { return yt(url, '360p', 'mp4', '360', server) },
-    servers: ['id4', 'en60', 'en61', 'en68']
+    ytv(url, server = 'en406') { return yt(url, '360p', 'mp4', '360', server) },
+    ytvhd(url, server = 'en406') { return yt(url, '480p', 'mp4', '480', server) },
+    ytvfhd(url, server = 'en406') { return yt(url, '720p', 'mp4', '720', server) },
+    ytvfhdd(url, server = 'en406') { return yt(url, '1080p', 'mp4', '1080', server) },
+    servers: ['id4', 'id11', 'de14', 'en60', 'en61', 'en68', 'en88', 'en371', 'en406', 'es27', 'fr15', 'hi13', 'it13', 'jp8', 'kr7', 'mm7', 'my9', 'pt15', 'ru8', 'th8', 'tr8', 'vi12', 'zh-cn5', 'zh-tw5', 'sa12', 'bn9']
 }

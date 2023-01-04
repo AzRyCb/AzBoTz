@@ -1,3 +1,4 @@
+// @ts-check
 class TicTacToe {
     constructor(playerX = 'x', playerO = 'o') {
         this.playerX = playerX

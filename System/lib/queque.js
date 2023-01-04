@@ -1,7 +1,6 @@
+// @ts-check
 import EventEmitter from "events"
-
-const isNumber = x => typeof x === 'number' && !isNaN(x)
-const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(resolve, ms))
+const { delay } = (await import('./function.js')).default 
 
 const QUEQUE_DELAY = 5 * 1000
 

@@ -1,17 +1,17 @@
 // @ts-check
-import yargs from 'yargs'
-import os from 'os'
+import yargs from 'yargs' //gk bs
+import {platform} from 'os'
 import path from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { createRequire } from 'module'
-import fs from 'fs'
-import Stream, { Readable } from 'stream'
+import { promises, ReadStream, constants, existsSync, statSync, createWriteStream} from 'fs'
+import { isReadable, Readable } from 'stream'
 
 /** 
  * @param {ImportMeta | string} pathURL 
  * @param {boolean?} rmPrefix if value is `'true'`, it will remove `'file://'` prefix, if windows it will automatically false
  */
-const __filename = function filename(pathURL = import.meta, rmPrefix = os.platform() !== 'win32') {
+const __filename = function filename(pathURL = import.meta, rmPrefix = platform() !== 'win32') {
     const path = /** @type {ImportMeta} */ (pathURL).url || /** @type {String} */ (pathURL)
     return rmPrefix ?
         /file:\/\/\//.test(path) ?
@@ -25,8 +25,8 @@ const __dirname = function dirname(pathURL) {
     const dir = __filename(pathURL, true)
     const regex = /\/$/
     return regex.test(dir) ?
-        dir : fs.existsSync(dir) &&
-            fs.statSync(dir).isDirectory() ?
+        dir : existsSync(dir) &&
+            statSync(dir).isDirectory() ?
             dir.replace(regex, '') :
             path.dirname(dir)
 }
@@ -37,13 +37,13 @@ const __require = function require(dir = import.meta) {
     return createRequire(path)
 }
 /** @param {string} file */
-const checkFileExists = (file) => fs.promises.access(file, fs.constants.F_OK).then(() => true).catch(() => false)
+const checkFileExists = (file) => promises.access(file, constants.F_OK).then(() => true).catch(() => false)
 
 /** @type {(name: string, path: string, query: { [Key: string]: any }, apikeyqueryname: string) => string} */
 const API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.set.APIs ? global.set.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.set.APIKeys[name in global.set.APIs ? global.set.APIs[name] : name] } : {}) })) : '')
 /** @type {ReturnType<yargs.Argv['parse']>} */
 const opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
-const prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
+const prefix = new RegExp('^[' + (opts['prefix'] || '‎xyzXYZ/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
 
 
 /**
@@ -52,7 +52,7 @@ const prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°=
  * @returns {Promise<void>}
  */
 const saveStreamToFile = (stream, file) => new Promise((resolve, reject) => {
-    const writable = stream.pipe(fs.createWriteStream(file))
+    const writable = stream.pipe(createWriteStream(file))
     writable.once('finish', () => {
         resolve()
         writable.destroy()
@@ -90,6 +90,7 @@ const isNodeStream = (obj) => {
         )
     );
 }
+
 const isDestroyed = (stream) => {
     if (!isNodeStream(stream)) return null;
     const wState = stream._writableState;
@@ -108,7 +109,7 @@ const isReadableFinished = (stream, strict) => {
     );
 }
 const isReadableStream = (stream) => {
-    if (typeof Stream.isReadable === 'function') return Stream.isReadable(stream)
+    if (typeof isReadable === 'function') return isReadable(stream)
     if (stream && stream[kIsReadable] != null) return stream[kIsReadable];
     if (typeof stream?.readable !== 'boolean') return null;
     if (isDestroyed(stream)) return false;
@@ -116,7 +117,7 @@ const isReadableStream = (stream) => {
         isReadableNodeStream(stream) &&
         !!stream.readable &&
         !isReadableFinished(stream)
-    ) || stream instanceof fs.ReadStream || stream instanceof Readable;
+    ) || stream instanceof ReadStream || stream instanceof Readable;
 }
 
 export default {

@@ -1,3 +1,4 @@
+// @ts-check
 import mongoose from 'mongoose'
 
 const { Schema, connect, model: _model } = mongoose
@@ -170,10 +171,10 @@ export const mongoDBV2 = class MongoDBV2 {
           await this.write(data)
         } else {
           doc.data = listDoc
-          await doc.save()
+          await doc.save(resolve)
         }
         this.data = {}
-        resolve()
+        return resolve(true)
       })
     })
   }

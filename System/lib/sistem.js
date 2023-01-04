@@ -1,27 +1,29 @@
+// @ts-check
 import { tmpdir } from "os"
-import Crypto from "crypto"
+import Crypto from "crypto" //gk bs ktny
 const ffmpegPath = (await import('@ffmpeg-installer/ffmpeg')).path;
 import ff from "fluent-ffmpeg"
-import webp from "node-webpmux"
-import * as fs from 'fs'
-import * as path from 'path'
-import { createReadStream, promises, ReadStream } from 'fs'
+import webp from "node-webpmux"  //cr cr
+import { createReadStream, readFileSync, writeFileSync, promises, ReadStream, unlinkSync} from 'fs'
 import { join, dirname } from 'path'
 import { spawn } from 'child_process'
 import { Readable } from 'stream'
-import Helper from './helper.js'
-import uploadFile from './uploadFile.js'
-import uploadImage from './uploadImage.js'
 import { fileTypeFromBuffer } from 'file-type'
-import fetch from 'node-fetch';
+import fetch from 'node-fetch'; //gkbs
 import { fileURLToPath } from 'url'
-import * as  crypto from 'crypto'
 import { FormData, Blob } from 'formdata-node';
 import { JSDOM } from 'jsdom';
+import axios from 'axios' //gkbs
+import {load} from 'cheerio'
+import {format} from 'util'
+import request from 'request' //gkbs
+import uploadFile from './uploadFile.js'
+import uploadImage from './uploadImage.js'
 
-const __dirname = Helper.__dirname(import.meta.url)
+const {  __dirname, isReadableStream, saveStreamToFile } = (await import('./helper.js')).default 
+const __dirname1 = __dirname(import.meta.url)
 const __dirname2 = dirname(fileURLToPath(import.meta.url))
-const tmp = path.join(__dirname2, '../tmp')
+const tmp = join(__dirname2, '../tmp')
 
 /**
  * 
@@ -81,6 +83,178 @@ async function webp2png(source) {
   return new URL(document2.querySelector('div#output > p.outfile > img').src, res2.url).toString()
 }
 
+const toBuffer = async (file) => {
+  file = Buffer.isBuffer(file) ? file : typeof file === 'string' && file.startsWith('http') ? (await axios.get(file, {
+  responseType: 'arraybuffer',
+  })).data : readFileSync(file)
+  const buffer = await fileTypeFromBuffer(file)
+  return { buffer: file, mime: buffer.mime }
+  }
+   
+  const pendek = async (url) => {
+  var tin = await axios.get(`https://tinyurl.com/api-create.php?url=${url}`)
+  return tin.data
+  }
+   
+   
+  // set exif
+  async function setExif(webpSticker, packname, author, extra = {}) {
+  return new Promise(async (resolve, reject) => {
+  const img = new Image()
+  const stickerPackId = randomBytes(16).toString('hex').slice(0, 8)
+  const json = {
+  'sticker-pack-id': stickerPackId,
+  'sticker-pack-name': global.set.packname,
+  'sticker-pack-publisher': global.set.author,
+  'sticker-pack-publisher-id': global.set.author,
+  'sticker-pack-version': '1.0.0',
+  'android-app-store-link': 'https://hardianto.xyz',
+  'ios-app-store-link': 'https://hardianto.xyz',
+  'sticker-pack-description': 'sticker ini merupakan sticker yang telah di generate oleh jamal',
+  emojis: ['❤', '😍', '😘', '💕', '😻', '💑', '👩‍❤‍👩', '👨‍❤‍👨', '💏', '👩‍❤‍💋‍👩', '👨‍❤‍💋‍👨', '🧡', '💛', '💚', '💙', '💜', '🖤', '💔', '❣', '💞', '💓', '💗', '💖', '💘', '💝', '💟', '♥', '💌', '💋', '👩‍❤️‍💋‍👩', '👨‍❤️‍💋‍👨', '👩‍❤️‍👨', '👩‍❤️‍👩', '👨‍❤️‍👨', '👩‍❤️‍💋‍👨', '👬', '👭', '👫', '🥰', '😚', '😙', '👄', '🌹', '😽', '❣️', '❤️', '😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '🙂', '😛', '😝', '😜', '🤪', '🤗', '😺', '😸', '😹', '☺', '😌', '😉', '🤗', '😊', '🎊', '🎉', '🎁', '🎈', '👯‍♂️', '👯', '👯‍♀️', '💃', '🕺', '🔥', '⭐️', '✨', '💫', '🎇', '🎆', '🍻', '🥂', '🍾', '🎂', '🍰', '☹', '😣', '😖', '😫', '😩', '😢', '😭', '😞', '😔', '😟', '😕', '😤', '😠', '😥', '😰', '😨', '😿', '😾', '😓', '🙍‍♂', '🙍‍♀', '💔', '🙁', '🥺', '🤕', '☔️', '⛈', '🌩', '🌧,😯', '😦', '😧', '😮', '😲', '🙀', '😱', '🤯', '😳', '❗', '❕', '🤬', '😡', '😠', '🙄', '👿', '😾', '😤', '💢', '👺', '🗯️', '😒', '🥵', '👋'],
+  ...extra,
+  }
+  let exifAttr = Buffer.from([0x49, 0x49, 0x2a, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x41, 0x57, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x16, 0x00, 0x00, 0x00])
+  let jsonBuffer = Buffer.from(JSON.stringify(json), 'utf8')
+  let exif = Buffer.concat([exifAttr, jsonBuffer])
+  exif.writeUIntLE(jsonBuffer.length, 14, 4)
+  await img.load(webpSticker)
+  img.exif = exif
+  return resolve(await img.save(null))
+  })
+  }
+   
+  async function makeWm(
+  file,
+  datao = {
+  author: '',
+  pack: '',
+  keepScale: true,
+  removebg: 'HQ',
+  circle: false,
+  }
+  ) {
+  return new Promise(async (resolve, reject) => {
+  const buffer = await toBuffer(file)
+  if (buffer.mime == 'image/webp') return resolve(await setExif(buffer.buffer, datao.pack, datao.author))
+  const config2 = {
+  ...datao,
+  processOptions: {
+  crop: !datao.keepScale,
+  fps: 10,
+  startTime: '00:00:00.0',
+  endTime: '00:00:7.0',
+  loop: 0,
+  },
+  }
+  const DEFAULT_URL = 'https://sticker-api.openwa.dev/'
+  let Type = buffer.mime.includes('image') ? 'image' : 'file'
+  let url = String(`${DEFAULT_URL}${Type === 'image' ? 'prepareWebp' : 'convertMp4BufferToWebpDataUrl'}`)
+  await axios(url, {
+  method: 'POST',
+  headers: {
+  Accept: 'application/json, text/plain, /',
+  'Content-Type': 'application/json;charset=utf-8',
+  'User-Agent': 'WhatsApp/2.2037.6 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36',
+  },
+  data: JSON.stringify(
+  Object.assign(
+  config,
+  { stickerMetadata: config2 },
+  {
+  [Type]: `data:${buffer.mime};base64,${buffer.buffer.toString('base64')}`,
+  }
+  )
+  ),
+  maxBodyLength: Infinity,
+  maxContentLength: Infinity,
+  })
+  .then(async ({ data }) => {
+  if (Type === 'image') return resolve(await this.setExif(Buffer.from(data.webpBase64, 'base64'), datao.author, datao.pack))
+  else {
+  const webpBase = data.replace(/^data:(.*?);base64,/, '')
+  const webpBase64 = webpBase.replace(/ /g, '+')
+  const file = Buffer.from(webpBase64, 'base64')
+  resolve(await this.setExif(file, datao.pack, datao.author))
+  }
+  })
+  .catch((err) => reject(err))
+  })
+  }
+   
+  async function attp(text){
+  return new Promise(async(resolve, reject) => {
+  const getid = await axios.get('https://id.bloggif.com/text')
+  const id = load(getid.data)('#content > form').attr('action')
+  const options = {
+  method: "POST",
+  url: `https://id.bloggif.com${id}`,
+  headers: {
+  "content-type": 'application/x-www-form-urlencoded',
+  "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+  },
+  formData: {
+  target: 1,
+  text: text,
+  glitter_id: Math.floor(Math.random() * 2821),
+  font_id: 'tahoma_bold',
+  //'candara_bold',
+  //'comic_sans_ms_bold',
+  //'lucida_sans_demibold_roman',
+  size: 100,
+  bg_color: 'FFFFFF',
+  transparent: 1,
+  border_color: '000000',
+  border_width: 0,
+  shade_color: '000000',
+  shade_width: 0,
+  angle: 0,
+  text_align: 'center'
+  },
+  };
+  request(options, async function(error, response, body) {
+  if (error) return new Error(error)
+  const $ = load(body)
+  const url = $('#content > div:nth-child(10) > a').attr('href')
+  var anu = await (await fetch(`https://id.bloggif.com${url}`)).buffer()
+  resolve({status: 200, author: global.set.pack, result: anu})
+  })
+  })
+  }
+   
+  async function ttp(text){
+  return new Promise((resolve, reject) => {
+  const options = {
+  method: 'POST',
+  url: `https://www.picturetopeople.org/p2p/text_effects_generator.p2p/transparent_text_effect`,
+  headers: {
+  "Content-Type": "application/x-www-form-urlencoded",
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36",
+  "Cookie": "_ga=GA1.2.1667267761.1655982457; _gid=GA1.2.77586860.1655982457; __gads=ID=c5a896288a559a38-224105aab0d30085:T=1655982456:RT=1655982456:S=ALNI_MbtHcmgQmVUZI-a2agP40JXqeRnyQ; __gpi=UID=000006149da5cba6:T=1655982456:RT=1655982456:S=ALNI_MY1RmQtva14GH-aAPr7-7vWpxWtmg; _gat_gtag_UA_6584688_1=1"
+  },
+  formData: {
+  'TextToRender': text,
+  'FontSize': '100',
+  'Margin': '30',
+  'LayoutStyle': '0',
+  'TextRotation': '0',
+  'TextColor': 'ffffff',
+  'TextTransparency': '0',
+  'OutlineThickness': '3',
+  'OutlineColor': '000000',
+  'FontName': 'Lekton',
+  'ResultType': 'view'
+  }
+  };
+  request(options, async function(error, response, body) {
+  if (error) throw new Error(error)
+  const $ = load(body)
+  const result = 'https://www.picturetopeople.org' + $('#idResultFile').attr('value')
+  var res = await (await fetch(result)).buffer()
+  resolve({ status: 200, author: global.set.pack, result: res })
+  });
+  })
+  }
 
 /**
  * Image to Sticker
@@ -95,8 +269,8 @@ function sticker2(img, url) {
         if (res.status !== 200) throw await res.text()
         img = await res.buffer()
       }
-      let inp = path.join(tmp, +new Date + '.jpeg')
-      await fs.promises.writeFile(inp, img)
+      let inp = join(tmp, +new Date + '.jpeg')
+      await promises.writeFile(inp, img)
       let ff = spawn('ffmpeg', [
         '-y',
         '-i', inp,
@@ -106,12 +280,12 @@ function sticker2(img, url) {
       ])
       ff.on('error', reject)
       ff.on('close', async () => {
-        await fs.promises.unlink(inp)
+        await promises.unlink(inp)
       })
       let bufs = []
       const [_spawnprocess, ..._spawnargs] = [...(module.exports.support.gm ? ['gm'] : module.exports.magick ? ['magick'] : []), 'convert', 'png:-', 'webp:-']
       let im = spawn(_spawnprocess, _spawnargs)
-      im.on('error', e => conn.reply(m.chat, util.format(e), m))
+      im.on('error', e => this.reply(m.chat, format(e), m))
       im.stdout.on('data', chunk => bufs.push(chunk))
       ff.stdout.pipe(im.stdin)
       im.on('exit', () => {
@@ -200,7 +374,7 @@ async function sticker5(img, url, packname, author, categories = [''], extra = {
   const { Sticker } = await import('wa-sticker-formatter')
   const stickerMetadata = {
     type: 'default',
-    pack: packname,
+    pack: global.set.packname,
     author,
     categories,
     ...extra
@@ -225,20 +399,20 @@ function sticker6(img, url) {
       ext: 'bin'
     }
     if (type.ext == 'bin') reject(img)
-    const tmp = path.join(__dirname2, `../tmp/${+ new Date()}.${type.ext}`)
-    const out = path.join(tmp + '.webp')
-    await fs.promises.writeFile(tmp, img)
+    const tmp = join(__dirname2, `../tmp/${+ new Date()}.${type.ext}`)
+    const out = join(tmp + '.webp')
+    await promises.writeFile(tmp, img)
     // https://github.com/MhankBarBar/termux-wabot/blob/main/index.js#L313#L368
     let Fffmpeg = /video/i.test(type.mime) ? ff(tmp).inputFormat(type.ext) : ff(tmp).input(tmp)
     Fffmpeg
       .on('error', function (err) {
         console.error(err)
-        fs.promises.unlink(tmp)
+        promises.unlink(tmp)
         reject(img)
       })
       .on('end', async function () {
-        fs.promises.unlink(tmp)
-        resolve(await fs.promises.readFile(out))
+        promises.unlink(tmp)
+        resolve(await promises.readFile(out))
       })
       .addOutputOptions([
         `-vcodec`, `libwebp`, `-vf`,
@@ -260,7 +434,7 @@ function sticker6(img, url) {
  */
 async function addExif(webpSticker, packname, author, categories = [''], extra = {}) {
   const img = new webp.Image();
-  const stickerPackId = crypto.randomBytes(32).toString('hex');
+  const stickerPackId = Crypto.randomBytes(32).toString('hex');
   const json = { 'sticker-pack-id': stickerPackId, 'sticker-pack-name': packname, 'sticker-pack-publisher': author, 'emojis': categories, ...extra };
   let exifAttr = Buffer.from([0x49, 0x49, 0x2A, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x41, 0x57, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x16, 0x00, 0x00, 0x00]);
   let jsonBuffer = Buffer.from(JSON.stringify(json), 'utf8');
@@ -280,9 +454,9 @@ async function addExif(webpSticker, packname, author, categories = [''], extra =
 async function sticker(img, url, ...args) {
   let lastError, stiker
   for (let func of [
-    sticker3, global.support.ffmpeg && sticker6, sticker5,
-    global.support.ffmpeg && global.support.ffmpegWebp && sticker4,
-    global.support.ffmpeg && (global.support.convert || global.support.magick || global.support.gm) && sticker2,
+    sticker3, global.set.support.ffmpeg && sticker6, sticker5,
+    global.set.support.ffmpeg && global.set.support.ffmpegWebp && sticker4,
+    global.set.support.ffmpeg && (global.set.support.convert || global.set.support.magick || global.set.support.gm) && sticker2,
     sticker1
   ].filter(f => f)) {
     try {
@@ -331,11 +505,11 @@ const support = {
 function ffmpeg(buffer, args = [], ext = '', ext2 = '') {
   return new Promise(async (resolve, reject) => {
     try {
-      const tmp = join(__dirname, `../tmp/${Date.now()}.${ext}`)
+      const tmp = join(__dirname1, `../tmp/${Date.now()}.${ext}`)
       const out = `${tmp}.${ext2}`
 
-      const isStream = Helper.isReadableStream(buffer)
-      if (isStream) await Helper.saveStreamToFile(buffer, tmp)
+      const isStream = isReadableStream(buffer)
+      if (isStream) await saveStreamToFile(buffer, tmp)
       else await promises.writeFile(tmp, buffer)
 
       spawn('ffmpeg', [
@@ -426,10 +600,10 @@ ff.setFfmpegPath(ffmpegPath);
 
 async function imageToWebp (media) {
 
-    const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
-    const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.jpg`)
+    const tmpFileOut = join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
+    const tmpFileIn = join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.jpg`)
 
-    fs.writeFileSync(tmpFileIn, media)
+    writeFileSync(tmpFileIn, media)
 
     await new Promise((resolve, reject) => {
         ff(tmpFileIn)
@@ -445,18 +619,18 @@ async function imageToWebp (media) {
             .save(tmpFileOut)
     })
 
-    const buff = fs.readFileSync(tmpFileOut)
-    fs.unlinkSync(tmpFileOut)
-    fs.unlinkSync(tmpFileIn)
+    const buff = readFileSync(tmpFileOut)
+    unlinkSync(tmpFileOut)
+    unlinkSync(tmpFileIn)
     return buff
 }
 
 async function videoToWebp (media) {
 
-    const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
-    const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.mp4`)
+    const tmpFileOut = join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
+    const tmpFileIn = join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.mp4`)
 
-    fs.writeFileSync(tmpFileIn, media)
+    writeFileSync(tmpFileIn, media)
 
     await new Promise((resolve, reject) => {
         ff(tmpFileIn)
@@ -483,17 +657,17 @@ async function videoToWebp (media) {
             .save(tmpFileOut)
     })
 
-    const buff = fs.readFileSync(tmpFileOut)
-    fs.unlinkSync(tmpFileOut)
-    fs.unlinkSync(tmpFileIn)
+    const buff = readFileSync(tmpFileOut)
+    unlinkSync(tmpFileOut)
+    unlinkSync(tmpFileIn)
     return buff
 }
 
 async function writeExifImg (media, metadata) {
     let wMedia = await imageToWebp(media)
-    const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
-    const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
-    fs.writeFileSync(tmpFileIn, wMedia)
+    const tmpFileIn = join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
+    const tmpFileOut = join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
+    writeFileSync(tmpFileIn, wMedia)
 
     if (metadata.packname || metadata.author) {
         const img = new webp.Image()
@@ -503,7 +677,7 @@ async function writeExifImg (media, metadata) {
         const exif = Buffer.concat([exifAttr, jsonBuff])
         exif.writeUIntLE(jsonBuff.length, 14, 4)
         await img.load(tmpFileIn)
-        fs.unlinkSync(tmpFileIn)
+        unlinkSync(tmpFileIn)
         img.exif = exif
         await img.save(tmpFileOut)
         return tmpFileOut
@@ -512,9 +686,9 @@ async function writeExifImg (media, metadata) {
 
 async function writeExifVid (media, metadata) {
     let wMedia = await videoToWebp(media)
-    const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
-    const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
-    fs.writeFileSync(tmpFileIn, wMedia)
+    const tmpFileIn = join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
+    const tmpFileOut = join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
+    writeFileSync(tmpFileIn, wMedia)
 
     if (metadata.packname || metadata.author) {
         const img = new webp.Image()
@@ -524,7 +698,7 @@ async function writeExifVid (media, metadata) {
         const exif = Buffer.concat([exifAttr, jsonBuff])
         exif.writeUIntLE(jsonBuff.length, 14, 4)
         await img.load(tmpFileIn)
-        fs.unlinkSync(tmpFileIn)
+        unlinkSync(tmpFileIn)
         img.exif = exif
         await img.save(tmpFileOut)
         return tmpFileOut
@@ -533,9 +707,9 @@ async function writeExifVid (media, metadata) {
 
 async function writeExif (media, metadata) {
     let wMedia = /webp/.test(media.mimetype) ? media.data : /image/.test(media.mimetype) ? await imageToWebp(media.data) : /video/.test(media.mimetype) ? await videoToWebp(media.data) : ""
-    const tmpFileIn = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
-    const tmpFileOut = path.join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
-    fs.writeFileSync(tmpFileIn, wMedia)
+    const tmpFileIn = join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
+    const tmpFileOut = join(tmpdir(), `${Crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.webp`)
+    writeFileSync(tmpFileIn, wMedia)
 
     if (metadata.packname || metadata.author) {
         const img = new webp.Image()
@@ -545,7 +719,7 @@ async function writeExif (media, metadata) {
         const exif = Buffer.concat([exifAttr, jsonBuff])
         exif.writeUIntLE(jsonBuff.length, 14, 4)
         await img.load(tmpFileIn)
-        fs.unlinkSync(tmpFileIn)
+        unlinkSync(tmpFileIn)
         img.exif = exif
         await img.save(tmpFileOut)
         return tmpFileOut
@@ -554,5 +728,6 @@ async function writeExif (media, metadata) {
 //converter,exif,sticker,web2mp4
 export { imageToWebp, videoToWebp, writeExifImg, writeExifVid, writeExif,  
   toAudio, toPTT, toVideo, ffmpeg,
-  sticker,sticker1,sticker2,sticker3,sticker4,sticker6,addExif,support,  
-  webp2mp4, webp2png  }
+  sticker, sticker1, sticker2, sticker3, sticker4, sticker6, addExif, support,  
+  webp2mp4, webp2png,
+  makeWm, setExif, attp, ttp  }

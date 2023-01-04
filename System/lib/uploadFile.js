@@ -1,3 +1,4 @@
+// @ts-check
 import fetch from 'node-fetch'
 import { FormData, Blob } from 'formdata-node'
 import { fileTypeFromBuffer } from 'file-type'

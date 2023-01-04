@@ -25,6 +25,7 @@
  - License: [MIT](https://en.wikipedia.org/wiki/MIT_License)
  - Bot ini menggunakan apikey & scrapper
  - Default Prefixes: `!, @, #, $, %, ^, &, /, .`
+ - use npm version: npm:baileys@Latest
   
 [![BOT WHATSAPP](https://img.shields.io/badge/WhatsApp%20BOT-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/6283879175089) 
 [![ONWER](https://img.shields.io/badge/Owner%20BOT-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/6285795035419) 

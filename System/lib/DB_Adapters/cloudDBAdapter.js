@@ -1,4 +1,5 @@
-import got from 'got'
+// @ts-check
+import got from 'got' //gk bs
 
 const stringify = obj => JSON.stringify(obj, null, 2)
 const parse = str => JSON.parse(str, (_, v) => {

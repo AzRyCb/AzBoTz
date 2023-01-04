@@ -2,23 +2,18 @@
     "name": "AzBoTz-MD",
     "version": "0.0.0",
     "description": "Simple Whatsapp Bot With Esm Module",
-    "depecrated": false,
-    "main": "index.js",
+    "main": "System/index.js",
     "type": "module",
     "directories": {
-        "system/lib": "system/lib",
-        "system/src": "system/src",
-        "plugins": "plugins"
+        "System/lib": "System/lib",
+        "System/src": "System/src",
+        "System/plugins": "System/plugins"
     },
     "scripts": {
-        "start": "node index.js",
+        "start": "node . --clearses --autocleartmp",
         "test": "node test.js",
         "test2": "nodemon index.js"
     },
-    "keywords": [
-        "whatsapp-bot",
-        "Games-wabot"
-    ],
     "homepage": "https://github.com/AzRyCb",
     "author": {
         "name": "AzRyCb"
@@ -32,7 +27,8 @@
     },
     "license": "GPL-3.0-or-later",
     "dependencies": {
-        "@adiwajshing/baileys": "github:amiruldev20/baileys",
+        "@adiwajshing/baileys": "npm:baileys@latest",
+        "@adiwajshing/keyed-db": "latest",
         "@bochilteam/scraper": "latest",
         "@ffmpeg-installer/ffmpeg": "latest",
         "@ibaraki-douji/pixivts": "latest",
@@ -50,6 +46,7 @@
         "deepai": "latest",
         "dhn-api": "latest",
         "didyoumean": "latest",
+        "express": "latest",
         "emoji-api": "latest",
         "feedid": "latest",
         "file-type": "latest",
@@ -63,6 +60,7 @@
         "image-to-base64": "latest",
         "jsdom": "latest",
         "jimp": "latest",
+        "knights-canvas": "github:squad-404/knights-canvas",
         "link-preview-js": "latest",
         "lodash": "latest",
         "lowdb": "latest",
@@ -71,11 +69,12 @@
         "moment-timezone": "latest",
         "mongoose": "latest",
         "mime-types": "latest",
-        "node-fetch": "latest",
+        "node-fetch": "^3.2.0",
         "node-webpmux": "latest",
         "node-gtts": "latest",
-        "nhentai-node-api": "latest",
+        "nhentai-node-api": "github:AzRyCb/nhentai-node-api",
         "ocr-space-api-wrapper": "latest",
+        "obfuscator": "latest",
         "pino": "latest",
         "pino-pretty": "latest",
         "qrcode": "latest",
@@ -87,8 +86,9 @@
         "spinnies": "latest",
         "socket.io": "latest",
         "syntax-error": "latest",
+        "terminal-image": "latest",
         "translate-google": "latest",
-        "translate-google-api": "latest",
+        "translate-google-api": "github:lalcaraz-breezeway/translate-google-api",
         "url-regex-safe": "latest",
         "xfarr-api": "^2.0.0",
         "yargs": "latest",

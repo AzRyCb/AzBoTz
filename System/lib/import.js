@@ -2,9 +2,8 @@
 
 // import { resolve } from 'path'
 // import { Worker, isMainThread, parentPort, workerData } from 'worker_threads'
-import Helper from './helper.js'
-
-const WORKER_DIR = Helper.__dirname(import.meta.url, false)
+const { __dirname, __filename } = (await import('./helper.js')).default 
+const WORKER_DIR = __dirname(import.meta.url, false)
 // const WORKER_FILE = Helper.__filename(resolve(WORKER_DIR, './import.js'), false)
 
 // if (!isMainThread) importModule(workerData)
@@ -30,7 +29,7 @@ export default async function importLoader(module) {
     //     worker.once('message', (msg) => (killWorker(), console.log(msg.data), resolve(msg)))
     //     worker.once('error', (error) => (killWorker(), reject(error)))
     // })
-    module = Helper.__filename(module)
+    module = __filename(module)
     const module_ = await import(`${module}?id=${Date.now()}`)
     const result = module_ && 'default' in module_ ? module_.default : module_
     return result

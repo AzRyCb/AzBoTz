@@ -1,9 +1,16 @@
-import fetch from 'node-fetch'
-import axios from 'axios'
-import cfonts from 'cfonts'
-import spin from 'spinnies'
-import Crypto from 'crypto'
-import moment from 'moment-timezone'
+// @ts-check
+import fetch from 'node-fetch' //gk bs
+import axios from 'axios' //gk bisa
+import cfonts from 'cfonts' //gkbs
+import spin from 'spinnies' //gkbs
+import Crypto from 'crypto' //nanti eror
+import moment from 'moment-timezone'//gkbs
+
+global.set.ucapan = ucapann()
+global.set.pickRandom = pickRandom
+
+const more = String.fromCharCode(8206)
+const readMore = more.repeat(4001)
 
 const wait = async (media) => new Promise(async (resolve, reject) => {
     const attachmentData = `data:image/jpeg;base64,${media.toString('base64')}`
@@ -36,7 +43,7 @@ const parseMention = async (text = '') => {
 const simih = async (text) => {
 	try {
 		const sami = await fetch(`https://simsumi.herokuapp.com/api?text=${text}`, {method: 'GET'})
-		const res = await sami.json()
+		let res = await sami.json()
 		return res.success
 	} catch {
 		return 'Simi ga tau apa yang anda ngomong, bahasa alien yah kak?'
@@ -75,7 +82,7 @@ const getBuffer = async(url, options) => {
         })
         return res.data
     } catch (e) {
-        console.log(`Error : ${e}`)
+        console.info(`Error : ${e}`)
     }
 }
 
@@ -88,7 +95,7 @@ const generateMessageID = () => {
 }
 
 const getGroupAdmins = (participants) => {
-    admins = []
+    let admins = []
     for (let i of participants) {
         i.isAdmin ? admins.push(i.jid) : ''
     }
@@ -97,41 +104,6 @@ const getGroupAdmins = (participants) => {
 
 const getRandom = (ext) => {
     return `${Math.floor(Math.random() * 10000)}${ext}`
-}
-
-function pickRandom(list) {
-	return list[Math.floor(Math.random() * list.length)]
-}
-  
-function clockString(ms) {
-	  let h = isNaN(ms) ? '-' : Math.floor(ms / 3600000)
-	  let m = isNaN(ms) ? '-' : Math.floor(ms / 60000) % 60
-	  let s = isNaN(ms) ? '-' : Math.floor(ms / 1000) % 60
-	  return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
-}
-  
-function ucapan() {
-	let waktunya = moment.tz('Asia/Jakarta').format('HH')
-	let ucapin = 'Halo'
-	if(waktunya >= 1) {
-		ucapin = 'Selamat Pagi 🗿'
-	}
-	if(waktunya >= 4) {
-		ucapin = 'Selamat pagi 🌄'
-	}
-	if(waktunya > 10) {
-		ucapin = 'Selamat siang ☀️'
-	}
-	if(waktunya >= 15) {
-		ucapin = 'Selamat sore 🌅'
-	}
-	if(waktunya >= 18) {
-		ucapin = 'Selamat malam 🌙'
-	}
-	if(waktunya >= 24) {
-		ucapin = 'Selamat Begadang 🗿'
-	}
-	return ucapin
 }
 
 const spinner = {
@@ -154,13 +126,12 @@ const spinner = {
 
 let globalSpinner;
 
-
 const getGlobalSpinner = (disableSpins = false) => {
     if (!globalSpinner) globalSpinner = new spin({ color: 'blue', succeedColor: 'green', spinner, disableSpins });
     return globalSpinner;
 }
 
-let spins = getGlobalSpinner(false)
+const spins = getGlobalSpinner(false)
 
 const start = (id, text) => {
     spins.add(id, { text: text })
@@ -217,13 +188,7 @@ const stalkff = async (userId) => {
   }
 }
 
-function randomSelect(...arr) {
-	if(!arr || arr.length === 0) throw new Error("Array / Text ?");
-	if(typeof arr[0] === "object") arr = arr[0];
-	return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function randomPass(length, opts = {}) {
+const randomPass = (length, opts = {}) => {
 	let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	let lower = "abcdefghijklmnopqrstuvwxyz"
 	let num = "0123456789"
@@ -240,6 +205,68 @@ function randomPass(length, opts = {}) {
 	for(let i = 1; i <= length; i++) result += all[Math.floor(Math.random() * all.length)]
 
 	return result
+}
+
+class Kerang {
+	constructor() {
+		this.apakah = function(text) {
+			let jawaban = ["Iya", "Tidak", "Mungkin", "Mungkin Iya", "Mungkin Tidak", "Coba Tanya Lagi"][Math.floor(Math.random() * 6)];
+			return jawaban;
+		};
+		this.kapankah = function(text) {
+			let jawaban = ["Besok", "2 Hari Lagi", "10 Hari Lagi", "Tahun depan", new Date().getFullYear() + 3, new Date().getFullYear() + 5, new Date().getFullYear() + 2][Math.floor(Math.random() * 7)];
+			return jawaban;
+		}
+	}
+}
+
+const upperFirst = function(str) {
+  return str[0].toUpperCase() + str.replace(str[0], "")
+}
+
+const isNumber = x => typeof x === 'number' && !isNaN(x)
+
+//ubah jadi const bg
+
+function pickRandom(list) {
+	return list[Math.floor(Math.random() * list.length)]
+}
+  
+function clockString(ms) {
+	  let h = isNaN(ms) ? '-' : Math.floor(ms / 3600000)
+	  let m = isNaN(ms) ? '-' : Math.floor(ms / 60000) % 60
+	  let s = isNaN(ms) ? '-' : Math.floor(ms / 1000) % 60
+	  return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
+}
+
+function ucapann() {
+	let waktunya = moment.tz('Asia/Jakarta').format('HH')
+	let ucapin = 'Halo'
+	if(waktunya >= 1) {
+		ucapin = 'Selamat Pagi 🗿'
+	}
+	if(waktunya >= 4) {
+		ucapin = 'Selamat pagi 🌄'
+	}
+	if(waktunya > 10) {
+		ucapin = 'Selamat siang ☀️'
+	}
+	if(waktunya >= 15) {
+		ucapin = 'Selamat sore 🌅'
+	}
+	if(waktunya >= 18) {
+		ucapin = 'Selamat malam 🌙'
+	}
+	if(waktunya >= 24) {
+		ucapin = 'Selamat Begadang 🗿'
+	}
+	return ucapin
+}
+/*
+function randomSelect(...arr) {
+	if(!arr || arr.length === 0) throw new Error("Array / Text ?");
+	if(typeof arr[0] === "object") arr = arr[0];
+	return arr[Math.floor(Math.random() * arr.length)];
 }
 
 function randomUID(length = 5) {
@@ -272,11 +299,6 @@ function isNotString(text) {
 function isNotNumber(n) {
 	return typeof(n) != "number";
 }
-
-function isNumber() {
-	const int = parseInt(this)
-	return typeof int === 'number' && !isNaN(int)
-  }
 
 function wame(n, text) {
 	if(n == undefined) return !1
@@ -337,19 +359,6 @@ function genHTML(wn = "(Name)", js, css, cnt) {
 	return out;
 }
 
-class Kerang {
-	constructor() {
-		this.apakah = function(text) {
-			let jawaban = ["Iya", "Tidak", "Mungkin", "Mungkin Iya", "Mungkin Tidak", "Coba Tanya Lagi"][Math.floor(Math.random() * 6)];
-			return jawaban;
-		};
-		this.kapankah = function(text) {
-			let jawaban = ["Besok", "2 Hari Lagi", "10 Hari Lagi", "Tahun depan", new Date().getFullYear() + 3, new Date().getFullYear() + 5, new Date().getFullYear() + 2][Math.floor(Math.random() * 7)];
-			return jawaban;
-		}
-	}
-}
-
 function hk(digit = 4) {
 	digit = digit * 1; // Number(digit)
 	if(digit <= 0) return hk(digit + 2);
@@ -372,8 +381,7 @@ function chck(code) {
 	return "Nothing";
 }
 
-const upperFirst = function(str) {
-  return str[0].toUpperCase() + str.replace(str[0], "")
-}
-
-export default { wait, delay, parseMention, simih, getBuffer, h2k, generateMessageID, getGroupAdmins, getRandom, start, info, success, banner, close, pickRandom, clockString, ucapan, jsonformat, stalkff, randomBytes, parseRegex, clockString, randomSelect, randomPass, randomUID, randomPh, isString, isNotString, isNumber, isNotNumber, wame, find, isEven, isOdd, getAge, parseRegex, genHTML, kerang: new Kerang(), hk, chck, upperFirst }
+*/
+//randomUID, randomPh, isString, isNotString, wame, find, isEven, isOdd, getAge, parseRegex, genHTML, kerang: new Kerang(), hk, chck,parseRegex, clockString, randomSelect, pickRandom, clockString, ucapan
+export {isNumber}
+export default { more, readMore, wait, delay, parseMention, simih, getBuffer, h2k, generateMessageID, getGroupAdmins, getRandom, start, info, success, banner, close, jsonformat, stalkff, randomBytes, randomPass, upperFirst }

@@ -1,0 +1,1 @@
+rm -rf MyBot && git clone https://github.com/AzRyCb/MyBot && sudo apt install ffmpeg imagemagick -y && cd MyBot && npm install && npm install -g pm2 && pm2 start index.js && pm2 logs
