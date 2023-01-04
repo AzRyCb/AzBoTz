@@ -26,7 +26,7 @@ jobs:
           command: node test.js
   push:
     docker:
-      - image: cimg/base:2022.12
+      - image: cimg/base:2023.01
     steps:
       - add_ssh_keys:
           fingerprints:
