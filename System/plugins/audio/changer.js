@@ -3,7 +3,6 @@ import { join } from 'path'
 import { exec } from 'child_process'
 
 let handler = async (m, { conn, args, __dirname, usedPrefix, command }) => {
-try {
 let q = m.quoted ? m.quoted : m
 let mime = ((m.quoted ? m.quoted : m.msg).mimetype || '')
 let set
@@ -32,9 +31,7 @@ type: 'audioMessage',
 ptt: true 
 })})
 } else throw `*[INFO] respond to the audio or voice note which will be modified, use the command ${usedPrefix + command}*`
-} catch (e) {
-throw e
-}}
+}
 handler.help = ['bass', 'blown', 'deep', 'earrape', 'fast', 'fat', 'nightcore', 'reverse', 'robot', 'slow', 'smooth', 'tupai'].map(v => v + ' [vn]')
 handler.tags = ['audio']
 handler.command = /^(bass|blown|deep|earrape|fas?t|nightcore|reverse|robot|slow|smooth|tupai|squirrel|chipmunk)$/i

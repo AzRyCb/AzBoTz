@@ -89,7 +89,6 @@ ${usedPrefix + command} pinterest |wibu
 await conn.sendButtonVid(m.chat, logo, caption, 'Nih.mp4', 'Back', '.menulist', fakes, adReply)
 	}
             
-try {
 if (command) {
 switch (template) {
         
@@ -233,24 +232,17 @@ case 'toxic':
   let c_ = await a_.download()
   let e_ = new Sticker(c_, { pack: set.packname, author: set.author, type: StickerTypes.FULL })
   let d_
-  try {
   if (/webp/g.test(b_)) d_ = await webp2png(c_)
         else if (/image/g.test(b_)) d_ = await uploadImage(c_)
         else if (/video/g.test(b_)) d_ = await uploadFile(c_)
         else if (/viewOnce/g.test(b_)) d_ = await uploadFile(c_)
         if (typeof d_ !== 'string') d_ = await uploadImage(c_)
         else if (/gif/g.test(b_)) d_ = e_
-        } catch (e) {
-        throw eror
-        }
         let wnt = `https://restapi.frteam.xyz/wanted?url=${d_}&apikey=Hrbot`
         conn.sendButton(m.chat, 'Nih.jpg', set.wm, wnt, ['To Sticker', '.s'], fakes, adReply)
             break
             
 }
-}
-} catch (e) {
-throw eror
 }
 }
 handler.help = ['frt <command> <teks>']

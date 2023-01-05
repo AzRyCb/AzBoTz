@@ -36,7 +36,7 @@ if (chat && chat.updateAnimeNews) {
 		}
 	}, 10*60*1000) // 10 minutes 10*60*1000
 }
-
+/*
 //autodidyoumean
 if ((usedPrefix = (match[0] || '')[0])) {
 	let noPrefix = m.text.replace(usedPrefix, '')
@@ -51,7 +51,7 @@ if (help.includes(noPrefix)) return
 	let caption = `👋 Hai ${name} @${who.split("@")[0]}, Apakah yang kamu maksud: *${usedPrefix + mean}*\nSimilarity: *${Number(sim * 100).toFixed(2)}%*`
 if (mean) conn.sendButton(m.chat, caption, set.wm, null, [['✅ Iya', `${usedPrefix + mean} ${text}`], ['❌ Bukan', usedPrefix + '?']], m, { mentions: conn.parseMention(caption) })
 }	
-
+*/
 if (chat.updateAnime) {
 	if (!chat.lastAnime) chat.lastAnime = []
 	let lastAnime = chat.lastAnime

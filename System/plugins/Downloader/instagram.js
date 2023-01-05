@@ -8,7 +8,6 @@ let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? c
 let name = await conn.getName(who)
 
 if (!args[0]) throw 'Masukkan Link'
-try {
     let listSections = []
 	listSections.push(['No. ', [
           ['Metode A', usedPrefix + command + ' ' + args[0] + ' a', '\n⌚ *By:* ' + set.author],
@@ -71,9 +70,7 @@ let dapet = json.result.url
 	}
 	return conn.sendListM(m.chat, button, row, m)
 }
-} catch (e) {
-    throw e
-    }
+
 }
 handler.help = ['instagram'].map(v => v + ' <url>')
 handler.tags = ['downloader']

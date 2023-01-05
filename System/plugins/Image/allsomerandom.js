@@ -2,7 +2,6 @@
 import fetch from "node-fetch";
 
 let handler  = async (m, { conn, usedPrefix, command }) => {
- try {
     let res = await fetch(`https://some-random-api.ml/img/${command}`)
     let json = await res.json()
     if (json.status) throw json
@@ -10,11 +9,6 @@ let handler  = async (m, { conn, usedPrefix, command }) => {
 Pikacu
 `.trim()
     conn.sendFile(m.chat, json.link, '', caption, m)
-   } catch (e) {
-    conn.reply(m.chat, set.error)
-    console.error(e)
-        throw '_*Error!*_'
-    }
 }
 
 handler.help = ['pikachu', 'bird', 'cat', 'dog', 'fox', 'kangaroo', 'koala', 'panda', 'raccoon', 'red_panda', 'whale']

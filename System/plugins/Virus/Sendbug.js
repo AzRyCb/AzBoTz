@@ -10,7 +10,6 @@ let handler = async (m, { conn, text, usedPrefix, command, isOwner, isPrems }) =
     if (!jumlah) throw 'masukan jumlah nya.\n\nContoh\n.sbug 62882...., 10'
     m.reply('_sedang diproses..._')
     let who
-    try {
         if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : orang.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
         else who = orang.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
         if (who.length <= 20) throw 'balas atau tag orang yg mau di serang!';
@@ -30,11 +29,6 @@ let handler = async (m, { conn, text, usedPrefix, command, isOwner, isPrems }) =
             })
         }
         conn.reply(m.chat, `sukses mengirim bug ke @${who.split('@')[0]}`, m, { mentions: [who] })
-    } catch (e) {
-        conn.reply(m.chat, set.error)
-        console.error(e)
-        throw e
-    }
 }
 handler.help = ['sendbug', 'sbug'].map(v => v + ' <nomor>')
 handler.tags = ['premium', 'virus']

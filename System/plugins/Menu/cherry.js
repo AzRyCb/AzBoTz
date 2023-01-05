@@ -34,7 +34,6 @@ ${usedPrefix + command} pinterest |wibu
 await conn.sendButtonVid(m.chat, logo, caption, 'Nih.mp4', 'Back', '.menulist', fakes, adReply)
 	}
             
-try {
 if (command) {
 switch (template) {
         
@@ -122,9 +121,6 @@ switch (template) {
             break
             
 }
-}
-} catch (e) {
-throw eror
 }
 }
 handler.help = ['cery <command> <teks>']

@@ -1,5 +1,5 @@
 import { wikipedia } from '@bochilteam/scraper'
-let handler = async (m, { text, usedPrefix, command }) => {
+let handler = async (m, { conn, text, usedPrefix, command }) => {
 try {
   if (!text) throw `Contoh penggunaan ${usedPrefix}${command} Minecraft`
   let json = await wikipedia(text)
@@ -10,7 +10,7 @@ _Gambar:_ ${json.img}
 ${json.articles}
 `.trim())
 } catch (e) {
-m.reply("Not found")
+conn.reply(m.chat, "Not found")
  }
 }
 handler.help = ['wikipedia'].map(v => v + ' <apa>')

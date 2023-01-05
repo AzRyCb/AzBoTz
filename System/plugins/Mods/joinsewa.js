@@ -48,7 +48,7 @@ Untuk menggunakan *${conn.user.name}* silahkan ketik
          })
      })
     } catch (e) {
-      conn.reply(set.owner, e)
+      console.error(e)
       throw `Maaf bot tidak bisa bergabung ke grup!\n *NOT AUTHORIJET (tidak diizinkan) BG :V`
       }
 }

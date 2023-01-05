@@ -3,13 +3,13 @@ import { format } from 'util'
 import { spawn } from 'child_process'
 
 // Font By MFarelS:V
-let fontPath = '../System/src/font/Zahraaa.ttf'
+let fontPath = '/System/src/font/Zahraaa.ttf'
 let handler = async (m, { conn, args }) => {
     if (!set.support.convert &&
         !set.support.magick &&
         !set.support.gm) return handler.disabled = true // Disable if doesnt support
     let inputPath = '../System/src/kertas/magernulis1.jpg'
-    let d = new Date()
+    let d = new Date
     let tgl = d.toLocaleDateString('id-Id')
     let hari = d.toLocaleDateString('id-Id', { weekday: 'long' })
     let teks = args.join` `
@@ -20,6 +20,8 @@ let handler = async (m, { conn, args }) => {
         inputPath,
         '-font',
         fontPath,
+        '-fill',
+        'blue',
         '-size',
         '1024x784',
         '-pointsize',
@@ -31,6 +33,8 @@ let handler = async (m, { conn, args }) => {
         hari,
         '-font',
         fontPath,
+        '-fill',
+        'blue',
         '-size',
         '1024x784',
         '-pointsize',
@@ -42,6 +46,8 @@ let handler = async (m, { conn, args }) => {
         tgl,
         '-font',
         fontPath,
+        '-fill',
+        'blue',
         '-size',
         '1024x784',
         '-pointsize',
@@ -60,11 +66,11 @@ let handler = async (m, { conn, args }) => {
         })
         .stdout.on('data', chunk => bufs.push(chunk))
 }
-handler.help = ['n'].map(v => v + 'ulis <teks>')
-handler.tags = ['nulis']
-handler.command = /^nulis$/i
+handler.help = ['n'].map(v => v + 'ulis2 <teks>')
+handler.tags = ['maker']
+handler.command = /^nulis2$/i
 
 export default handler
 
-// BY MFARELS NJEENK
+// BY MFARELS
 // https://GitHub.com/MFarelS/

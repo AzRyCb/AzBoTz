@@ -83,7 +83,6 @@ ${usedPrefix + command} pinterest |wibu
 await conn.sendButtonVid(m.chat, set.logobot, caption, 'Nih.mp4', 'Back', '.menulist', fakes, adReply)
             }
             
-try {
 if (command) {
 switch (template) {
 
@@ -694,16 +693,12 @@ ${v.url}
   let c__a = await a__a.download()
   let e__a = new Sticker(c__a, { pack: packname, author: author, type: StickerTypes.FULL })
   let d__a
-  try {
   if (/webp/g.test(b__a)) d__a = await webp2png(c__a)
         else if (/image/g.test(b__a)) d__a = await uploadImage(c__a)
         else if (/video/g.test(b__a)) d__a = await uploadFile(c__a)
         else if (/viewOnce/g.test(b__a)) d__a = await uploadFile(c__a)
         if (typeof d__a !== 'string') d__a = await uploadImage(c__a)
         else if (/gif/g.test(b__a)) d__a = e__a
-        } catch (e) {
-        throw eror
-        }
         let SS = await xa.search.whatanime(d__a)
         let _SS = SS
         conn.sendButtonImg(m.chat, _SS.data, set.wm, 'Nih.jpg', 'To Sticker', '.s', fakes, adReply)
@@ -715,16 +710,12 @@ ${v.url}
   let c__b = await a__b.download()
   let e__b = new Sticker(c__b, { pack: packname, author: author, type: StickerTypes.FULL })
   let d__b
-  try {
   if (/webp/g.test(b__b)) d__b = await webp2png(c__b)
         else if (/image/g.test(b__b)) d__b = await uploadImage(c__b)
         else if (/video/g.test(b__b)) d__b = await uploadFile(c__b)
         else if (/viewOnce/g.test(b__b)) d__b = await uploadFile(c__b)
         if (typeof d__b !== 'string') d__b = await uploadImage(c__b)
         else if (/gif/g.test(b__b)) d__b = e__b
-        } catch (e) {
-        throw eror
-        }
         let TT = await xa.search.whatimage(d__b)
         let _TT = TT
             conn.sendButtonImg(m.chat, _TT.data, set.wm, 'Nih.jpg', 'To Sticker', '.s', fakes, adReply)
@@ -766,9 +757,6 @@ ${v.url}
             conn.reply(m.chat, _aA.result)
             break
 }
-}
-} catch (e) {
-throw eror
 }
 }
 handler.help = ['xfar <command> <teks>']

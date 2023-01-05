@@ -12,7 +12,6 @@ let urut = text.split`|`
 
 if (command == 'nhentai') {
 if (!args[0]) throw `Contoh penggunaan ${usedPrefix}${command} 344253`
-try {
   let gas = await fetch(`https://api.lolhuman.xyz/api/nhentai/${args[0]}?apikey=${set.lolkey}`)
     let json = await gas.json()
     let hasil = json.result.image
@@ -27,10 +26,7 @@ try {
 		footerText: set.wm
 	}
 	return await conn.sendListM(m.chat, button, row, m)
-} catch (e) {
-  conn.reply(m.chat, set.error)
-console.error(e)
-}
+
 }
 /*
 if (command == 'hmtai') {
@@ -60,7 +56,6 @@ if (!args[0]) throw `Contoh penggunaan ${usedPrefix}${command} url`
 let gas = await fetch(args[0])
 let json = await gas.json()
 try {
-try {
 let stiker = await sticker(null, json.url, set.packname, set.author)
   if (stiker) return conn.sendFile(m.chat, stiker, 'sticker.webp', '', fakes, adReply, { asSticker: true })
   throw stiker.toString()
@@ -69,9 +64,7 @@ let stiker = await sticker(null, json.url, set.packname, set.author)
 				const buffer = await stek.toBuffer()
 				conn.sendFile(m.chat, buffer, 'sticker.webp', '', fakes, adReply, { asSticker: true })
 			}
-			} catch {
-			throw eror
-			}
+
 }
 
 if (command == 'nhentaipdf') {

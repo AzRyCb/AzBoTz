@@ -32,7 +32,6 @@ ${usedPrefix + command} pinterest |wibu
 await conn.sendButtonVid(m.chat, logo, caption, 'Nih.mp4', 'Back', '.menulist', fakes, adReply)
 	}
             
-try {
 if (command) {
 switch (template) {
         
@@ -148,9 +147,6 @@ switch (template) {
 	return await conn.sendListM(m.chat, df3, de3, m)
             
 }
-}
-} catch (e) {
-throw eror
 }
 }
 handler.help = ['males <command> <teks>']

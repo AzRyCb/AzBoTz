@@ -26,7 +26,6 @@ ${usedPrefix + command} pinterest |wibu
 await conn.sendButtonVid(m.chat, logo, caption, 'Nih.mp4', 'Back', '.menulist', fakes, adReply)
 	}
             
-try {
 if (command) {
 switch (template) {
         
@@ -66,9 +65,6 @@ switch (template) {
             
             
 }
-}
-} catch (e) {
-throw eror
 }
 }
 handler.help = ['cand <command> <teks>']

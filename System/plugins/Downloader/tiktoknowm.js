@@ -2,7 +2,6 @@ import fetch from 'node-fetch'
 import axios from 'axios'
 let handler = async (m, { conn, usedPrefix, text, args, command }) => {
 if (!args[0]) throw 'Masukkan Link'
-try {
     let listSections = []
 	listSections.push(['No. ', [
           ['Metode A', usedPrefix + command + ' ' + args[0] + ' a', '\n⌚ *By:* ' + set.author],
@@ -29,9 +28,7 @@ if (args[1] == 'a') {
     let txt = `🚀 *Link:* ${await(await axios.get(`https://tinyurl.com/api-create.php?url=${args[0]}`)).data}` 
     conn.send2ButtonVid(m.chat, json.result.link, txt, set.wm, `No Wm`, `.tiktoknowm ${args[0]}`, `Audio`, `${usedPrefix}tiktokaudio ${args[0]}`, fakes, adReply)
     }
-    } catch (e) {
-    throw e
-    }
+
 }
 handler.help = ['tiktoknowm'].map(v => v + ' <url>')
 handler.tags = ['downloader']

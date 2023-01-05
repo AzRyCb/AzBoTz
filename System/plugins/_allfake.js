@@ -29,29 +29,7 @@ let _situm = await Func.resize(set.thumbnailUrl.getRandom(), 300, 150)
 let sipp = await Func.resize(pp, 150, 150)
 		
 // Fake adReply
-global.adReply = {
-fileLength: set.fsizedoc, 
-seconds: set.fsizedoc,
-	contextInfo: {
-	forwardingScore: set.fsizedoc,
-	//mentionedJid: [user],
-	//isForwarded: true, // ini biar ada tulisannya diteruskan berkali-kali
-	externalAdReply: {
-		showAdAttribution: true,
-		title: set.ucapan,
-		body: uptime,
-		mediaUrl: set.gcbot,
-		description: set.botdate,
-		previewType: 'PHOTO',
-		//thumbnailUrl: await(await fetch(set.thumb)).buffer(),
-		//thumbnail: await(await fetch(set.thumb)).buffer(),
-		thumbnail: set.logo,
-		sourceUrl: set.web,
-		mediaType: 1,
-		renderLargerThumbnail: false
-	}
-	}
-}
+
   
 
 global.set.fakeig = {
@@ -139,6 +117,7 @@ let fpayment = {
 		}
 	}
 }
+//wrok
 let fpoll = {
 	key: {
 		participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast'
@@ -149,6 +128,7 @@ let fpoll = {
 		}
 	}
 }
+//wrok
 let ftroli = {
 	key: {
 		participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast'
@@ -158,19 +138,20 @@ let ftroli = {
 			itemCount: set.fsizedoc,
 			status: 1,
 			surface: 1,
-			message: set.botdate,
+			//message: set.botdate,
 			orderTitle: set.wm,
 			sellerJid: '0@s.whatsapp.net'
 		}
 	}
 }
+//wrok
 let fkontak = {
 	key: {
 		participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast'
 	},
 	message: {
 		contactMessage: {
-			displayName: set.ucapan,
+			displayName: name,
 			//pake jid kalo who rsk
 			vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${set.ucapan},;;;\nFN:${set.ucapan},\nitem1.TEL;waid=${who.split('@')[0]}:${who.split('@')[0]}\nitem1.X-ABLabell:Ponsel\nEND:VCARD`,
 			jpegThumbnail: set.thumb,
@@ -179,6 +160,7 @@ let fkontak = {
 		}
 	}
 }
+//wrok
 let fvn = {
 	key: {
 		participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast'
@@ -205,6 +187,7 @@ let fvid = {
 		}
 	}
 }
+//wrok
 let ftextt = {
 	key: {
 		participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast'
@@ -229,6 +212,7 @@ let fliveLoc = {
 		}
 	}
 }
+//wrok
 let ftoko = {
 	key: {
 		participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast'
@@ -257,11 +241,12 @@ let fdocs = {
 	},
 	message: {
 		documentMessage: {
-			title: set.wm,
+			title: name = '👋 Hay Kak :> ' + name,
 			jpegThumbnail: set.logobot
 		}
 	}
 }
+//wrok
 let fgif = {
 	key: {
 		participant: '0@s.whatsapp.net', remoteJid: 'status@broadcast'
@@ -272,7 +257,7 @@ let fgif = {
 			h: 'Hmm',
 			seconds: set.fsizedoc,
 			gifPlayback: true,
-			caption: set.botdate,
+			caption: uptime,
 			jpegThumbnail: set.logobot
 		}
 	}

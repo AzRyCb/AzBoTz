@@ -90,7 +90,7 @@ global.set = {
   logo: readFileSync('System/src/logo.jpg'),
 
   //tampilan
-  fsizedoc: '1'.repeat(10),
+  fsizedoc: '9'.repeat(14),
   fpagedoc: '1'.repeat(10),
   //fsizedoc = '99999999999999' // default 10TB
   //fpagedoc = '999'
@@ -172,6 +172,30 @@ global.set = {
 */
 let _uptime = process.uptime() * 1000
 let uptime = "Telah aktif selama: " + await set.clockString(_uptime)
+
+global.adReply = {
+  fileLength: set.fsizedoc, 
+  seconds: set.fsizedoc,
+  contextInfo: {
+    forwardingScore: set.fsizedoc,
+    //mentionedJid: [user],
+    //isForwarded: true, // ini biar ada tulisannya diteruskan berkali-kali
+    externalAdReply: {
+      showAdAttribution: true,
+      title: set.ucapan,
+      body: uptime,
+      mediaUrl: set.gcbot,
+      description: set.botdate,
+      previewType: 'PHOTO',
+      //thumbnailUrl: await(await fetch(set.thumb)).buffer(),
+      //thumbnail: await(await fetch(set.thumb)).buffer(),
+      thumbnail: set.logo,
+      sourceUrl: set.web,
+      mediaType: 1,
+      renderLargerThumbnail: false
+    }
+  }
+}
 
 global.set.rpg = {
   emoticon(string) {

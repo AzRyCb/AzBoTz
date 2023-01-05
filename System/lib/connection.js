@@ -251,7 +251,7 @@ async function connectionUpdate(opts, update) {
     if (connection == 'open') this.logger?.info(`[Connected] ` + JSON.stringify(this.user, null, 2))
     //lolcatjs.fromstring(`[Connected] ` + JSON.stringify(this.user, null, 2))
     const code = new Boom(lastDisconnect?.error)?.output.statusCode || new Boom(lastDisconnect?.error)?.output?.payload?.statusCode
-    if (code && code !== DisconnectReason.loggedOut && code !== DisconnectReason.connectionLost && code !== DisconnectReason.badSession && code !== DisconnectReason.connectionReplaced && this?.ws.readyState !== ws.CONNECTING) {
+    if (code && code !== DisconnectReason.loggedOut && code !== DisconnectReason.badSession && code !== DisconnectReason.connectionReplaced && this?.ws.readyState !== ws.CONNECTING) {
         this.logger?.info(await reload(this, true, opts).catch(this.logger?.error))
         timestamp.connect = new Date
     }
@@ -271,7 +271,7 @@ async function connectionUpdate(opts, update) {
 		} else if (reason === DisconnectReason.loggedOut) {this.logger?.info(`Device Logged Out, Please Scan Again And Run.`);
             this.logout();
         } else if (reason === DisconnectReason.connectionLost) {this.logger?.info("Connection Lost from Server, please check connetion");
-            this.logout();
+            //this.logout();
         } else if (reason === DisconnectReason.multideviceMismatch) {this.logger?.info("multideviceMismatch, Restarting..."); 
         } else if (reason === DisconnectReason.connectionClosed) {this.logger?.info("Connection closed, reconnecting....");
 		} else if (reason === DisconnectReason.restartRequired) {this.logger?.info("Restart Required, Restarting...");
@@ -311,12 +311,12 @@ ${mir}`
 // @ts-ignore
 this.sendButton('6281358919342@s.whatsapp.net', pesan, 'MyWA BOT HOSTING', ["MENU", ".menu"], null, { mentions: ['0@s.whatsapp.net', '6285346545126@s.whatsapp.net'] }) 
 // @ts-ignore
-this.sendButton('6285722037770@s.whatsapp.net', pesan, 'MyWA BOT HOSTING', ["MENU", ".menu"], null, { mentions: ['0@s.whatsapp.net', '6285722037770@s.whatsapp.net'] }) 
+//this.sendButton('6285722037770@s.whatsapp.net', pesan, 'MyWA BOT HOSTING', ["MENU", ".menu"], null, { mentions: ['0@s.whatsapp.net', '6285722037770@s.whatsapp.net'] }) 
 // @ts-ignore
-this.sendButton('120363024208795001@g.us', 'AzBoTz Sudah aktif\nGunakan BOT Dengan Bijak 😉', null, null, ['MENU', '/menu'], global.fakes, global.adReply)
+//this.sendButton('120363024208795001@g.us', 'AzBoTz Sudah aktif\nGunakan BOT Dengan Bijak 😉', null, null, ['MENU', '/menu'], global.fakes, global.adReply)
 // @ts-ignore
 //hehe('6285722037770@s.whatsapp.net').catch(err => { return !0 }) //ubah ini masuk neraka
-console.info('💬 Waiting New Messages')   
+
 // pale db kurang cum:v
     if (!existsSync('System/data/jadibot')) return 
         // @ts-ignore
@@ -327,6 +327,7 @@ console.info('💬 Waiting New Messages')
                 await delay(3000) //supaya gk load platform 
                 await jadibot.starts(jid + '@s.whatsapp.net').catch(_=>_)
 	        }
+            console.info('💬 Waiting New Messages')   
         }
         if (qr != null && qr != undefined) {
            console.log('🚩 Scan QR Dibawah, Qr Expired Dalam 20 Detik.')

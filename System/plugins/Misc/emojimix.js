@@ -16,7 +16,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         const stiker = await sticker(false, json.results[0].url, global.packname, global.author)
         await conn.sendFile(m.chat, stiker, 'sticker.webp', '', m)
     } catch (e) {
-        conn.reply(m.chat, set.error)
         console.error(e)
         await conn.sendFile(m.chat, ztick, 'sticker.webp', '', m)
     }

@@ -43,7 +43,7 @@ ${usedPrefix + command} pinterest |wibu
 await conn.sendButtonVid(m.chat, logo, caption, 'Nih.mp4', 'Back', '.menulist', fakes, adReply)
 	}
             
-try {
+
 if (command) {
 switch (template) {
         
@@ -150,9 +150,6 @@ let kuas = await fetch(`https://latam-api.vercel.app/api/${args[0]}?apikey=nekos
             
             
 }
-}
-} catch (e) {
-throw eror
 }
 }
 handler.help = ['latam <command> <teks>']

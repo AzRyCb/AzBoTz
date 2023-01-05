@@ -40,6 +40,7 @@ let handler = async (m, { conn, text, usedPrefix }) => {
   		  var user = number + '@s.whatsapp.net'
 			}  
 		} catch (e) {
+			console.error(e)
   } finally {
   
 	let groupMetadata = m.isGroup ? await conn.groupMetadata(m.chat) : {}

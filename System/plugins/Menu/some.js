@@ -53,7 +53,6 @@ ${usedPrefix + command} pinterest |wibu
 await conn.sendButtonVid(m.chat, logo, caption, 'Nih.mp4', 'Back', '.menulist', fakes, adReply)
             }
             
-try {
 if (command) {
 switch (template) {
 case 'animal':
@@ -161,9 +160,6 @@ case 'animu':
         return conn.sendButtonImg(m.chat, wnt, wm, 'Nih.jpg', 'Sticker', '.s', fakes, adReply)
             
 }
-}
-} catch (e) {
-throw eror
 }
 }
 handler.help = ['some <command> <teks>']

@@ -22,7 +22,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (jid == m.sender) throw 'tidak bisa mengirim pesan confess ke diri sendiri.'
     let mf = Object.values(conn.confess).find(mf => mf.status === true)
     if (mf) return !0
-    try {
     	let id = + new Date
         let txt = `Hai @${data.jid.split('@')[0]}, kamu menerima pesan confess nih.\n\nDari: *${name}*\nPesan: \n${pesan}\n\nMau balas pesan ini kak? bisa kak. kakak tinggal ketik pesan kakak nanti saya sampaikan ke *${name}*.`.trim();
         await conn.sendButton(data.jid, txt, set.wm, 0, [['Balas Pesan', '.balasconfess']], null)
@@ -38,10 +37,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             }
             return !0
         })
-    } catch (e) {
-        console.error(e)
-        conn.reply(m.chat, set.error);
-    }
 }
 handler.tags = ['pribadi']
 handler.help = ['confes'].map(v => v + ' <nomor|nama|pesan>')

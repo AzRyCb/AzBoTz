@@ -22,7 +22,6 @@ ${usedPrefix + command} pinterest |wibu
 await conn.sendButtonVid(m.chat, logo, caption, 'Nih.mp4', 'Back', '.menulist', fakes, adReply)
             }
             
-try {
 if (command) {
 switch (template) {
 case 'mediafire':
@@ -45,9 +44,6 @@ case 'tiktok':
     conn.sendFile(m.chat, urls, 'tiktok.mp4', author, m)
             break
 }
-}
-} catch (e) {
-throw eror
 }
 }
 handler.help = ['boc <command> <teks>']

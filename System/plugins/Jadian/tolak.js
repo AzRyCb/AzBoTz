@@ -12,7 +12,6 @@ let handler = async (m, { conn, text, participants, groupMetadata }) => {
   
   if(isNaN(number)) return conn.reply(m.chat, `Nomor yang anda masukan salah!`, m)
   if(number.length > 15) return conn.reply(m.chat, `Format salah!`, m)
-  try {
 		if(text) {
 			var user = number + '@s.whatsapp.net'
 		} else if(m.quoted.sender) {
@@ -20,8 +19,6 @@ let handler = async (m, { conn, text, participants, groupMetadata }) => {
 		} else if(m.mentionedJid) {
   		  var user = number + '@s.whatsapp.net'
 			}  
-		} catch (e) {
-  } finally {
     let users = m.isGroup ? participants.find(v => areJidsSameUser(v.jid == user)) : {}
     if(!users) return conn.reply(m.chat, `Target atau Nomor tidak ditemukan, mungkin sudah keluar atau bukan anggota grup ini.`, m)
     if(user === m.sender) return conn.reply(m.chat, `Tidak bisa berpacaran dengan diri sendiri!`, m)
@@ -38,7 +35,6 @@ let handler = async (m, { conn, text, participants, groupMetadata }) => {
       }})
     }
 	}	
-}
 handler.help = ['tolak *@tag*']
 handler.tags = ['jadian']
 handler.command = /^(tolak)$/i

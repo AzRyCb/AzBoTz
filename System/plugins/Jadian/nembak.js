@@ -26,7 +26,6 @@ let ps = groupMetadata.participants.map(v => v.id)
   
   if(isNaN(number)) return conn.reply(m.chat, `_*Nomor tidak valid.*_`, m)
   if(number.length > 15) return conn.reply(m.chat, `*_Format Tidak Valid.*_`, m)
-  try {
 		if(text) {
 			var user = number + '@s.whatsapp.net'
 		} else if(m.quoted.sender) {
@@ -34,8 +33,6 @@ let ps = groupMetadata.participants.map(v => v.id)
 		} else if(m.mentionedJid) {
   		  var user = number + '@s.whatsapp.net'
 			}  
-		} catch (e) {
-  } finally {
     let users = m.isGroup ? participants.find(v => areJidsSameUser(v.jid == user)) : {}
     if(!users) return conn.reply(m.chat, `*_Target atau Nomor tidak ditemukan, mungkin sudah keluar atau bukan anggota grup ini.*_`, m)
     if(user === m.sender) return conn.reply(m.chat, `_*Tidak bisa berpacaran dengan diri sendiri.*_`, m)
@@ -62,7 +59,6 @@ let ps = groupMetadata.participants.map(v => v.id)
       conn.sendButton(m.chat, `${await ktnmbk.getRandom()}\n\nKamu baru saja mengajak @${user.split('@')[0]} berpacaran\n\nSilahkan menunggu jawaban darinya!`, `Ketik *${usedPrefix}terima @user* untuk menerima\n*${usedPrefix}tolak @user untuk menolak*`, null, m , { contextInfo: { mentionedJid: [user]}})
     }
 	}	
-}
 handler.help = ['tembak *@tag*']
 handler.tags = ['jadian']
 handler.command = /^(tembak|jadian)$/i

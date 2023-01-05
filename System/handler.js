@@ -1,6 +1,5 @@
 
 //-- module internal
-//@ts-check
 import './config.js'
 import { smsg } from './lib/socket.js'
 import { plugins } from './lib/plugins.js'
@@ -36,7 +35,9 @@ export async function handler(chatUpdate) {
 if (db.data == null) await loadDatabase()
     this.msgqueque = this.msgqueque || new Queque()
 if (!chatUpdate) return
-if (chatUpdate.messages.length > 1) this.logger?.info(chatUpdate.messages)
+//this.pushMessage(chatUpdate.messages).catch(console.error)
+// if (!(chatUpdate.type === 'notify' || chatUpdate.type === 'append')) return
+//if (chatUpdate.messages.length > 1) this.logger?.info(chatUpdate.messages)
 let m = chatUpdate.messages[chatUpdate.messages.length - 1]
 if (!m) return
 const Tnow = (new Date()/1000).toFixed(0)
@@ -102,7 +103,8 @@ try {
         if (!isNumber(user.semangka)) user.semangka = 0
         if (!isNumber(user.stroberi)) user.stroberi = 0
     }           
-
+    if (!isNumber(user.limitspam)) user.limitspam = 0
+    if (!isNumber(user.bannedDate)) user.bannedDate = 0
     if (!isNumber(user.usebot)) user.usebot = 0
     if (!isNumber(user.lastkerja)) user.lastkerja = 0
     if (!isNumber(user.lastjob)) user.lastjob = 0
@@ -114,6 +116,7 @@ try {
     if (!('montir' in user)) user.montir = false
     if (!('kuli' in user)) user.kuli = false
     if (!('polisi' in user)) user.polisi = false
+    if (!('created' in user)) user.created = false
 
     if (!isNumber(user.area)) user.area = 0
     if (!isNumber(user.afk)) user.afk = -1
@@ -524,6 +527,7 @@ try {
         lastclaim2: 0,
         lastnyampah: 0,
         lastowner: 0,
+        limitspam: 0,
         call: 0,
         area: 0,
         email: '',
@@ -537,6 +541,8 @@ try {
         montir: false,
         kuli: false,
         polisi: false,
+        created: false,
+        bannedDate: 0,
                     afk: -1,
                     afkReason: '',
                     age: -1,
@@ -944,6 +950,9 @@ try {
                 if (!('closeGroup' in chat)) chat.closeGroup = false
                 if (!('openGroup' in chat)) chat.openGroup = false
 
+                if (!('mute' in chat)) chat.mute = true 
+                if (!('download' in chat)) chat.download = false 
+
                 if (!('mature' in chat)) chat.mature = false
                 if (!('game' in chat)) chat.game = false
                 if (!('clear' in chat)) chat.clear = true
@@ -1085,6 +1094,9 @@ try {
         if (!('rpg' in settings)) settings.game = false
         if (!('getmsg' in settings)) settings.getmsg = true
 
+        if (!'autoreset' in settings) settings.autoreset = true
+        if (!isNumber(settings.autoresetTime)) settings.autoresetTime = (new Date() * 1) + 3600000 * 720
+
         if (!('anon' in settings)) settings.anon = true
         if (!('anticall' in settings)) settings.anticall = true
         if (!('antispam' in settings)) settings.antispam = true
@@ -1125,6 +1137,9 @@ try {
         rpg: false, 
         getmsg: true,
 
+        autoreset: true,
+        autoresetTime: (new Date() * 1) + 3600000 * 720,
+
         anon: true,
         anticall: true,
         antispam: true,
@@ -1152,8 +1167,13 @@ try {
 }
 const isROwner = [this.decodeJid(this.user.id), ...set.owner.map(([number]) => number)].map(v => v?.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
 const isOwner = isROwner || m.fromMe
+if (!isOwner && db.data.settings.self) return // Saat mode self diaktifkan hanya owner yang dapat menggunakannya
 const isMods = isOwner || set.mods.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
 const isPrems = isROwner || set.prems.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
+//let isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
+if (!isPrems && !m.isGroup && db.data.settings.groupOnly) return
+const isBans = db.data.users[m.sender].banned
+const isCreated = db.data.users[m.sender].created
 const ownerJadibot = [...set.ownerjbot].map(v => v?.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(this.user.jid)
 opts['self'] = opts['self'] ? opts['self'] : opts['self'] == false ? opts['self'] : ownerJadibot
 
@@ -1175,8 +1195,10 @@ const id = m.id
     await this.msgqueque.waitQueue(id)
 }
 
-if (m.isBaileys)
-    return
+if (m.isBaileys) return 
+if (m.chat.endsWith('broadcast') || m.key.remoteJid.endsWith('broadcast')) return // Supaya tidak merespon di status
+//let blockList = await conn.fetchBlocklist() //error
+//if (blockList?.includes(m.sender)) return
 m.exp += Math.ceil(Math.random() * 10)
 
 let usedPrefix
@@ -1217,13 +1239,13 @@ const ___dirname = join(dirname(fileURLToPath(import.meta.url)), './plugins')
                     }
                 }
             }
-            /*
+            
             if (!opts['restrict'])
                 if (plugin.tags && plugin.tags.includes('admin')) {
                     // set.dfail('restrict', m, this)
                     continue
                 }
-                */
+                
             const str2Regex = str => str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
             let _prefix = plugin.customPrefix ? plugin.customPrefix : this.prefix ? this.prefix : prefix
             let match = (_prefix instanceof RegExp ? // RegExp Mode?
@@ -1291,8 +1313,8 @@ const ___dirname = join(dirname(fileURLToPath(import.meta.url)), './plugins')
                 if (m.chat in db.data.chats || m.sender in db.data.users) {
                     let chat = db.data.chats[m.chat]
                     let user = db.data.users[m.sender]
-                    if (name != ['plugins/owner/owner-unban.js', 'plugins/group/group-unban.js', 'plugins/info/info-listban.js', 'info-creator.js'] && chat && chat?.isBanned && !isPrems) return // Kecuali ini, bisa digunakan
-                    if (name != ['plugins/owner/owner-unban.js', 'plugins/group/group-unban.js', 'plugins/info/info-listban.js', 'info-creator.js'] && user && user?.banned) return
+                    if (!['plugins/owner/owner-unban.js', 'plugins/group/group-unban.js', 'plugins/info/info-listban.js', 'info-creator.js'].includes(name) && chat && chat?.isBanned && !isPrems) return // Kecuali ini, bisa digunakan
+                    if (!['plugins/owner/owner-unban.js', 'plugins/group/group-unban.js', 'plugins/info/info-listban.js', 'info-creator.js'].includes(name) && user && user?.banned) return
                 }
                 if (plugin.rowner && plugin.owner && !(isROwner || isOwner)) { // Both Owner
                     fail('owner', m, this)
@@ -1313,6 +1335,14 @@ const ___dirname = join(dirname(fileURLToPath(import.meta.url)), './plugins')
                 if (plugin.premium && !isPrems) { // Premium
                     fail('premium', m, this)
                     continue
+                }
+                if (plugin.banned && !isBans) { // Banned
+                    fail('banned', m, this)
+                    continue
+                }
+                if (plugin.created && !isCreated) { // Created
+                     fail('created', m, this)
+                     continue
                 }
                 if (plugin.group && !m.isGroup) { // Group Only
                     fail('group', m, this)
@@ -1367,7 +1397,7 @@ const ___dirname = join(dirname(fileURLToPath(import.meta.url)), './plugins')
                 }
                 m.isCommand = true
                 let xp = 'exp' in plugin ? parseInt(plugin.exp) : 17 // XP Earning per command
-                if (xp > 200)
+                if (xp > 9999999999999999999999)
                 this.sendButtonDoc(m.chat, `[❗] *Sepertinya Anda Bermain Curang, Menggunakan Calculator*`, set.wm, null, [['Buy Limit', '/buylimit',] ['Cheat Limit', '/cheat']] , fakes, adReply)
                 else 
                 m.exp += xp
@@ -1564,15 +1594,11 @@ if (mychat.autodelvn && !m.fromMe && m.isBaileys && m.mtype === 'audioMessage' &
 }
 
 //-- autoread gc
-if (myset.readgc && m.isGroup && m.isCommand) 
-    this.readMessages([m.key])
-
+if (myset.readgc && m.isGroup && m.isCommand) this.readMessages([m.key])
 //-- autoread pc
-if (myset.readpc && !m.isGroup && m.isCommand) 
-    this.readMessages([m.key])
+if (myset.readpc && !m.isGroup && m.isCommand) this.readMessages([m.key])
 
-if (opts['autoread'])
-    await this.readMessages([m.key])
+if (opts['autoread']) await this.readMessages([m.key])
   }
 }
 
@@ -1592,6 +1618,9 @@ export async function participantsUpdate({ id, participants, action }) {
     switch (action) {
         case 'add':
         case 'remove':
+        case 'leave':
+        case 'invite':
+        case 'invite_v4':
             if (chat.welcome) {
                 let groupMetadata = await store.fetchGroupMetadata(id, this.groupMetadata)
                 let member = groupMetadata.participants
@@ -1714,10 +1743,14 @@ Untuk mematikan fitur ini, ketik
 export async function callUpdate(json) {
 let ownerJadibot = [...set.ownerjbot].map(v => v?.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(this.user.jid)
 opts['self'] = opts['self'] ? opts['self'] : opts['self'] == false ? opts['self'] : ownerJadibot
+console.log(json.content[0])
 if (opts['self']) return
 if (this.isInit) return
 if (db.data == null) await loadDatabase()
 if (!db.data.settings[this.user.jid].anticall) return
+let [data] = json
+let { from, isGroup, isVideo, date, status} = data
+if (isGroup) return
 if (json.content[0].tag == 'offer') {
 let typeCall = json.content[0].content[0].tag
 let callerId = json.content[0].attrs['call-creator']
@@ -1731,8 +1764,8 @@ switch (this.callWhitelistMode) {
 }
 let kontakk = [
 [
-`${set.owner[0][0]}`, 
-`${set.owner[0][1]}`,
+`${set.owner[0]}`, 
+`${this.getName(set.owner[0] + '@s.whatsapp.net')}`,
 `👑 Developer Bot `,
 `🚫 Don't call me 🥺`, 
 `Not yet`,
@@ -1751,13 +1784,17 @@ let kontakk = [
 `Empat sehat le mark sempurna 👌🗿`
 ]
 ]
-user.warning += 1
-if (user.warning == 5) {
-conn.sendContact(callerId, kontakk).then(async sel => { 
- await conn.reply(callerId, `Sistem auto block, jangan menelepon bot silahkan hubungi owner untuk dibuka!`, sel).then(async _=> {
-await conn.updateBlockStatus(callerId, 'block').then(async _=> { 
- let pp = await this.profilePictureUrl(callerId, 'image').catch(_=> pp)
- await conn.reply(set.owner[0][0]+'@s.whatsapp.net', `*NOTIF CALLER BOT!*\n\n@${callerId.split`@`[0]} telah menelpon *${this.user.name}*`, null, {
+user.call += 1
+if (user.call == 5) {
+    let sentMsg = await this.sendContactArray(callerId, kontakk)
+conn.sendContact(callerId, kontakk).then(async sentMsg => { 
+conn.reply(callerId, `Sistem auto block, jangan menelepon bot silahkan hubungi owner untuk dibuka!`, sentMsg).then(async _=> {
+await conn.updateBlockStatus(callerId, 'block')
+.then(_=> { 
+    user.call = 0
+}).then(_=> {
+ let pp = this.profilePictureUrl(callerId, 'image').catch(_=> pp)
+ conn.reply2(set.owner[0]+'@s.whatsapp.net', `*NOTIF CALLER BOT!*\n\n@${callerId.split`@`[0]} telah menelpon *${this.user.name}*`, null, {
 title: set.wm, 
 render: true, 
 thumb: pp, 
@@ -1766,7 +1803,7 @@ thumb: pp,
 })
  })
 })
-} else await this.reply(callerId, `Maaf tidak bisa menerima panggilan ${typeCall}, Jika kamu menelepon lebih dari 5, kamu akan diblokir.\n\n${user.warning} / 5`, null, {
+} else await this.reply2(callerId, `Maaf tidak bisa menerima panggilan ${typeCall}, Jika kamu menelepon lebih dari 5, kamu akan diblokir.\n\n${user.warning} / 5`, null, {
 title: set.wm, 
 render: true, 
 thumb: set.fla + `don't call me`, 

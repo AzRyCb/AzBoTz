@@ -11,14 +11,13 @@ const { opts, __dirname } = (await import('../lib/helper.js')).default
 let handler = async (m, { conn, usedPrefix: _p, args, command, __dirname }) => {
   let tags
   let teks = `${args[0]}`.toLowerCase()
-  let arrayMenu = ['all', 'misc', 'store', 'trash', 'user', 'edukasi', 'lagu', 'anonymous', 'ephoto360', 'baileys', 'convert', 'database', 'nocategory', 'primbon', 'canvas', 'absen', 'update','rpg', 'anime', 'virus', 'downloader', 'game', 'fun', 'xp', 'news', 'group', 'image', 'admin', 'info', 'internet', 'islam', 'kerang', 'maker', 'owner', 'audio', 'premium', 'quotes', 'stalk', 'shortlink', 'sticker', 'tools', 'nsfw', 'asupan', 'random', 'textpro', 'photooxy']
+  let arrayMenu = ['all', 'misc', 'store', 'user', 'edukasi', 'anonymous', 'ephoto360', 'baileys', 'convert', 'database', 'nocategory', 'primbon', 'canvas', 'absen', 'update','rpg', 'anime', 'virus', 'downloader', 'game', 'fun', 'xp', 'news', 'group', 'image', 'admin', 'info', 'internet', 'islam', 'kerang', 'maker', 'owner', 'audio', 'premium', 'quotes', 'stalk', 'shortlink', 'sticker', 'tools', 'nsfw', 'asupan', 'random', 'textpro', 'photooxy']
   if (!arrayMenu.includes(teks)) teks = '404'
   if (teks == 'all') tags = {
   'main': 'Main',
   'game': 'Game',
   'rpg': 'RPG Games',
   'xp': 'xp & Limit',
-  'exp': 'Exp & Limit',
   'jadian': 'Jadian',
   'sticker': 'Sticker',
   'edukasi': 'Edukasi',
@@ -42,7 +41,6 @@ let handler = async (m, { conn, usedPrefix: _p, args, command, __dirname }) => {
   'database': 'Database',
   'vote': 'Voting',
   'absen': 'Absen',
-  'quran': 'Al Qur\'an',
   'jadibot': 'Jadi Bot',
   'owner': 'Owner',
   'host': 'Host',
@@ -50,15 +48,12 @@ let handler = async (m, { conn, usedPrefix: _p, args, command, __dirname }) => {
   'info': 'Info',
   'nocategory': 'No Category',
 
-  'trash': 'Trash',
   'convert': 'Converter',
   'bank': 'Bank',
   'store': 'store',
   'ephoto360': 'Ephoto360',
   'walpaper': 'WALPAPER',
   'image': 'IMAGE',
-  'lagu': 'Lagu',
-  'text': 'text',
   'work': 'work',
   'anime': 'Anime',
   'user': 'user',
@@ -97,16 +92,9 @@ if (teks == 'downloader') tags = {
 }
 if (teks == 'xp') tags = {
 'xp': 'XP & LIMIT',
-'exp': 'EXP & LIMIT',
 }
 if (teks == 'fun') tags = {
 'fun': 'FUN',
-}
-if (teks == 'trash') tags = {
-  'trash': 'Trash'
-  }
-if (teks == 'lagu') tags = {
-  'lagu': 'Lagu',
 }
 if (teks == 'store') tags = {
   'store': 'store',
@@ -176,7 +164,6 @@ if (teks == 'kerang') tags = {
 }
 if (teks == 'maker') tags = {
 'maker': 'MAKER',
-'text': 'MAKER TEXT',
 'nulis': 'MagerNulis',
 'logo': 'logo',
 }
@@ -232,7 +219,6 @@ if (teks == 'update') tags = {
   'update': 'Next Update'
 }
 
-try {
   //let _package = JSON.parse(await fs.promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
   let who
   if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.sender
@@ -447,7 +433,6 @@ if (teks == '404') {
    rows: [
     {title: `│ Virus`, rowId: `${_p}? virus`, description: "Khusus user premium Vip"},
     {title: `│ user`, rowId: `${_p}? user`, description: "beta"},
-    {title: `│ trash`, rowId: `${_p}? trash`, description: "fitur2 mati/error"},
     {title: `│ converter`, rowId: `${_p}? convert`, description: "coming"},
     {title: `│ Baileys`, rowId: `${_p}? baileys`, description: "coming soon"},
     {title: `🔝 update`, rowId: `${_p}? update`, description: "coming soon fitur"},
@@ -465,9 +450,8 @@ title: `––––––『 Maker 』––––––`,
  rows: [
     {title: `🎨 │ PhotoOxi`, rowId: `${_p}? photooxy`, description: "Menampilkan Photo Oxy Menu"},
     {title: `📝 │ Maker`, rowId: `${_p}? maker`, description: "Buat logo atau sebuah karya"},
-    {title: `✒️ │ Text maker`, rowId: `${_p}? text`, description: "Buat teks tentang sesuatu"},
     {title: `✏️ │ Nulis`, rowId: `${_p}? nulis`, description: "Nulis kok males kak?"},
-    {title: `🌈 │ TextPro`, rowId: `${_p}? textpro`, description: "Buat Gambar teks disini"},
+    {title: `✒️ │ TextPro`, rowId: `${_p}? textpro`, description: "Buat Gambar teks disini"},
     {title: `🌈 │ Ephoto360`, rowId: `${_p}? ephoto360`, description: "Buat Gambar teks disini"},
     ]
   },{
@@ -571,25 +555,30 @@ title: `––––––『 Maker 』––––––`,
               ['Layanan Dan Jasa', '/store']
             ], m)
         */
-            conn.sendButton(m.chat, text, set.titlebot, [['Ping', '.ping'],['Owner', '.owner'],['Donasi', '.donasi']], null, global.fakes, global.adReply)
-        /*
+            //conn.sendButton(m.chat, text, set.titlebot, [['Ping', '.ping'],['Owner', '.owner'],['Donasi', '.donasi']], null, global.fakes, global.adReply)
+        
 
               //-------DOC TEMPLATE
               const message = {
-                jpegThumbnail: await(await fetch(set.fla)) + teks,
+                jpegThumbnail: await(await fetch(set.thumb)).buffer(),
                 caption: text.trim(),
                 footer: `AzBoTz aktif selama : ${uptime}`,
+                document: { url: set.thumb },
+                fileName: set.ucapan,
+                mimetype: set.doc,
+                fileLength: set.fsizedoc,
+                pageCount: set.fpagedoc,
                 templateButtons: [
                     {
                         urlButton: {
-                            displayText: `FOllOW ON INSTAGRAM`,
-                            url: web
+                            displayText: `My Website`,
+                            url: set.web
                         }
                     },
                     {
                         urlButton: {
                             displayText: '💌 Group Official',
-                            url: gc
+                            url: set.gcbot
                         }
                     },
                     {
@@ -600,29 +589,24 @@ title: `––––––『 Maker 』––––––`,
                     },
                     {
                         quickReplyButton: {
-                            displayText: '🐾 Store',
-                            id: '.store'
+                            displayText: '📮 Donasi',
+                            id: '.donasi'
                         }
                     },
                     {
                         quickReplyButton: {
-                            displayText: '📮 Donasi',
-                            id: '.donasi'
+                            displayText: '🐾 Layanan Dan Jasa 🐾',
+                            id: '.store'
                         }
                     },
                 ]
             }
            conn.sendMessage(m.chat, message)
-            */
+            
         //------------------- BUTTON VID
         //conn.sendButton(m.chat, text, wm, 'https://telegra.ph/file/a46ab7fa39338b1f54d5a.mp4', [['Ping', '.ping'],['Owner', '.owner'],['Donasi', '.donasi']],fakes, { gifPlayback: true, contextInfo: { externalAdReply: {title: set.namebot, body: set.bottime, sourceUrl: set.ig, thumbnail: set.thumb }}})
-        
-  } catch (e) {
-    conn.reply(m.chat, set.error)
-    console.error(e)
-    throw e
   }
-}
+
 handler.help = ['menu']
 handler.tags = ['main']
 handler.command = /^(menu|listmenu|menubot|\?)$/i

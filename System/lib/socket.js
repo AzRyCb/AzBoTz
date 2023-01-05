@@ -1,5 +1,4 @@
 // TODO: Make this file more redeable
-//@ts-check
 //-- MODULE EKSTERNAL
 import path from 'path'
 import chalk from 'chalk'
@@ -74,6 +73,11 @@ export function HelperConnection(conn, { store, logger }) {
             enumerable: true,
             writable: false
         },
+        /*
+        conn.ws.on(`CB:action,,battery`, json => {
+            this.battery = Object.fromEntries(Object.entries(json[2][0][1]).map(v => [v[0], eval(v[1])]))
+          }),
+          */
         getFile: {
             /**
              * getBuffer hehe
@@ -372,7 +376,7 @@ try {
 		return conn.sendMessage(jid, msg, { quoted, ephemeralExpiration: ephemeral, ...options }) 
 } catch (e) {
 console.error(e)
-return conn.sendMessage(jid, { ...options, text }, { quoted, ...options })
+return conn.sendMessage(jid, { ...options, text }, { quoted, ephemeralExpiration: ephemeral, ...options })
 .catch(e2 => (error = e2))
 		} finally {
 if (thum) await file.clear()
