@@ -129,5 +129,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-System/data/
+System/data/database.json
+System/data/data.store.json
+System/data/jadibot/
 package-lock.json
