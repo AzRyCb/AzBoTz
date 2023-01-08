@@ -4,11 +4,8 @@ const { API } = (await import('../../lib/helper.js')).default
 
 let handler = async (m, { conn, command }) => {
 let fkontak = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: `status@broadcast` } : {}) }, message: { 'contactMessage': { 'displayName': set.wm, 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;${set.wm},;;;\nFN:${set.wm},\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabell:Ponsel\nEND:VCARD`, 'jpegThumbnail': set.thumb, thumbnail: set.thumb ,sendEphemeral: true}}}
-
-//m.reply(`Wait ${command} sedang proses🐦`)
-let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
-let pp = await conn.profilePictureUrl(who)
 let stiker = await sticker(null, API(`https://telegra.ph/file/d34b2ab2cb233c749776c.png`), set.packname, set.author)
+//m.reply(`Wait ${command} sedang proses🐦`)
 
  conn.sendFile(m.chat, stiker, 'sticker.webp', '', m, null, { fileLength: 100, contextInfo: {
    externalAdReply :{
@@ -18,7 +15,7 @@ let stiker = await sticker(null, API(`https://telegra.ph/file/d34b2ab2cb233c7497
     description: set.ucapan, 
     title: `${command} Sedang Di Proses`,
     body: set.botdate,
-    thumbnail: set.thumb,
+    thumbnail: await (await fetch(set.thumb)).buffer(),
     sourceUrl: set.gcbot
      }}
   })
@@ -41,7 +38,7 @@ ptt: false, seconds: 0,contextInfo: {
     })
 }
 handler.help = handler.command = ['mangkane1','mangkane2','mangkane3','mangkane4','mangkane5','mangkane6','mangkane7','mangkane8','mangkane9','mangkane10','mangkane11','mangkane12','mangkane13','mangkane14','mangkane15','mangkane16','mangkane17','mangkane18','mangkane19','mangkane20','mangkane21','mangkane22','mangkane23','mangkane24']
-handler.tags = ['audio']
+handler.tags = ['sound']
 //handler.command = /^(mangkane1|mangkane2|mangkane3|mangkane4|mangkane5|mangkane6|mangkane7|mangkane8|mangkane9|mangkane10|mangkane11|mangkane12|mangkane13|mangkane14|mangkane15|mangkane16|mangkane17|mangkane18|mangkane19|mangkane20|mangkane21|mangkane22|mangkane23|mangkane24)$/i
 handler.owner = false
 export default handler

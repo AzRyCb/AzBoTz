@@ -17,7 +17,7 @@ let handler = async (m, { conn, text, participants }) => {
   )
   await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
 }
-handler.help = ['pengumuman', 'announce', 'hidetag'].map(v => v + ' [teks]')
+handler.help = ['announce', 'hidetag'].map(v => v + ' [teks]')
 handler.tags = ['admin']
 handler.command = /^(pengumuman|announce|hiddentag|hidetag)$/i
 

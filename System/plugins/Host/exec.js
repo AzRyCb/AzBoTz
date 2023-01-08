@@ -40,7 +40,7 @@ let handler = async (m, _2) => {
   }
 }
 handler.help = ['> ', '=> ']
-handler.tags = ['host']
+handler.tags = ['advanced']
 handler.customPrefix = /^=?> /
 handler.command = /(?:)/i
 

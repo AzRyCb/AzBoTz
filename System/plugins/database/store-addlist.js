@@ -11,7 +11,7 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
 	conn.reply(m.chat, `berhasil menambahkan ${text} ke List Store.\n\nakses dengan mengetik namanya`.trim())
 }
 handler.help = ['list'].map(v => 'add' + v + ' <teks>')
-handler.tags = ['store']
+handler.tags = ['database']
 handler.command = /^addlist$/i
 
 handler.group = handler.admin = true

@@ -6,7 +6,7 @@ let handler = async (m, { conn, command, text }) => conn.reply(m.chat, `
 } : {}, m)
 
 handler.help = ['', 'kah'].map(v => 'kapan' + v + ' <text>?')
-handler.tags = ['kerang', 'fun']
+handler.tags = ['kerang']
 handler.command = /^kapan(kah)?$/i
 
 export default handler

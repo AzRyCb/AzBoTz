@@ -1,5 +1,5 @@
 {
-    "name": "AzBoTz-MD",
+    "name": "azbot",
     "version": "0.0.0",
     "description": "Simple Whatsapp Bot With Esm Module",
     "main": "System/index.js",
@@ -10,7 +10,8 @@
         "System/plugins": "System/plugins"
     },
     "scripts": {
-        "start": "node . --clearses --autocleartmp",
+        "start": "node . --autocleartmp",
+        "start2": "node . --clearses --autocleartmp --img",
         "test": "node test.js",
         "test2": "nodemon index.js"
     },
@@ -20,10 +21,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/AzRyCb/AzBoTz-MD.git"
+        "url": "git+https://github.com/AzRyCb/azbot.git"
     },
     "bugs": {
-        "url": "https://github.com/AzRyCb/AzBoTz-MD/issues"
+        "url": "https://github.com/AzRyCb/azbot/issues"
     },
     "license": "GPL-3.0-or-later",
     "dependencies": {

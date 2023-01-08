@@ -9,7 +9,7 @@ let handler = async (m, { conn, text }) => {
   for (let id of chats) await conn.copyNForward(id, conn.cMod(m.chat, cc, /bc|broadcast/i.test(teks) ? teks : teks + '\n' + readMore + '「 ' + set.author + ' All Chat & group Broadcast 」\n' + randomID(32)), true).catch(_ => _)
   await m.reply('Selesai Broadcast All Chat :)')
 }
-handler.help = ['broadcast', 'bc'].map(v => v + ' <teks>')
+handler.help = ['broadcast'].map(v => v + ' <teks>')
 handler.tags = ['owner']
 handler.command = /^(broadcast|bc)$/i
 

@@ -9,7 +9,7 @@ let handler = async (m, { text, conn }) => {
   `)
 }
 handler.help = ['afk [alasan]']
-handler.tags = ['main']
+handler.tags = ['group']
 handler.command = /^afk$/i
 
 export default handler

@@ -8,11 +8,9 @@ let handler = async (m, { conn, participants }) => {
 
 }
 handler.help = ['odemote @tag']
-handler.tags = ['group']
+handler.tags = ['owner']
 handler.command = /^(odemote)$/i
 
-handler.rowner = true
-handler.group = true
-handler.botAdmin = true
+handler.rowner = handler.group = handler.botAdmin = true
 
 export default handler

@@ -6,7 +6,7 @@ let handler = async (m, { conn, command, text }) => conn.reply(m.chat,`
 } : {})
 
 handler.help = ['apakah <teks>?']
-handler.tags = ['kerang', 'fun']
+handler.tags = ['kerang']
 handler.command = /^apakah$/i
 
 export default handler

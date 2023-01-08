@@ -15,8 +15,8 @@ let handler = async (m, { conn }) => {
 
 }
 handler.help = ['clearchat']
-handler.tags = ['group']
+handler.tags = ['host']
 handler.command = /^clearchat$/i
-handler.owner = true
+handler.rowner = handler.group = true
 
 export default handler

@@ -33,7 +33,7 @@ const store = makeInMemoryStore()
 store.readFromFile(storeFile)
 
 const logger = P({
-    //level: 'error', //fatal, atau debug
+    level: 'error', //fatal, atau debug
     timestamp: () => `,"time":"${new Date().toJSON()}"`,
     transport: {
       target: 'pino-pretty',
@@ -149,7 +149,7 @@ async function start(oldSocket = null, opts = { store, logger, authState }) {
             opts.store.loadMessage(/** @type {string} */(key.id)) || {}
         ).message || { conversation: 'Please send messages again' },
     })
-    console.info(`Using WA v${version.join('.')}, isLatest: ${isLatest}`)
+    logger.info(`Using WA v${version.join('.')}, isLatest: ${isLatest}`)
     HelperConnection(conn, { store: opts.store, logger })
 
     if (oldSocket) {
@@ -242,7 +242,7 @@ const connect = async() => {
 async function connectionUpdate(opts, update) {
     //this.logger?.info(update)
     const { qr, receivedPendingNotifications, connection, lastDisconnect, isNewLogin, isOnline } = update
-    if (isNewLogin) this.isInit = true
+    //if (isNewLogin) this.isInit = true
     //if (connection) console.info(chalk.yellow("Connection: " + connection))
     if (isOnline == true) console.info('📱 Status Online')
     if (isOnline == false) console.info('📱 Status Offline')
@@ -271,7 +271,7 @@ async function connectionUpdate(opts, update) {
 		} else if (reason === DisconnectReason.loggedOut) {this.logger?.info(`Device Logged Out, Please Scan Again And Run.`);
             this.logout();
         } else if (reason === DisconnectReason.connectionLost) {this.logger?.info("Connection Lost from Server, please check connetion");
-            //this.logout();
+            this.logout();
         } else if (reason === DisconnectReason.multideviceMismatch) {this.logger?.info("multideviceMismatch, Restarting..."); 
         } else if (reason === DisconnectReason.connectionClosed) {this.logger?.info("Connection closed, reconnecting....");
 		} else if (reason === DisconnectReason.restartRequired) {this.logger?.info("Restart Required, Restarting...");

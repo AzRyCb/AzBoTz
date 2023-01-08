@@ -62,8 +62,8 @@ const listMessage = {
 }
 conn.sendMessage(m.chat, listMessage, { quoted: m, contextInfo:{ mentionedJid: [m.sender] }})
 }
-handler.help = ['Menuanime', 'anime']
-handler.tags = ['main']
-handler.command = /^(anime|menuanime)$/i
+handler.help = ['listanime']
+handler.tags = ['anime']
+handler.command = /^(listanime|anime|menuanime)$/i
     
 export default handler

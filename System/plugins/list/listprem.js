@@ -23,9 +23,9 @@ setTimeout(() => {
     if (db.data.chats[m.chat].deletemedia) conn.deleteMessage(m.chat, key)
   }, db.data.chats[m.chat].deletemediaTime)
 }
-handler.help = ['premlist [angka]']
+handler.help = ['listpremium [angka]']
 handler.tags = ['info']
-handler.command = /^(listprem|premlist)$/i
+handler.command = /^(listprem|listpremium|premlist)$/i
 
 export default handler
 

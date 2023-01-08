@@ -18,7 +18,7 @@ let stiker = await sticker(null, API(`https://telegra.ph/file/d34b2ab2cb233c7497
    description: set.ucapan, 
    title: `${command} Sedang Di Proses`,
    body: set.botdate,
-   thumbnail:set.thumb,
+   thumbnail:await (await fetch(set.thumb)).buffer(),
    sourceUrl: set.gcbot
    }}
 })
@@ -42,7 +42,7 @@ ptt: false, seconds: 0,contextInfo: {
 }
 
 handler.help = handler.command = ['mangkane25','mangkane26','mangkane27','mangkane28','mangkane29','mangkane30','mangkane31','mangkane32','mangkane33','mangkane34','mangkane35','mangkane36','mangkane37','mangkane38','mangkane39','mangkane40','mangkane41','mangkane42','mangkane43','mangkane44','mangkane45','mangkane46','mangkane47','mangkane48','mangkane49','mangkane50','mangkane51','mangkane52','mangkane53','mangkane54']
-handler.tags = ['audio']
+handler.tags = ['sound']
 //handler.command = /^(mangkane25|mangkane26|mangkane27|mangkane28|mangkane29|mangkane30|mangkane31|mangkane32|mangkane33|mangkane34|mangkane35|mangkane36|mangkane37|mangkane38|mangkane39|mangkane40|mangkane41|mangkane42|mangkane43|mangkane44|mangkane45|mangkane46|mangkane47|mangkane48|mangkane49|mangkane50|mangkane51|mangkane52|mangkane53|mangkane54)$/i
 handler.owner = false
 export default handler

@@ -63,18 +63,8 @@ let res = await fetch(`https://api.goprogram.ai/inspiration`)
             ], m)
 }
 
-if (command == 'artinama') {
-let res = await fetch(`https://api.lolhuman.xyz/api/artinama?apikey=${set.lolkey}&nama=${text}`)
-  let x = await res.json()
-  await conn.sendButton(m.chat, `*Artinama:*
-  ${x.result}`, set.wm, null, [
-                ['Next', `${usedPrefix + command}`],
-                ['Translate', `${usedPrefix}tr id ${x.result}`]
-            ], m)
 }
-
-}
-handler.command = handler.help = ['quotegarden', 'quotable', 'inspiration', 'artinama']
+handler.command = handler.help = ['quotegarden', 'quotable', 'inspiration']
 handler.tags = ['quotes']
 
 export default handler

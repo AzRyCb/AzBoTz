@@ -36,7 +36,7 @@ global.set = {
   lolkey: "ed78c137a46873c5b8e5fe3b",
   xteamkey: "5bd33b276d41d6b4",
   xckey: "7iyNa0qA",
-  zenzkey: 'BagasPrdn', //ganti jadi apikey lu kalau expired
+  zenzkey: '4ea1d2c75b65', //ganti jadi apikey lu kalau expired
   wm: '❋ཻུ۪۪⸙ Whatsapp Botz Multi-Device ❋ཻུ۪۪',
   wm2: '꒷︶꒷꒥꒷ ‧₊˚ ꒰ฅ˘օառɛʀ˘ฅ ꒱ ‧₊˚꒷︶꒷꒥꒷',
   multiplier: 69, // The higher, The harder levelup
@@ -82,7 +82,7 @@ global.set = {
     'https://telegra.ph/file/7d6c0e35f9c8f52715541.jpg','https://telegra.ph/file/ef4b742d47e6a9115e2ff.jpg',
     'https://telegra.ph/file/55e5af5f33fbd57104187.jpg','https://telegra.ph/file/af236598456b95884bd15.jpg',
     'https://telegra.ph/file/de92ed4a729887ffc974c.jpg','https://telegra.ph/file/00ce42a193b1dbbf907d4.jpg'],
-  fla: 'https://flamingtext.com/net-fu/proxy_form.cgi?script=chrominium-logo&_loc=generate&imageoutput=true&script=water-logo&doScale=true&scaleWidth=500&scaleHeight=500&fontsize=100&fillTextType=0&backgroundColor=%23101820&text=',
+  fla: 'https://www6.flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=sketch-name&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&fillTextType=1&fillTextPattern=Warning!&text=',
   qrgc: 'https://telegra.ph/file/97eec795fd58f4d658ac6.jpg',
   giflogo: 'https://telegra.ph/file/a46ab7fa39338b1f54d5a.mp4',
   logobot: readFileSync('System/src/chatbot.png'), // logo chatbot,
@@ -185,13 +185,13 @@ global.adReply = {
       title: set.ucapan,
       body: uptime,
       mediaUrl: set.gcbot,
+      mediaType: 1,
       description: set.botdate,
       previewType: 'PHOTO',
       //thumbnailUrl: await(await fetch(set.thumb)).buffer(),
       //thumbnail: await(await fetch(set.thumb)).buffer(),
       thumbnail: set.logo,
       sourceUrl: set.web,
-      mediaType: 1,
       renderLargerThumbnail: false
     }
   }

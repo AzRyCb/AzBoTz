@@ -195,8 +195,8 @@ const listMessage = {
 await conn.sendMessage(m.chat, listMessage, { quoted: fakes, mentions: await conn.parseMention(teks), contextInfo:{ forwardingScore: 99999, isForwarded: true }})
 }
 
-handler.help = ['audiomenu']
-handler.tags = ['audio']
+handler.help = ['listaudio']
+handler.tags = ['sound']
 handler.command = /^(audiomenu)/i
 handler.register = true
 

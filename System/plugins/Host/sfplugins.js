@@ -6,9 +6,9 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     writeFileSync(path, m.quoted.text)
     await conn.reply(m.chat, `Sukses tersimpan di ${path}`)
 }
-handler.help = ['sfp'].map(v => v + ' <teks>')
+handler.help = ['saveplugin'].map(v => v + ' <teks>')
 handler.tags = ['host']
-handler.command = /^sfp|sfplugin|sfplugins$/i
+handler.command = /^sfp|sfplugin|sfplugins|saveplugin$/i
 
 handler.rowner = true
 export default handler

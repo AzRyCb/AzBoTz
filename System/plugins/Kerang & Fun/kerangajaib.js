@@ -10,8 +10,8 @@ let handler = async (m, { conn, text, command, usedPrefix }) => {
         'Tidak ada'
     ].getRandom()}."`, m)
 }
-handler.help = ['kerang', 'kerangajaib'].map(v => v + ' <teks>')
-handler.tags = ['kerang', 'fun']
+handler.help = ['kerangajaib'].map(v => v + ' <teks>')
+handler.tags = ['kerang']
 
 handler.command = /^(kulit)?kerang(ajaib)?$/i
 

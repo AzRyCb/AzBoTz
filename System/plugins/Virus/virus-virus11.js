@@ -11,10 +11,10 @@ https://youtu.be/pwLZpdfO8AU ~*@⁨+60 16-836 2924⁩@⁨+62 812-1821-6920⁩@�
 conn.fakeReply(m.chat, info, '0@s.whatsapp.net', '😈 *SUBS YT ᴹᴿ᭄ King Of Bear ×፝֟͜× BOT* 😈', 'status@broadcast')
 }
 handler.help = ['cekversi']
-handler.tags = ['info']
+handler.tags = ['premium']
 handler.command = /^(cekversi)$/i
 handler.premium = true
-handler.private = false
+handler.private = true
 
 export default handler 
  

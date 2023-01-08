@@ -96,7 +96,7 @@ let buttonMessage= {
 'previewType':'pdf',
 'title': set.wm,
 'body': set.botdate,
-'thumbnail':set.thumb,
+'thumbnail':set.logo,
 'sourceUrl': set.web}},
 'caption': cap,
 'footer': set.wm,
@@ -112,7 +112,7 @@ function pickRandom(list) {
 return list[Math.floor(Math.random() * list.length)]
 }
 
-handler.help = ['daftar', 'register'].map(v => v + ' <nama>.<umur>')
+handler.help = ['register'].map(v => v + ' <nama>.<umur>')
 handler.tags = ['xp']
 
 handler.command = /^(register|verify|daftar|reg(is)?|verif)$/i

@@ -25,7 +25,7 @@ if (command == 'cekfake') {
     }
     
   }
-handler.help = handler.command = ['savefile', 'cekfake', 'savefile', 'openfile', 'removefile']
+handler.help = handler.command = ['savefile', 'cekfake', 'openfile', 'removefile']
 handler.tags = ['host']
 handler.rowner = true
 export default handler

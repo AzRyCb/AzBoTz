@@ -36,7 +36,7 @@ if (!text) throw 'Masukkan teks, Ex. Radiogead'
 	return conn.sendList(m.chat, ' 📺 itunes Search 🔎 ', `⚡ Silakan pilih itunes Search di tombol di bawah...\n*Teks yang anda kirim:* ${text}\n\nKetik ulang *${usedPrefix + command}* teks anda untuk mengubah teks lagi`, set.wm, `☂️ itunes Search Disini ☂️`, listSections, m)
     }
 handler.help = ['itunes']
-handler.tags = ['music', 'audio']
+handler.tags = ['internet']
 handler.command = /^itunes$/i
 
 export default handler

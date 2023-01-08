@@ -16,7 +16,7 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 	else throw `\nbelum ada Menu yg Ada di list store.\nketik *${usedPrefix + command} <teks>* untuk menambahkan daftar menu.\n`
 }
 handler.help = ['store'].map(v => 'list' + v)
-handler.tags = ['store']
+handler.tags = ['database']
 handler.command = /^list(store|shop)?$/i
 
 export default handler

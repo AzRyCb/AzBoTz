@@ -37,7 +37,7 @@ ${set.dmenuf}`
       throw false
   }
 }
-handler.help = ['grouplist']
+handler.help = ['listgroup']
 handler.tags = ['info']
 handler.command = /^((gro?ups?list)|(listgro?ups?)|(listgc))$/i
 

@@ -1,2 +1,2 @@
 FROM gitpod/workspace-full
-RUN sudo apt-get update && sudo apt-get install -y ffmpeg imagemagick
+RUN sudo apt-get update && sudo apt-get install -y ffmpeg imagemagick libwebp

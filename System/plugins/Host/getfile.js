@@ -53,9 +53,9 @@ ${error}
         }
     }
 }
-handler.help = ['getplugin', 'getfile'].map(v => `get${v} <name file>`)
+handler.help = ['plugin2', 'file'].map(v => `get${v} <name file>`)
 handler.tags = ['host']
-handler.command = /^g(et)?(p(lugin)?|f(ile)?)$/i
+handler.command = /^g(et)?(p(lugin)2?|f(ile)?)$/i
 
 handler.rowner = true
 

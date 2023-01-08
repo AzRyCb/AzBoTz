@@ -120,9 +120,20 @@ if (command == 'idfreefire') {
   if (json.result.name) m.reply(`\nNama : ${json.result.name}\nID : ${args[0]}\n`)
     else throw `Error!\n\n${json}`
     }
+
+    if (command == 'artinama') {
+      let res = await fetch(`https://api.lolhuman.xyz/api/artinama?apikey=${set.lolkey}&nama=${text}`)
+        let x = await res.json()
+        await conn.sendButton(m.chat, `*Artinama:*
+        ${x.result}`, set.wm, null, [
+                      ['Next', `${usedPrefix + command}`],
+                      ['Translate', `${usedPrefix}tr id ${x.result}`]
+                  ], m)
+      }
+
 }
 //handler.command = handler.help = ['nhentaipdf', 'nhentai', 'hmtai', 'gethmtai', 'apiksearch', 'apiktren', 'lk21ftv', 'lk21search', 'idfreefire']
-handler.command = handler.help = ['nhentaipdf', 'nhentai', 'gethmtai', 'apiksearch', 'apiktren', 'lk21ftv', 'lk21search', 'idfreefire']
+handler.command = handler.help = ['nhentaipdf', 'nhentai', 'gethmtai', 'apiksearch', 'apiktren', 'lk21ftv', 'lk21search', 'idfreefire', 'artinama']
 handler.tags = ['internet']
 
 export default handler

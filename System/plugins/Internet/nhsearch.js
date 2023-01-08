@@ -9,7 +9,7 @@ let handler = async(m, { conn, text }) => {
     else throw json
 }
 handler.help = ['nhsearch <query>']
-handler.tags = ['nsfw']
+handler.tags = ['internet']
 handler.command = /^(nhs|nhsearch)$/i
 
 export default handler

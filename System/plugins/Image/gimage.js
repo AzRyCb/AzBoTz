@@ -9,8 +9,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 Result from *${text}*
 `.trim(), m)
 }
-handler.help = ['gimage <query>', 'image <query>']
-handler.tags = ['internet', 'image']
+handler.help = ['gimage <query>']
+handler.tags = ['image']
 handler.command = /^(gimage|image)$/i
 
 export default handler

@@ -13,7 +13,7 @@ let handler = async (m, { conn, args }) => {
     await conn.reply(m.chat,'Berhasil unbanned!!')
     conn.reply(m.chat,'Kamu telah di Unbanned!!', mention)
 }
-handler.help = ['unban']
+handler.help = ['unbanuser']
 handler.tags = ['owner']
 handler.command = /^unban(user)?$/i
 handler.rowner = true

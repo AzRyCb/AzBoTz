@@ -50,9 +50,9 @@ let handler = async (m, { conn, text, participants, usedPrefix, command }) => {
     	await conn.sendGroupV4Invite(m.chat, jid, invite_code, invite_code_exp, await conn.getName(m.chat), 'Undangan untuk bergabung ke grup WhatsApp saya', jpegThumbnail)
     }
 }
-handler.help = ['add', '+'].map(v => v + ' nomor')
+handler.help = ['adduser'].map(v => v + ' nomor')
 handler.tags = ['admin']
-handler.command = /^(add|menambahkan|\+)$/i
+handler.command = /^(add|adduser|menambahkan|\+)$/i
 
 handler.group = handler.admin = handler.botAdmin = true
 export default handler

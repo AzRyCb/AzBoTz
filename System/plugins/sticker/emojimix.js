@@ -11,7 +11,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!res.ok) throw await res.text()
     let json = await res.json()
     if (!json.results) throw 'Error!'
-    let ztick = readFileSync(`../System/src/media/bronya.webp`)
+    let ztick = readFileSync(`System/src/media/bronya.webp`)
     try {
         const stiker = await sticker(false, json.results[0].url, global.packname, global.author)
         await conn.sendFile(m.chat, stiker, 'sticker.webp', '', m)
@@ -21,6 +21,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     }
 }
 handler.help = ['emojimix'].map(v => v + ' emot1|emot2>')
-handler.tags = ['misc']
+handler.tags = ['sticker']
 handler.command = /^(emojimix)$/i
 export default handler

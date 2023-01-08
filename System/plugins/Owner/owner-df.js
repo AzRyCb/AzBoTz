@@ -13,9 +13,9 @@ unlinkSync(file)
 conn.reply(m.chat, `Succes deleted "plugins/${args[0]}.js"`, m)
     
 }
-handler.help = ['df']
+handler.help = ['delplugin']
 handler.tags = ['owner']
-handler.command = /^(df)$/i
+handler.command = /^(delplugin)$/i
 
 handler.mods = true
 

@@ -7,7 +7,7 @@ m.reply(answer)
 }
 
 handler.help = ['brainly <soal>']
-handler.tags = ['internet']
+handler.tags = ['edukasi']
 handler.command = /^brainly$/i
 handler.limit = true
 

@@ -3,19 +3,83 @@ import fs from 'fs'
 import { join } from 'path'
 import { xpRange } from '../lib/levelling.js'
 import { plugins } from '../lib/plugins.js'
+import Func from '../lib/func.js'
 import { platform } from 'os'
 import fetch from 'node-fetch'
 import moment from 'moment-timezone'
 const { opts, __dirname } = (await import('../lib/helper.js')).default 
 
 let handler = async (m, { conn, usedPrefix: _p, args, command, __dirname }) => {
-  let tags
-  let teks = `${args[0]}`.toLowerCase()
-  let arrayMenu = ['all', 'misc', 'store', 'user', 'edukasi', 'anonymous', 'ephoto360', 'baileys', 'convert', 'database', 'nocategory', 'primbon', 'canvas', 'absen', 'update','rpg', 'anime', 'virus', 'downloader', 'game', 'fun', 'xp', 'news', 'group', 'image', 'admin', 'info', 'internet', 'islam', 'kerang', 'maker', 'owner', 'audio', 'premium', 'quotes', 'stalk', 'shortlink', 'sticker', 'tools', 'nsfw', 'asupan', 'random', 'textpro', 'photooxy']
-  if (!arrayMenu.includes(teks)) teks = '404'
+//let _package = JSON.parse(await fs.promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
+let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
+let name = await conn.getName(who)
+let user = db.data.users[who]
+let prems = `${user.premium > 0 ? 'Premium': 'Free'}`
+let { exp, limit, level, role, money, lastclaim, lastweekly, registered, regTime, age, banned, pasangan } = user
+let { min, xp, max } = xpRange(level, set.multiplier)
+let totalreg = Object.keys(db.data.users).length
+let rtotalreg = Object.values(db.data.users).filter(user => user.registered == true).length
+let mode = opts['self'] ? 'Private' : 'Publik'
+let platformm = platform()
+let pp = await conn.profilePictureUrl(who).catch(_ => './src/avatar_contact.png')
+let tag = `wa.me/${m.sender.split('@')[0]}`
+m, { contextInfo: { mentionedJid: conn.parseMention(tag) }}
+let d = new Date(new Date + 3600000)
+let locale = 'id'
+let wib = moment.tz('Asia/Jakarta').format('HH:mm:ss')
+let wibh = moment.tz('Asia/Jakarta').format('HH')
+let wibm = moment.tz('Asia/Jakarta').format('mm')
+let wibs = moment.tz('Asia/Jakarta').format('ss')
+let wit = moment.tz('Asia/Jayapura').format('HH:mm:ss')
+let wita = moment.tz('Asia/Makassar').format('HH:mm:ss')
+let wktuwib = `${wibh} H ${wibm} M ${wibs} S`
+let weton = ['Pahing', 'Pon', 'Wage', 'Kliwon', 'Legi'][Math.floor(d / 84600000) % 5]
+let week = d.toLocaleDateString(locale, { weekday: 'long' })
+let date = d.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })
+let dateIslamic = Intl.DateTimeFormat(locale + '-TN-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(d)
+let time = d.toLocaleTimeString(locale, { hour: 'numeric', minute: 'numeric', second: 'numeric' })
+let _uptime = process.uptime() * 1000
+let uptime = set.clockString(_uptime)
+let _muptime
+  if (process.send) {
+    process.send('uptime')
+    _muptime = await new Promise(resolve => {
+    process.once('message', resolve)
+    setTimeout(resolve, 1000)
+  }) * 1000
+}
+let muptime = set.clockString(_muptime)
+let totalcmd = Object.values(plugins).length
+let sortedCmd = Object.entries(db.data.stats).map(([key, value]) => {
+  return { ...value, name: key }
+  }).map(toNumber('total')).sort(sort('total'))
+      
+  let all = 0;
+  let sall = 0;
+  for (let i of sortedCmd){
+  all += i.total
+  sall += i.success
+  }
+
+//━━━━━━━━[ SETTING HELP ]━━━━━━━━//
+let help = Object.values(plugins).filter(plugin => !plugin.disabled).map(plugin => {
+  return {
+    help: Array.isArray(plugin.tags) ? plugin.help : [plugin.help],
+    tags: Array.isArray(plugin.tags) ? plugin.tags : [plugin.tags],
+    prefix: 'customPrefix' in plugin,
+    limit: plugin.limit,
+    premium: plugin.premium,
+    enabled: !plugin.disabled,
+  }
+})
+
+let tags
+let teks = `${args[0]}`.toLowerCase()
+let arrayMenu = ['all', 'user', 'edukasi', 'anonymous', 'ephoto360', 'baileys', 'convert', 'database', 'nocategory', 'primbon', 'canvas', 'absen', 'update','rpg', 'anime', 'virus', 'downloader', 'game', 'fun', 'xp', 'news', 'group', 'image', 'admin', 'info', 'internet', 'islam', 'kerang', 'maker', 'owner', 'audio', 'sound', 'premium', 'quotes', 'stalk', 'shortlink', 'sticker', 'tools', 'nsfw', 'asupan', 'random', 'textpro', 'photooxy']
+if (!arrayMenu.includes(teks)) teks = '404'
   if (teks == 'all') tags = {
-  'main': 'Main',
-  'game': 'Game',
+  'main': 'Menu Utama',
+  'game': 'Bermain Game',
   'rpg': 'RPG Games',
   'xp': 'xp & Limit',
   'jadian': 'Jadian',
@@ -24,7 +88,8 @@ let handler = async (m, { conn, usedPrefix: _p, args, command, __dirname }) => {
   'kerang': 'Kerang Ajaib',
   'random': 'Random',
   'quotes': 'Quotes',
-  'audio': 'Audio',
+  'sound': 'Sound',
+  'audio': 'Pengubah Suara',
   'maker': 'Maker',
   'admin': 'Admin',
   'group': 'Group',
@@ -34,7 +99,6 @@ let handler = async (m, { conn, usedPrefix: _p, args, command, __dirname }) => {
   'hentai': 'Hentai',
   'bokep': 'Bokep',
   'anonymous': 'Anonymous Chat',
-  'nulis': 'MagerNulis',
   'downloader': 'Downloader',
   'tools': 'Tools',
   'fun': 'Fun',
@@ -50,7 +114,6 @@ let handler = async (m, { conn, usedPrefix: _p, args, command, __dirname }) => {
 
   'convert': 'Converter',
   'bank': 'Bank',
-  'store': 'store',
   'ephoto360': 'Ephoto360',
   'walpaper': 'WALPAPER',
   'image': 'IMAGE',
@@ -58,7 +121,6 @@ let handler = async (m, { conn, usedPrefix: _p, args, command, __dirname }) => {
   'anime': 'Anime',
   'user': 'user',
   'canvas': 'canvas',
-  'misc': 'misc',
   'primbon': 'Primbon',
   'Baileys': 'Baileys',
   'update': 'update',
@@ -96,9 +158,6 @@ if (teks == 'xp') tags = {
 if (teks == 'fun') tags = {
 'fun': 'FUN',
 }
-if (teks == 'store') tags = {
-  'store': 'store',
-}
 if (teks == 'ephoto360') tags = {
   'ephoto360': 'Ephoto360',
 }
@@ -113,9 +172,6 @@ if (teks == 'database') tags = {
 }
 if (teks == 'edukasi') tags = {
   'edukasi': 'Edukasi',
-}
-if (teks == 'misc') tags = {
-  'misc': 'misc',
 }
 if (teks == 'convert') tags = {
   'convert': 'Converter',
@@ -164,7 +220,6 @@ if (teks == 'kerang') tags = {
 }
 if (teks == 'maker') tags = {
 'maker': 'MAKER',
-'nulis': 'MagerNulis',
 'logo': 'logo',
 }
 if (teks == 'owner') tags = {
@@ -174,6 +229,9 @@ if (teks == 'owner') tags = {
 }
 if (teks == 'audio') tags = {
 'audio': 'PENGUBAH SUARA',
+}
+if (teks == 'sound') tags = {
+  'sound': 'Sound',
 }
 if (teks == 'premium') tags = {
 'premium': 'PREMIUM',
@@ -219,94 +277,7 @@ if (teks == 'update') tags = {
   'update': 'Next Update'
 }
 
-  //let _package = JSON.parse(await fs.promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
-  let who
-  if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.sender
-  else who = m.sender 
-  let name = await conn.getName(m.sender)
-  let platformm = platform()
-  let tag = `wa.me/${m.sender.split('@')[0]}`
-  m, { contextInfo: { mentionedJid: conn.parseMention(tag) }}
 
-//━━━━━━━━[ piktur ]━━━━━━━━//
-let sortedCmd = Object.entries(db.data.stats).map(([key, value]) => {
-  return { ...value, name: key }
-  }).map(toNumber('total')).sort(sort('total'))
-      
-  let all = 0;
-  let sall = 0;
-  for (let i of sortedCmd){
-  all += i.total
-  sall += i.success
-  }
-  let totalcmd = Object.values(plugins).length
-
-/***************** TIME *********************/
-
-//━━━━━━━━[ TIMER ]━━━━━━━━//
-let d = new Date(new Date + 3600000)
-let locale = 'id'
-
-// d.getTimeZoneOffset()
-// Offset -420 is 18.00
-// Offset    0 is  0.00
-// Offset  420 is  7.00
-let wib = moment.tz('Asia/Jakarta').format('HH:mm:ss')
-let wibh = moment.tz('Asia/Jakarta').format('HH')
-let wibm = moment.tz('Asia/Jakarta').format('mm')
-let wibs = moment.tz('Asia/Jakarta').format('ss')
-let wit = moment.tz('Asia/Jayapura').format('HH:mm:ss')
-let wita = moment.tz('Asia/Makassar').format('HH:mm:ss')
-let wktuwib = `${wibh} H ${wibm} M ${wibs} S`
-let weton = ['Pahing', 'Pon', 'Wage', 'Kliwon', 'Legi'][Math.floor(d / 84600000) % 5]
-let week = d.toLocaleDateString(locale, { weekday: 'long' })
-let date = d.toLocaleDateString(locale, {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric'
-})
-let dateIslamic = Intl.DateTimeFormat(locale + '-TN-u-ca-islamic', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric'
-}).format(d)
-let time = d.toLocaleTimeString(locale, {
-  hour: 'numeric',
-  minute: 'numeric',
-  second: 'numeric'
-})
-let _uptime = process.uptime() * 1000
-let _muptime
-  if (process.send) {
-    process.send('uptime')
-    _muptime = await new Promise(resolve => {
-    process.once('message', resolve)
-    setTimeout(resolve, 1000)
-  }) * 1000
-}
-let muptime = set.clockString(_muptime)
-let uptime = set.clockString(_uptime)
-
-//━━━━━━━━[ DATABASE ]━━━━━━━━//
-let totalreg = Object.keys(db.data.users).length
-let rtotalreg = Object.values(db.data.users).filter(user => user.registered == true).length
-let { exp, limit, level, role, registered, money, } = db.data.users[m.sender]
-let { min, xp, max } = xpRange(level, set.multiplier)
-let mode = opts['self'] ? 'Private' : 'Publik'
-let user = db.data.users[m.sender]
-let prems = `${user.premium > 0 ? 'Premium': 'Free'}`
-
-//━━━━━━━━[ SETTING HELP ]━━━━━━━━//
-let help = Object.values(plugins).filter(plugin => !plugin.disabled).map(plugin => {
-  return {
-    help: Array.isArray(plugin.tags) ? plugin.help : [plugin.help],
-    tags: Array.isArray(plugin.tags) ? plugin.tags : [plugin.tags],
-    prefix: 'customPrefix' in plugin,
-    limit: plugin.limit,
-    premium: plugin.premium,
-    enabled: !plugin.disabled,
-  }
-})
 //━━━━━━━━[ DEFAULT MENU ]━━━━━━━━//
 //┃──〔  𝐃𝐀𝐓𝐀𝐁𝐀𝐒𝐄  〕─⬣
 //𝐈𝐍𝐅𝐎
@@ -437,9 +408,7 @@ if (teks == '404') {
     {title: `│ Baileys`, rowId: `${_p}? baileys`, description: "coming soon"},
     {title: `🔝 update`, rowId: `${_p}? update`, description: "coming soon fitur"},
     {title: `│ primbon`, rowId: `${_p}? primbon`, description: "coming soon fitur"},
-    {title: `│ Canvas`, rowId: `${_p}? canvas`, description: "coming soon fitur"},
-    {title: `│ misc`, rowId: `${_p}? misc`, description: "coming soon fitur"},
-    {title: `│ store`, rowId: `${_p}? store`, description: "coming soon fitur"},
+    {title: `✏️ │ Canvas`, rowId: `${_p}? canvas`, description: "coming soon fitur"},
     {title: `🧩 │ User`, rowId: `${_p}? user`, description: "comingsoon"},
     {title: `🎨 │ Edukasi`, rowId: `${_p}? edukasi`, description: "comingsoon"},
     {title: `❓ │ No Category`, rowId: `${_p}? nocategory`, description: "Fitur tanpa kategory!"},
@@ -450,7 +419,6 @@ title: `––––––『 Maker 』––––––`,
  rows: [
     {title: `🎨 │ PhotoOxi`, rowId: `${_p}? photooxy`, description: "Menampilkan Photo Oxy Menu"},
     {title: `📝 │ Maker`, rowId: `${_p}? maker`, description: "Buat logo atau sebuah karya"},
-    {title: `✏️ │ Nulis`, rowId: `${_p}? nulis`, description: "Nulis kok males kak?"},
     {title: `✒️ │ TextPro`, rowId: `${_p}? textpro`, description: "Buat Gambar teks disini"},
     {title: `🌈 │ Ephoto360`, rowId: `${_p}? ephoto360`, description: "Buat Gambar teks disini"},
     ]
@@ -538,7 +506,7 @@ title: `––––––『 Maker 』––––––`,
       readmore: readMore
     }
     text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
-    const pp = await conn.profilePictureUrl(conn.user.jid).catch(_ => './src/avatar_contact.png')
+    let sipp = await conn.resize(await(await fetch(set.fla + teks)).buffer(), 300, 300)
     /*
     conn.sendHydrated2(m.chat, text.trim(), set.wm, pp, set.web, 'Web', null, null, [
       ['Donate', '/donasi'],
@@ -547,8 +515,8 @@ title: `––––––『 Maker 』––––––`,
     ], m)
     */
 
-        //await conn.send3TemplateButtonImg(m.chat, logo, text.trim(), `Aktif selama : ${uptime}`, `🏅Owner`, `${_p}owner`, `🎖ThanksTo`, `${_p}tqto`, `🎗  Donasi  🎗`, `${_p}infobot`)
-        //conn.send3TemplateButtonImg(m.chat, await(await fetch(set.fla + teks)).buffer(), text.trim(), `Aktif selama : ${uptime}`, `🏅Owner`, `${_p}owner`, `🎖ThanksTo`, `${_p}tqto`, `🎗  Donasi  🎗`, `${_p}infobot`)
+    //await conn.send3TemplateButtonImg(m.chat, logo, text.trim(), `Aktif selama : ${uptime}`, `🏅Owner`, `${_p}owner`, `🎖ThanksTo`, `${_p}tqto`, `🎗  Donasi  🎗`, `${_p}infobot`)
+    //conn.send3TemplateButtonImg(m.chat, await(await fetch(set.fla + teks)).buffer(), text.trim(), `Aktif selama : ${uptime}`, `🏅Owner`, `${_p}owner`, `🎖ThanksTo`, `${_p}tqto`, `🎗  Donasi  🎗`, `${_p}infobot`)
         /*   conn.sendHydrated(m.chat, text.trim(), 'Aktif selama : ${uptime}', null, 'https://chat.whatsapp.com/GpwaG5nvU2yCitgJ7c8o8f', 'Grup-Bot-AzBoTz', '', '', [
              ['Donate', '/donasi'],
               ['owner', '/creator'],
@@ -559,16 +527,14 @@ title: `––––––『 Maker 』––––––`,
         
 
               //-------DOC TEMPLATE
-              const message = {
-                jpegThumbnail: await(await fetch(set.thumb)).buffer(),
-                caption: text.trim(),
-                footer: `AzBoTz aktif selama : ${uptime}`,
-                document: { url: set.thumb },
-                fileName: set.ucapan,
-                mimetype: set.doc,
-                fileLength: set.fsizedoc,
-                pageCount: set.fpagedoc,
-                templateButtons: [
+      const message = {
+        document: { url: set.web },
+        mimetype: set.doc, fileName: set.ucapan, fileLength: set.fsizedoc,  pageCount: set.fpagedoc,
+        jpegThumbnail: sipp,
+        caption: text,
+        footer: `AzBoTz aktif selama : ${uptime}`,
+        //contextInfo: adReply.contextInfo,
+          templateButtons: [
                     {
                         urlButton: {
                             displayText: `My Website`,
@@ -600,12 +566,13 @@ title: `––––––『 Maker 』––––––`,
                         }
                     },
                 ]
-            }
-           conn.sendMessage(m.chat, message)
-            
+                //headerType: 6}
+              }
+           conn.sendMessage(m.chat, message, { quoted: m, ephemeralExpiration: set.ephemeral, contextInfo: { mentionedJid: m.sender, forwardingScore: set.fsizedoc, isForwarded: true }, ephemeralExpiration: set.ephemeral })
+          }
         //------------------- BUTTON VID
         //conn.sendButton(m.chat, text, wm, 'https://telegra.ph/file/a46ab7fa39338b1f54d5a.mp4', [['Ping', '.ping'],['Owner', '.owner'],['Donasi', '.donasi']],fakes, { gifPlayback: true, contextInfo: { externalAdReply: {title: set.namebot, body: set.bottime, sourceUrl: set.ig, thumbnail: set.thumb }}})
-  }
+  
 
 handler.help = ['menu']
 handler.tags = ['main']

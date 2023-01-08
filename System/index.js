@@ -69,7 +69,7 @@ function start(file) {
   p.on('exit', (_, code) => {
     isRunning = false
     console.error('[❗] Exited with code:', code)
-    if (code == 1) start('main.js')
+    if (code == 1) start('./main.js')
     if (code === 0) return 
     watchFile(args[0], () => {
       unwatchFile(args[0])
