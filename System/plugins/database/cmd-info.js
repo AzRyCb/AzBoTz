@@ -20,7 +20,7 @@ let name = await conn.getName(who)
 ${sticker.mentionedJid.length > 0 ? `*Cmd Mention:*
 ${sticker.mentionedJid.map((v, i) => `No. *${i + 1}*:\n*Mention Name:* ${conn.getName(v)}\n*Mention Number:* ${splitM(v)}\n*Mention Jid:* ${v}`).join('\n\n')}` : ''} 
 `.trim()
-    if (sticker) return conn.reply(m.chat, str, fakes, adReply)
+    if (sticker) return conn.reply(m.chat, str)
     else m.reply('Sticker Not in the database')
 }
 handler.help = ['infocmd']

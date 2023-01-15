@@ -82,7 +82,7 @@ if (!listSampah.length) return
   for (let namaSampah of listSampah) fs.promises.rmdir('System/jadibot/' + namaSampah).catch(_=>_)
   }, 60 * 1000)
 }
-if (opts['server']) (await import('./System/server.js')).default(conn, PORT)
+if (opts['server']) (await import('./server.js')).default(conn, PORT)
 
 /* Clear */
 async function clearTmp() {

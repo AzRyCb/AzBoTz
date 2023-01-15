@@ -16,13 +16,13 @@ let name = await conn.getName(who)
 *${set.htjava} ${text}*
 `, m, null, { fileLength: set.fsizedoc, seconds: set.fsizedoc, contextInfo: {
           externalAdReply :{
-    mediaUrl: set.ig,
+    mediaUrl: set.sosmed,
     mediaType: 2,
     description: set.wm, 
     title: '👋 Hai, ' + name + ' ' + set.ucapan,
     body: set.botdate,
     thumbnail: await(await fetch(pp)).buffer(),
-    sourceUrl: set.gcbot
+    sourceUrl: set.sosmed
      }}
   })
     } finally {
@@ -40,8 +40,8 @@ import { readdirSync, readFileSync, unlinkSync } from 'fs'
 import { join } from 'path'
 
 let __dirname1 = __dirname(import.meta.url)
-let src = join(__dirname1, '../System/src/')
-let tmp = join(__dirname1, '../tmp/')
+let src = join(__dirname1, '../../src/')
+let tmp = join(__dirname1, '../../../tmp/')
 let _font = join(src, 'font')
 let aesthetic = join(src, 'Aesthetic')
 
@@ -92,4 +92,34 @@ function ht(text = '') {
             })
         //.stderr.on('data', a => console.log(a+''))
     })
+}
+
+function noise(_var, depth = 4, s = 1024, freq) {
+    let forms = []
+    for (let i = 0; i < depth; i++) forms.push(
+        formula(
+            _var,
+            freq * rand(40, 80) * (s / 2048) / s * ((i + 1) / 5),
+            rand(-Math.PI, Math.PI),
+            (i + 1) / depth * 8,
+            0
+        )
+    )
+    return forms.join('+')
+}
+
+function formula(_var, freq, offset, amp, add) {
+    return `(${add.toFixed(3)}+${amp.toFixed(4)}*sin(${offset.toFixed(6)}+2*PI*${_var}*${freq.toFixed(6)}))`
+}
+
+function textArgs(text, background, color, size, fontfile, x = '200', y = '200', w = 1024, h = 1024) {
+    return `color=${background}:s=${w}x${h},drawtext=text='${text.replace(/[\\]/g, '\\$&')}':fontfile='${fontfile.replace(/[\\]/g, '\\$&')}':x=${x}:y=${y}:fontsize=${size}:fontcolor=${color}`
+}
+
+function pickRandom(list) {
+    return list[Math.floor(Math.random() * list.length)]
+}
+
+function rand(min, max, q = 0.001) {
+    return Math.floor((Math.random() * (max - min)) / q) * q
 }

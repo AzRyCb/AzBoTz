@@ -23,7 +23,7 @@ import uploadImage from './uploadImage.js'
 const {  __dirname, isReadableStream, saveStreamToFile } = (await import('./helper.js')).default 
 const __dirname1 = __dirname(import.meta.url)
 const __dirname2 = dirname(fileURLToPath(import.meta.url))
-const tmp = join(__dirname2, '../tmp')
+const tmp = join(__dirname2, '../../tmp')
 
 /**
  * 
@@ -399,7 +399,7 @@ function sticker6(img, url) {
       ext: 'bin'
     }
     if (type.ext == 'bin') reject(img)
-    const tmp = join(__dirname2, `../tmp/${+ new Date()}.${type.ext}`)
+    const tmp = join(__dirname2, `../../tmp/${+ new Date()}.${type.ext}`)
     const out = join(tmp + '.webp')
     await promises.writeFile(tmp, img)
     // https://github.com/MhankBarBar/termux-wabot/blob/main/index.js#L313#L368
@@ -505,7 +505,7 @@ const support = {
 function ffmpeg(buffer, args = [], ext = '', ext2 = '') {
   return new Promise(async (resolve, reject) => {
     try {
-      const tmp = join(__dirname1, `../tmp/${Date.now()}.${ext}`)
+      const tmp = join(__dirname1, `../../tmp/${Date.now()}.${ext}`)
       const out = `${tmp}.${ext2}`
 
       const isStream = isReadableStream(buffer)

@@ -38,6 +38,18 @@ if (setting.autoMessage) {
     await _m.copyNForward(m.chat, true)
 }
 */
+//antibug
+if ((user.money * 1) > 99999998) {
+    user.money = 99999999
+} else if ((user.money * 1) < 0) {
+    user.money = 0
+}
+if ((user.healt * 1) > 100) {
+    user.healt = 100
+} else if ((user.money * 1) < 0) {
+    user.healt = 0
+}
+
 // auto clear ketika terdapat pesan yang tidak dapat dilihat di wa desktop
 if (m.messageStubType === 68) {
     let log = {
@@ -51,7 +63,7 @@ if (m.messageStubType === 68) {
 }
 
 //antispam
-if (chat.antispam) {
+if (setting.security) {
 if (!m.message)return
     this.spam = this.spam ? this.spam : {}   
 if (m.sender in this.spam) {
@@ -74,6 +86,8 @@ this.spam[m.sender] = {
 }
 }
 //anticall
+/** @type {import('@adiwajshing/baileys')} */
+// @ts-ignore
 const { WAMessageStubType } = (await import('@adiwajshing/baileys')).default
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function () {
@@ -81,7 +95,7 @@ const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(function (
     resolve()
 }, ms))
 
-if (chat.antiCall) {
+if (setting.security) {
 if (m.fromMe && m.isBaileys) return !0
 if (m.messageStubType === (WAMessageStubType.CALL_MISSED_VOICE || WAMessageStubType.CALL_MISSED_VIDEO)) {
 	let cap = 'Kamu Di banned + block + warn + kick oleh bot karena telah melanggar aturan bot\n\n*📮Dilarang menelepon Bot!*'

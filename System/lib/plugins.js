@@ -1,5 +1,4 @@
 // inspired from https://github.com/Nurutomo/mahbod/blob/main/src/util/PluginManager.ts
-// @ts-check
 import { promises, existsSync, watch } from 'fs'
 import { resolve, join } from 'path'
 import { platform } from 'os'
@@ -59,7 +58,7 @@ async function loadPluginFiles(
             const module = await importFile(filename)
             if (module) plugins[formatedFilename] = module
         } catch (e) {
-            opts.logger?.error(e, `error while requiring ${formatedFilename}`)
+            opts.logger?.error(e, `[⛔] error while requiring ${formatedFilename}`)
             delete plugins[formatedFilename]
         }
     }))
@@ -112,7 +111,7 @@ async function reload({
             if (existsSync(file)) logger?.info(`[🔄] updated plugin - '${formatedFilename}'`)
             else {
                 logger?.warn(`[⛔] deleted plugin - '${formatedFilename}'`)
-                this.reply(`${global.set.mods}@s.whatsapp.net`, `Plugins *${formatedFilename}* telah dihapus [❗]`)
+                //this.reply(`${global.set.mods}@s.whatsapp.net`, `Plugins *${formatedFilename}* telah dihapus [❗]`)
                 return delete plugins[formatedFilename]
             }
         } else logger?.info(`[✅] new plugin - '${formatedFilename}'`)
@@ -128,9 +127,11 @@ async function reload({
             if (module) plugins[formatedFilename] = module
         } catch (e) {
             logger?.error(e, `[❗] error require plugin '${formatedFilename}'`)
+            /*
             this.reply(`${global.set.mods}@s.whatsapp.net`, `[❗] Eror load *${formatedFilename}*
             log:
             ${format(e)}`)
+*/
             delete plugins[formatedFilename]
         } finally {
             plugins = sortedPlugins(plugins)

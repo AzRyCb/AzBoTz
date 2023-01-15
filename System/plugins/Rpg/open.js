@@ -160,10 +160,10 @@ const tfinventory = {
   `.trim())
       let diamond = crateReward.diamond, mythic = crateReward.mythic, pet = crateReward.pet, legendary = crateReward.legendary, emerald = crateReward.emerald
       if (mythic || diamond) conn.reply(m.chat, `
-  Congrats you got a rare item, which is ${diamond ? `*${diamond}* ${rpg.emoticon('diamond')}diamond` : ''}${diamond && mythic ? 'and ' : ''}${mythic ? `*${mythic}* ${rpg.emoticon('mythic')}mythic` : ''}
+  Congrats you got a rare item, which is ${diamond ? `*${diamond}* ${set.rpg.emoticon('diamond')}diamond` : ''}${diamond && mythic ? 'and ' : ''}${mythic ? `*${mythic}* ${set.rpg.emoticon('mythic')}mythic` : ''}
   `.trim())
       if (pet || legendary || emerald) conn.reply(m.chat, `
-  Congrats you got a epic item, which is ${pet ? `*${pet}* ${rpg.emoticon('pet')}pet` : ''}${pet && legendary && emerald ? ', ' : (pet && legendary || legendary && emerald || emerald && pet) ? 'and ' : ''}${legendary ? `*${legendary}* ${rpg.emoticon('legendary')}legendary` : ''}${pet && legendary && emerald ? 'and ' : ''}${emerald ? `*${emerald}* ${rpg.emoticon('emerald')}emerald` : ''}
+  Congrats you got a epic item, which is ${pet ? `*${pet}* ${set.rpg.emoticon('pet')}pet` : ''}${pet && legendary && emerald ? ', ' : (pet && legendary || legendary && emerald || emerald && pet) ? 'and ' : ''}${legendary ? `*${legendary}* ${set.rpg.emoticon('legendary')}legendary` : ''}${pet && legendary && emerald ? 'and ' : ''}${emerald ? `*${emerald}* ${set.rpg.emoticon('emerald')}emerald` : ''}
   `.trim())
   }
   handler.help = ['open'].map(v => v + ' [crate] [count]')

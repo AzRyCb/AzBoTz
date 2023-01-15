@@ -5,13 +5,15 @@
     "main": "System/index.js",
     "type": "module",
     "directories": {
-        "System/lib": "System/lib",
-        "System/src": "System/src",
-        "System/plugins": "System/plugins"
+        "lib": "System/lib",
+        "src": "System/src",
+        "plugins": "System/plugins",
+        "tmp": "tmp"
     },
     "scripts": {
         "start": "node . --autocleartmp",
         "start2": "node . --clearses --autocleartmp --img",
+        "server": "node . --autocleartmp --server",
         "test": "node test.js",
         "test2": "nodemon index.js"
     },
@@ -30,6 +32,7 @@
     "dependencies": {
         "@adiwajshing/baileys": "npm:baileys@latest",
         "@adiwajshing/keyed-db": "latest",
+        "@arugaz/ai2d": "latest",
         "@bochilteam/scraper": "latest",
         "@ffmpeg-installer/ffmpeg": "latest",
         "@ibaraki-douji/pixivts": "latest",
@@ -61,7 +64,6 @@
         "image-to-base64": "latest",
         "jsdom": "latest",
         "jimp": "latest",
-        "knights-canvas": "latest",
         "link-preview-js": "latest",
         "lodash": "latest",
         "lowdb": "latest",
@@ -76,6 +78,7 @@
         "nhentai-node-api": "latest",
         "ocr-space-api-wrapper": "latest",
         "obfuscator": "latest",
+        "openai": "latest",
         "pino": "latest",
         "pino-pretty": "latest",
         "qrcode": "latest",
@@ -83,7 +86,6 @@
         "social-downloader-cherry": "latest",
         "social_media_downloader": "latest",
         "soundcloud-downloader": "latest",
-        "similarity": "latest",
         "spinnies": "latest",
         "socket.io": "latest",
         "syntax-error": "latest",
@@ -93,7 +95,6 @@
         "url-regex-safe": "latest",
         "xfarr-api": "^2.0.0",
         "yargs": "latest",
-        "yt-search": "latest",
         "zs-extract": "latest"
     },
     "optionalDependencies": {

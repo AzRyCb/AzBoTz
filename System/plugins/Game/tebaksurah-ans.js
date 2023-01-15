@@ -7,19 +7,19 @@ export async function before(m) {
         return !0
     this.tebaksurah = this.tebaksurah ? this.tebaksurah : {}
     if (!(id in this.tebaksurah))
-        return this.sendButton(m.chat, 'Soal itu telah berakhir', set.wm, null, buttontebaksurah, fakes, adReply)
+        return this.sendButton(m.chat, 'Soal itu telah berakhir', set.wm, null, buttontebaksurah, m)
     if (m.quoted.id == this.tebaksurah[id][0].id) {
         let isSurrender = /^((me)?nyerah|surr?ender)$/i.test(m.text)
         if (isSurrender) {
             clearTimeout(this.tebaksurah[id][3])
             delete this.tebaksurah[id]
-            return this.sendButton(m.chat, '*Yah Menyerah :( !*', set.wm, null, buttontebaksurah, fakes, adReply)
+            return this.sendButton(m.chat, '*Yah Menyerah :( !*', set.wm, null, buttontebaksurah, m)
         }
         let json = JSON.parse(JSON.stringify(this.tebaksurah[id][1]))
         // m.reply(JSON.stringify(json, null, '\t'))
         if (m.text.toLowerCase() == json.surah.englishName.toLowerCase().trim()) {
             db.data.users[m.sender].exp += this.tebaksurah[id][2]
-            this.sendButton(m.chat, `*Benar!*\n+${this.tebaksurah[id][2]} XP`, set.wm, null, buttontebaksurah, fakes, adReply)
+            this.sendButton(m.chat, `*Benar!*\n+${this.tebaksurah[id][2]} XP`, set.wm, null, buttontebaksurah, m)
             clearTimeout(this.tebaksurah[id][3])
             delete this.tebaksurah[id]
         } else if (similarity(m.text.toLowerCase(), json.surah.englishName.toLowerCase().trim()) >= threshold)
@@ -28,7 +28,7 @@ export async function before(m) {
             this.sendButton(m.chat, `*Salah!*`, set.wm, null, [
                 ['Hint', '/hsur'],
                 ['Nyerah', 'menyerah']
-            ], fakes, adReply)
+            ], m)
     }
     return !0
 }

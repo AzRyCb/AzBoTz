@@ -3,7 +3,7 @@ import util from 'util'
 import { performance } from 'perf_hooks'
 import { sizeFormatter } from 'human-readable'
 import { join } from 'path'
-import { promises } from 'fs'
+import { promises as fs } from 'fs'
 import moment from 'moment-timezone'
 import db from '../../lib/database.js'
 
@@ -18,7 +18,7 @@ let format = sizeFormatter({
 let handler = async (m, { conn, usedPrefix, __dirname, text, command }) => {
     let date = moment.tz('Asia/Jakarta').format("dddd, Do MMMM, YYYY")
     let time = moment.tz('Asia/Jakarta').format('HH:mm:ss')
-    let _package = JSON.parse(await promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
+    //let _package = JSON.parse(await fs.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
     let _uptime = process.uptime() * 1000
     let uptime = set.clockString2(_uptime)
     let totalreg = Object.keys(db.data.users).length
@@ -84,6 +84,6 @@ let handler = async (m, { conn, usedPrefix, __dirname, text, command }) => {
 }
 handler.help = ['botinfo']
 handler.tags = ['info']
-handler.command = /^(bot(info)?|infobot)$/i
+handler.command = /^(botinfo|infobot)$/i
 
 export default handler

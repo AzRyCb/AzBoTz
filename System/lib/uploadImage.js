@@ -1,4 +1,4 @@
-// @ts-check
+//@ts-check
 import fetch from 'node-fetch';
 import { FormData, Blob } from 'formdata-node';
 import { fileTypeFromBuffer } from 'file-type'
@@ -25,4 +25,3 @@ export default async buffer => {
   if (img.error) throw img.error
   return 'https://telegra.ph' + img[0].src
 }
-

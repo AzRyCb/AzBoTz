@@ -31,8 +31,8 @@ klik wa.me/${conn.user.jid.split`@`[0]}`, m.chat,
         }
       )
 
-      if (!room.pilih) this.sendButton(room.p, `Silahkan pilih Menang +${room.poin}XP\nKalah -${room.poin_lose}XP`, set.wm, null, [[ 'Batu🗿', 'Batu'], ['Kertas📄', 'Kertas'], ['Gunting✂️', 'Gunting']], fakes, adReply)
-      if (!room.pilih2) this.sendButton(room.p2, `Silahkan pilih Menang +${room.poin}XP\nKalah -${room.poin_lose}XP`, set.wm, null, [['Batu🗿', 'Batu'], ['Kertas📄', 'Kertas'], ['Gunting✂️', 'Gunting']], fakes, adReply)
+      if (!room.pilih) this.sendButton(room.p, `Silahkan pilih Menang +${room.poin}XP\nKalah -${room.poin_lose}XP`, set.wm, null, [[ 'Batu🗿', 'Batu'], ['Kertas📄', 'Kertas'], ['Gunting✂️', 'Gunting']], m)
+      if (!room.pilih2) this.sendButton(room.p2, `Silahkan pilih Menang +${room.poin}XP\nKalah -${room.poin_lose}XP`, set.wm, null, [['Batu🗿', 'Batu'], ['Kertas📄', 'Kertas'], ['Gunting✂️', 'Gunting']], m)
       room.waktu_milih = setTimeout(() => {
         if (!room.pilih && !room.pilih2) this.reply(m.chat, `Kedua pemain tidak niat main,\nSuit dibatalkan`)
         else if (!room.pilih || !room.pilih2) {

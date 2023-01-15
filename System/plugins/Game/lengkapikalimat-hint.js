@@ -5,7 +5,7 @@ let handler = async (m, { conn }) => {
     let json = conn.lengkapikalimat[id][1]
     conn.sendButton(m.chat, '```' + json.jawaban.replace(/[AIUEOaiueo]/ig, '_') + '```', set.wm, null, [
         ['Nyerah', 'menyerah']
-    ], fakes, adReply)
+    ], m)
 }
 handler.command = /^hlen$/i
 

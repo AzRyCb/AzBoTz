@@ -16,7 +16,7 @@ let handler = async (m, { conn, usedPrefix, text, command, args, isOwner, isAdmi
 *${set.dmenub} ID :* ${'@' + pc[i].id.replace(/@.+/, '')}
 *${set.dmenub} Presences :* ${pc[i].presences ? pc[i].presences : 'Tidak Diketahui'}
 ${set.dmenuf}\n\n`
-      await conn.sendButton(m.chat, str, set.wm,  pp ? pp : logo, ['B A C K', '.menu'], fakes, adReply)
+      await conn.sendButton(m.chat, str, set.wm,  pp ? pp : logo, ['B A C K', '.menu'], m)
        break
     default:
       if (!/[01]/.test(command)) return conn.sendList(m.chat, set.htki + ' 📺 Private List 🔎 ' + set.htka, `⚡ Silakan pilih Private List di tombol di bawah...\n*Teks yang anda kirim:* ${text ? text : 'Kosong'}\n\nKetik ulang *${usedPrefix + command}* teks anda untuk mengubah teks lagi`, wm, `☂️ Private List Disini ☂️`, listSections, m)

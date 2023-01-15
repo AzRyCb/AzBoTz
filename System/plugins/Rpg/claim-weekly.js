@@ -5,7 +5,7 @@ const rewards = {
 }
 const cooldown = 604800000
 import db from '../../lib/database.js'
-let handler = async (m) => {
+let handler = async (m, { conn, usedPrefix: _p, args, command, __dirname }) => {
   let user = db.data.users[m.sender]
   if (new Date - user.lastweekly < cooldown) throw `You have already claimed this daily claim!, wait for *${((user.lastweekly + cooldown) - new Date()).toTimeString()}*`
   let text = ''

@@ -26,11 +26,7 @@ moment.tz.setDefault('Asia/Jakarta').locale('id')
 const { getContentType, delay } = (await import('@adiwajshing/baileys')).default
   
 //const isNumber = x => typeof x === 'number' && !isNaN(x)
-/**
- * Handle messages upsert
- * @this {import('./lib/connection').Socket}
- * @param {import('@adiwajshing/baileys').BaileysEventMap['messages.upsert']} chatUpdate
- */
+
 export async function handler(chatUpdate) {
 if (db.data == null) await loadDatabase()
     this.msgqueque = this.msgqueque || new Queque()
@@ -58,7 +54,7 @@ try {
     if (!('BannedReason' in user)) user.BannedReason = ''
     if (!('Banneduser' in user)) user.Banneduser = false
     if (!('afkReason' in user)) user.afkReason = ''
-    if (!('autolevelup' in user)) user.autolevelup = false
+    if (!('autolevelup' in user)) user.autolevelup = true
     if (!('banned' in user)) user.banned = false
     if (!('catatan' in user)) user.catatan = ''
     if (!('job' in user)) user.job = ''
@@ -74,7 +70,6 @@ try {
     if (!('language' in user)) user.language = m.sender.startsWith('62') ? 'id' : 'en'
     if (!('languageSimi' in user)) user.languageSimi = m.sender.startsWith('62') ? 'id' : 'en'
     if (!('languageCountry' in user)) user.languageCountry = m.sender.startsWith('62') ? 'Indonesia' : 'English'
-    if (!('registered' in user)) user.registered = false
                 
     if (!user.registered) {
         if (!('name' in user)) user.name = m.name
@@ -573,7 +568,7 @@ try {
                     armormonster: 0,
                     as: 0,
                     atm: 0,
-                    autolevelup: false,
+                    autolevelup: true,
                     axe: 0,
                     axedurability: 0,
                     ayam: 0,
@@ -950,7 +945,7 @@ try {
                 if (!('closeGroup' in chat)) chat.closeGroup = false
                 if (!('openGroup' in chat)) chat.openGroup = false
 
-                if (!('mute' in chat)) chat.mute = true 
+                if (!('mute' in chat)) chat.mute = false
                 if (!('download' in chat)) chat.download = false 
 
                 if (!('mature' in chat)) chat.mature = false
@@ -987,7 +982,6 @@ try {
                 if (!('autoJoin' in chat)) chat.autoJoin = false
                 if (!('autoVn' in chat)) chat.autoVn = true
                 if (!('detect' in chat)) chat.detect = true
-                if (!('delete' in chat)) chat.delete = true
                 if (!('getmsg' in chat)) chat.getmsg = true
                 if (!('isBanned' in chat)) chat.isBanned = false
                 if (!('lastAnime' in chat)) chat.lastAnime = false
@@ -998,7 +992,7 @@ try {
                 if (!('premium' in chat)) chat.premium = false
                 if (!('premiumTime' in chat)) chat.premiumTime = false
                 if (!('premnsfw' in chat)) chat.premnsfw = false
-                if (!('rpg' in chat)) chat.delete = false
+                if (!('rpg' in chat)) chat.rpg = false
                 if (!('sBye' in chat)) chat.sBye = ''
                 if (!('sDemote' in chat)) chat.sDemote = ''
                 if (!('simi' in chat)) chat.simi = false
@@ -1010,7 +1004,7 @@ try {
                 if (!('updateAnimeNews' in chat)) chat.updateAnimeNews = false
                 if (!('viewonce' in chat)) chat.viewonce = false
                 if (!('viewOnce' in chat)) chat.viewOnce = false
-                if (!('welcome' in chat)) chat.welcome = false
+                if (!('welcome' in chat)) chat.welcome = true
                 if (!isNumber(chat.expired)) chat.expired = 0
             } else db.data.chats[m.chat] = {
                 name: await this.getName(m.chat),
@@ -1025,6 +1019,7 @@ try {
                 openTime: 6,
                 clearTime: 0,
                 onlyNumber: 62,
+                mute: false,
 
                 antiDelete: true,
                 antiLink: false,
@@ -1048,7 +1043,6 @@ try {
                 autoJoin: false,
                 autoVn: true,
                 detect: true,
-                delete: true,
                 expired: 0,
                 getmsg: true,
                 isBanned: false,
@@ -1072,37 +1066,38 @@ try {
                 updateAnimeNews: false,
         viewOnce: false,
         viewonce: false,
-        welcome: false,
+        welcome: true,
     }
     let settings = db.data.settings[this.user.jid]
     if (typeof settings !== 'object') db.data.settings[this.user.jid] = {}
     if (settings) {
         if (!('anonymous' in settings)) settings.anonymous = true
-        if (!('autoreadsw' in settings)) settings.autoreadsw = false
-        if (!('autotyping' in settings)) settings.autotyping = false
-        if (!('autocleartmp' in settings)) settings.autocleartmp = true
-        if (!('autodownload' in settings)) settings.autodownload = true
         if (!('developerMode' in settings)) settings.developerMode = true
-        if (!('delete' in settings)) settings.delete = false
-        if (!('antidelete' in settings)) settings.antidelete = true
         if (!('lastseen' in settings)) settings.lastseen = false
         if (!('mature' in settings)) settings.mature = true
         if (!('statusUpdate' in settings)) settings.statusUpdate = true
-        if (!('antivirus' in settings)) settings.antivirus = true
         if (!('publicjoin' in settings)) settings.publicjoin = true
         if (!('game' in settings)) settings.game = true
         if (!('rpg' in settings)) settings.game = false
         if (!('getmsg' in settings)) settings.getmsg = true
-
         if (!'autoreset' in settings) settings.autoreset = true
         if (!isNumber(settings.autoresetTime)) settings.autoresetTime = (new Date() * 1) + 3600000 * 720
-
         if (!('anon' in settings)) settings.anon = true
-        if (!('anticall' in settings)) settings.anticall = true
-        if (!('antispam' in settings)) settings.antispam = true
+        
         if (!('antitroli' in settings)) settings.antitroli = false
-        if (!('autoread' in settings)) settings.autoread = false
+        if (!('antidelete' in settings)) settings.antidelete = true
+        if (!('security' in settings)) settings.security = true
+
+
         if (!('autorestart' in settings)) settings.autorestart = true
+        if (!('autoread' in settings)) settings.autoread = false
+        if (!('autoreadsw' in settings)) settings.autoreadsw = true
+        if (!('autoreadpc' in settings)) settings.autoreadpc = false
+        if (!('autoreadgc' in settings)) settings.autoreadgc = false
+        if (!('autotyping' in settings)) settings.autotyping = false
+        if (!('autocleartmp' in settings)) settings.autocleartmp = true
+        if (!('autodownload' in settings)) settings.autodownload = true
+
         if (!('backup' in settings)) settings.backup = false
         if (!isNumber(settings.backupDB)) settings.backupDB = 0
         if (!('clearmedia' in settings)) settings.clearmedia = true
@@ -1114,24 +1109,19 @@ try {
         if (!('self' in settings)) settings.self = false
         if (!('restrict' in settings)) settings.restrict = false
         if (!('restartDB' in settings)) settings.restartDB = 0
-        if (!('readsw' in settings)) settings.readsw = false
-        if (!('readpc' in settings)) settings.readpc = false
-        if (!('readgc' in settings)) settings.readgc = false
         if (!('status' in settings)) settings.status = 0
         if (!isNumber(settings.status)) settings.status = 0
     } else db.data.settings[this.user.jid] = {
         anonymous: true,
-        autoreadsw: false, 
+        autoreadsw: true, 
         autotyping: false, 
         autocleartmp: true, 
         autodownload: true, 
         developerMode: true, 
-        delete: false,
         antidelete: true,
         lastseen: false,
         mature: true,
         statusUpdate: true,
-        antivirus: true,
         publicjoin: true,
         game: false, 
         rpg: false, 
@@ -1140,9 +1130,9 @@ try {
         autoreset: true,
         autoresetTime: (new Date() * 1) + 3600000 * 720,
 
-        anon: true,
-        anticall: true,
-        antispam: true,
+
+        security: true,
+        
         antitroli: false,
         autoread: false,
         autorestart: true,
@@ -1155,9 +1145,8 @@ try {
         modeoff: false,
         onsfw: false,
         restrict: false,
-        readsw: false,
-        readpc: false,
-        readgc: false,
+        autoreadpc: false,
+        autoreadgc: false,
         restartDB: 0,
         status: 0,
         self: false
@@ -1213,7 +1202,6 @@ const isRAdmin = user?.admin == 'superadmin' || false
 const isAdmin = isRAdmin || user?.admin == 'admin' || false // Is User Admin?
 const isBotAdmin = bot?.admin || false // Are you Admin?
 const expiration = m.message?.extendedTextMessage?.contextInfo?.expiration
-
 const ___dirname = join(dirname(fileURLToPath(import.meta.url)), './plugins')
         for (let name in plugins) {
             let plugin = plugins[name]
@@ -1313,9 +1301,10 @@ const ___dirname = join(dirname(fileURLToPath(import.meta.url)), './plugins')
                 if (m.chat in db.data.chats || m.sender in db.data.users) {
                     let chat = db.data.chats[m.chat]
                     let user = db.data.users[m.sender]
-                    if (!['plugins/owner/owner-unban.js', 'plugins/group/group-unban.js', 'plugins/info/info-listban.js', 'info-creator.js'].includes(name) && chat && chat?.isBanned && !isPrems) return // Kecuali ini, bisa digunakan
-                    if (!['plugins/owner/owner-unban.js', 'plugins/group/group-unban.js', 'plugins/info/info-listban.js', 'info-creator.js'].includes(name) && user && user?.banned) return
-                }
+                    if (name != 'owner-unbanchat.js' && chat?.isBanned)
+                        return // Except this
+                    if (name != 'owner-unbanuser.js' && user?.banned)
+                        return                }
                 if (plugin.rowner && plugin.owner && !(isROwner || isOwner)) { // Both Owner
                     fail('owner', m, this)
                     continue
@@ -1552,7 +1541,7 @@ if (myset.modeoff){
 }
 
 //-- autoread sw
-if (myset.readsw && m.chat == 'status@broadcast' && !m.fromMe && !m.message?.protocolMessage) {
+if (myset.autoreadsw && m.chat == 'status@broadcast' && !m.fromMe && !m.message?.protocolMessage) {
     await this.readMessages([m.key])
     this.logger?.info(chalk.green(`[STORY] Melihat story dari ${m.name}`))
     var tum = await this.profilePictureUrl(m.sender, "image").catch(_=> "https://i.pinimg.com/originals/55/44/2f/55442f2018fd5e2781c732f90f1f7756.jpg")
@@ -1594,11 +1583,11 @@ if (mychat.autodelvn && !m.fromMe && m.isBaileys && m.mtype === 'audioMessage' &
 }
 
 //-- autoread gc
-if (myset.readgc && m.isGroup && m.isCommand) this.readMessages([m.key])
+if (myset.autoreadgc && m.isGroup && m.isCommand) this.readMessages([m.key])
 //-- autoread pc
-if (myset.readpc && !m.isGroup && m.isCommand) this.readMessages([m.key])
+if (myset.autoreadpc && !m.isGroup && m.isCommand) this.readMessages([m.key])
 
-if (opts['autoread']) await this.readMessages([m.key])
+if (myset.autoread) await this.readMessages([m.key])
   }
 }
 
@@ -1628,27 +1617,39 @@ export async function participantsUpdate({ id, participants, action }) {
                 let isBotAdmin = bot?.admin || false // Are you Admin?
                 for (let user of participants) {
                     let name = this.getName(user)
-                    let pp = await this.profilePictureUrl(user.includes(this.user.jid) ? this.user.jid : id, 'image').catch(_=> user.includes(this.user.jid) ? ppimut : ppgc)
-                        text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await this.getName(id)).replace('@desc', groupMetadata.desc ? String.fromCharCode(8206).repeat(4001) + groupMetadata.desc : 'unknow') :
-                            (chat.sBye || this.bye || conn.bye || 'Bye, @user!')).replace('@user', '@' + user.split('@')[0])
-                            let wel = API('males', '/welcome2', {
-                                profile: pp,
-                                username: await this.getName(user),
-                                background: 'https://telegra.ph/file/c538a6f5b0649a7861174.png',
-                                groupname: await this.getName(id),
-                                membercount: groupMetadata.participants.length
-                            })
-                            let lea = API('males', '/goodbye2', {
-                                profile: pp,
-                                username: await this.getName(user),
-                                background: 'https://telegra.ph/file/c538a6f5b0649a7861174.png',
-                                groupname: await this.getName(id),
-                                membercount: groupMetadata.participants.length
-                            })
-                            await this.send3TemplateButtonImg(id, action === 'add' ? wel : lea, text, 'Groups Update Messages', action === 'add' ? 'selamat datang' : 'sampai jumpa', action === 'add' ? 'SyIniWibuElite' : 'SyIniWibuElite')
-                        }
+                    let pp = await this.profilePictureUrl(user.includes(this.user.jid) ? this.user.jid : id, 'image')
+                    text = (action === 'add' ? (chat.sWelcome || this.sWelcome || conn.sWelcome || 'Hi, @user 👋\nWelcom in group').replace('@subject', groupMetadata.subject).replace('@desc', groupMetadata.desc?.toString() || '') :
+                    (chat.sBye || this.sBye || conn.sBye || 'Bye, @user!')).replace('@user', '@' + user.split('@')[0])
+                     if (action === 'add' && user.includes(this.user.jid)) return this.reply(id, `Hello everyone 👋\n\nSaya adalah *${this.user.name}* Bot WhatsApp yang akan membantu kamu mempermudah sesuatu seperti membuat stiker dan lainnya, untuk menggunakan fitur-ku silahkan ketik *#menu*`, null, { 
+                     mention: groupMetadata.participants.map(v => v.id), 
+                     expi: 86400,
+                     title: set.wm, 
+                     thumb: pp,
+                     ads: true, 
+                     render: true, 
+                     source: set.link
+                     })
+                     if (action === 'add' && isBotAdmin && db.data.chats[id].only && !user.startsWith(db.data.chats[id].nOnly)) return this.reply(id, `Sorry @${parseInt(user)} this group is only for people *+${db.data.chats[id].nOnly}* you will be removed from this group.\n\n*Goodbye! 👋*\n`, set.fake.contact(user, name), { 
+                     mentions: participants
+                     }).then(async _=> {
+                     this.isInit = true
+                     await this.groupParticipantsUpdate(id, [user], "remove")
+                     }).then(async _=> {
+                     await delay(3000) 
+                     this.isInit = false
+                     })
+                     this.reply(id, text, set.fake.contact(user, name), {
+                    mention: user, 
+                    expi: 86400,
+                    title: set.wm, 
+                    thumb: pp,
+                    ads: true, 
+                    render: true, 
+                    source: set.link
+                     })
+                     }
                     }
-                break
+                     break
         case 'promote':
             text = (chat.sPromote || this.spromote || conn.spromote || '@user ```is now Admin```')
         case 'demote':
@@ -1660,7 +1661,6 @@ export async function participantsUpdate({ id, participants, action }) {
             break
     }
 }
-
 /**
  * Handle groups update
  * @this {import('./lib/connection').Socket}
@@ -1686,7 +1686,7 @@ export async function groupsUpdate(groupsUpdate, fromMe) {
         if (groupUpdate.announce == false) text = (chats.sAnnounceOff || this.sAnnounceOff || conn.sAnnounceOff || '```Group has been open!')
         if (groupUpdate.restrict == true) text = (chats.sRestrictOn || this.sRestrictOn || conn.sRestrictOn || '```Group has been all participants!')
         if (groupUpdate.restrict == false) text = (chats.sRestrictOff || this.sRestrictOff || conn.sRestrictOff || '```Group has been only admin!')
-        this.logger?.info('=============\n\ngroupsUpdate \n\n============\n\n' + await groupUpdate)
+        this.logger?.info('=============\n\ngroupsUpdate \n\n============\n\n' + groupUpdate)
         if (!text) continue
         this.send2ButtonDoc(id, text.trim(), 'Groups Update Messages', '🔖 Matikan Fitur', '.off detect', '🎀 Menu', '.menu', global.fakes, global.adReply, { mentions: await this.parseMention(text) })
         //await this.sendButtonDoc(id, text, 'Groups Update Messages', 'Matikan Fitur', `.off detect`, fakes, 
@@ -1705,73 +1705,49 @@ export async function deleteUpdate(message) {
     if (this.delete) return delete this.delete
     if (db.data == null) await loadDatabase()
     if (Array.isArray(message.keys) && message.keys.length > 0) {
-        const tasks = await Promise.allSettled(message.keys.map(async (key) => {
-            if (key.fromMe) return
-            let isGroup = key.remoteJid.endsWith('@g.us')
-            let groupMetadata = (isGroup ? await store.fetchGroupMetadata(key.remoteJid, this.groupMetadata) : {}) || {}
-            let participants = (isGroup ? groupMetadata.participants : []) || []
-            let user = (isGroup ? participants.find(u => this.decodeJid(u.id) === key.remoteJid) : {}) || {} // User Data
-            let isAdmin = user?.admin == 'admin' || false // Is User Admin?
-            if (isAdmin) return 
-            const msg = this.loadMessage(key.remoteJid, key.id) || this.loadMessage(key.id)
-            if (!msg || !msg.message) return
-            let chat = db.data.chats[key.remoteJid]
-
-            // if message type is conversation, convert it to extended text message because if not, it will throw an error
-            const mtype = getContentType(msg.message)
-            if (mtype === 'conversation') {
-                msg.message.extendedTextMessage = { text: msg.message[mtype] }
-                delete msg.message[mtype]
-            }
-
-            const participant = msg.participant || msg.key.participant || msg.key.remoteJid
-            let nama = ['apa', 'apaan'].getRandom()
-            let stiker = await Func.fetchGithub('raselcomel/db/master/sticker/' + nama + '.webp', { buffer: true })
-            if (!chat.delete || chat.delete == false ? !chat.delete : true) return this.sendFile(key.remoteJid, stiker, 'delete.webp', '', msg, null, { ephemeralExpiration: 86400 })
-
-            await this.reply(key.remoteJid, `
-Terdeteksi @${participant.split`@`[0]} telah menghapus pesan
-Untuk mematikan fitur ini, ketik
-*.enable delete*
-`.trim(), msg, { mentions: [participant] })
-            return await this.copyNForward(key.remoteJid, msg).catch(e => this.logger?.info(e, msg))
-        }))
-        tasks.map(t => t.status === 'rejected' && this.logger?.error(t.reason))
+    let tasks = await Promise.allSettled(message.keys.map(async (key) => {
+    if (key.fromMe) return
+    let isGroup = key.remoteJid.endsWith('@g.us')
+    let groupMetadata = (isGroup ? await store.fetchGroupMetadata(key.remoteJid, this.groupMetadata) : {}) || {}
+    let participants = (isGroup ? groupMetadata.participants : []) || []
+    let user = (isGroup ? participants.find(u => this.decodeJid(u.id) === key.remoteJid) : {}) || {} // User Data
+    let isAdmin = user?.admin == 'admin' || false // Is User Admin?
+    if (isAdmin) return 
+    let msg = this.loadMessage(key.remoteJid, key.id) || this.loadMessage(key.id)
+    if (!msg || !msg.message) return
+    let chat = db.data.chats[key.remoteJid] || {}
+    // if message type is conversation, convert it to extended text message because if not, it will throw an error
+    // const mtype = (await import(set.lib)).default.getContentType(msg.message)
+    /* if (mtype === 'conversation') {
+    msg.message.extendedTextMessage = { text: msg.message[mtype] }
+    delete msg.message[mtype]
+    } */
+    const participant = msg.participant || msg.key.participant || msg.key.remoteJid
+    let nama = ['apa', 'apaan'].getRandom()
+    let stiker = await Func.fetchGithub('raselcomel/db/master/sticker/' + nama + '.webp', { buffer: true })
+    if (!chat.delete || chat.delete == false ? !chat.delete : true) return this.sendFile(key.remoteJid, stiker, 'delete.webp', '', msg, null)
+    this.sendFile(key.remoteJid, stiker, 'hayo.webp', '', msg, null, { ephemeralExpiration: 86400 }).then(_=> this.copyNForward(key.remoteJid, msg).catch(e => console.log(e, msg)))
+    }))
+    tasks.map(t => t.status === 'rejected' && console.error(t.reason))
     }
-}
+    }
 
 export async function callUpdate(json) {
 let ownerJadibot = [...set.ownerjbot].map(v => v?.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(this.user.jid)
 opts['self'] = opts['self'] ? opts['self'] : opts['self'] == false ? opts['self'] : ownerJadibot
-console.log(json.content[0])
 if (opts['self']) return
 if (this.isInit) return
 if (db.data == null) await loadDatabase()
-if (!db.data.settings[this.user.jid].anticall) return
-let [data] = json
-let { from, isGroup, isVideo, date, status} = data
-if (isGroup) return
-if (json.content[0].tag == 'offer') {
-let typeCall = json.content[0].content[0].tag
-let callerId = json.content[0].attrs['call-creator']
-let user = db.data.users[callerId]
-if (user.whitelist) return
-switch (this.callWhitelistMode) {
- case 'contact':
- case 'mycontact':
- if (callerId in this.contacts && 'short' in this.contacts[callerId]) return
- break
-}
+if (!db.data.settings[this.user.jid].security) return
 let kontakk = [
 [
-`${set.owner[0]}`, 
-`${this.getName(set.owner[0] + '@s.whatsapp.net')}`,
+`${set.mods}`, 
 `👑 Developer Bot `,
 `🚫 Don't call me 🥺`, 
 `Not yet`,
 `🇮🇩 Indonesia`,
 `Mampus kena block makanya jangan asal nelpon" 🗿`,
-`Chat owner kalo mau di unban`
+`Folllow ig @rasel.ganz for open blocked`
 ], 
 [
 `0`, 
@@ -1784,34 +1760,35 @@ let kontakk = [
 `Empat sehat le mark sempurna 👌🗿`
 ]
 ]
-user.call += 1
-if (user.call == 5) {
-    let sentMsg = await this.sendContactArray(callerId, kontakk)
-conn.sendContact(callerId, kontakk).then(async sentMsg => { 
-conn.reply(callerId, `Sistem auto block, jangan menelepon bot silahkan hubungi owner untuk dibuka!`, sentMsg).then(async _=> {
-await conn.updateBlockStatus(callerId, 'block')
-.then(_=> { 
-    user.call = 0
-}).then(_=> {
- let pp = this.profilePictureUrl(callerId, 'image').catch(_=> pp)
- conn.reply2(set.owner[0]+'@s.whatsapp.net', `*NOTIF CALLER BOT!*\n\n@${callerId.split`@`[0]} telah menelpon *${this.user.name}*`, null, {
-title: set.wm, 
-render: true, 
-thumb: pp, 
- })
- user.warning = 0
-})
- })
-})
-} else await this.reply2(callerId, `Maaf tidak bisa menerima panggilan ${typeCall}, Jika kamu menelepon lebih dari 5, kamu akan diblokir.\n\n${user.warning} / 5`, null, {
-title: set.wm, 
-render: true, 
-thumb: set.fla + `don't call me`, 
-}) 
-}
-}
+/*
+let [data] = json
+let { from, isGroup, isVideo, date, status} = data
+if (isGroup) return
+*/
+if (json.content[0].tag == 'offer') {
+let call = json.tag
+   let typeCall = json.content[0].content[0].tag
+   let callerId = json.content[0].attrs['call-creator']
+   //let callerId = json.attrs.from
+   this.logger.warn({ call, callerId, typeCall })
+   //console.log(json.content[0])
+   let user = db.data.users[callerId]
+   if (user.whitelist) return
+   switch (this.callWhitelistMode) {
+    case 'contact':
+        case 'mycontact':
+        if (callerId in this.contacts && 'short' in this.contacts[callerId]) return
+        break
+    }
+    await this.reply(callerId, `Sistem otomatis block, jangan menelepon bot silahkan hubungi owner untuk dibuka!`)
+    await this.sendcontak(callerId, kontakk)
+    await this.updateBlockStatus(callerId, 'block')
+    await this.reply(set.mods+'@s.whatsapp.net', `*NOTIF CALLER BOT!*\n\n@${callerId.split`@`[0]} telah menelpon *${this.user.name}*\n\n ${callerId.split`@`[0]}\n`, null, { mentions: [callerId] })
+    delay(10000) // supaya tidak spam
+}}
  
-global.set.dfail = (type, m, usedPrefix, conn) => {
+global.set.dfail = (type, m, conn) => {
+    let name = conn.getName(m.chat)
 let msg = {
     rowner: `╭─֍〔 ıll 𝐀𝐂𝐂𝐄𝐒𝐒 𝐃𝐄𝐍𝐈𝐄𝐃 llı 〕֍─\n⬡ Perintah ini hanya untuk developer bot\n╰─────────────────֍`,
     mods: `╭─֍〔 ıll 𝐀𝐂𝐂𝐄𝐒𝐒 𝐃𝐄𝐍𝐈𝐄𝐃 llı 〕֍─\n⬡ Perintah ini hanya untuk moderator bot\n╰─────────────────֍`,
@@ -1819,37 +1796,37 @@ let msg = {
     private: `╭─֍〔 ıll 𝐏𝐑𝐈𝐕𝐀𝐓𝐄 𝐂𝐇𝐀𝐓 𝐎𝐍𝐋𝐘 llı 〕֍─\n⬡ Fitur ini hanya dapat digunakan diprivate chat\n╰─────────────────֍`,
     restrict: 'Fitur ini di *disable*!' 
     }[type]
-    if (msg) return conn.sendButton(m.chat, msg, null, ['Menu', `${usedPrefix}menu`], m, { mentions: conn.parseMention(msg) })
+    if (msg) return conn.sendButton(m.chat, msg, null, ['Menu', `.menu`], m, { mentions: conn.parseMention(msg) })
 
 let nsfw = {
     nsfw: `╭֍〔 ıll 𝐀𝐂𝐂𝐄𝐒𝐒 𝐃𝐄𝐍𝐈𝐄𝐃 llı 〕֍─\n⬡ Fitur *nsfw* Tidak Aktif Silahkan Hubungi owner Untuk Mengaktifkannya\n╰─────────────────֍`,
     }[type]
-    if (nsfw) return conn.sendButton(m.chat, nsfw, null, ['Owner', `${usedPrefix}owner`], m)
+    if (nsfw) return conn.sendButton(m.chat, nsfw, null, ['Owner', `.owner`], m, { mentions: conn.parseMention(nsfw)})
     
 let rpg = {
     rpg: `╭֍〔 ıll 𝐀𝐂𝐂𝐄𝐒𝐒 𝐃𝐄𝐍𝐈𝐄𝐃 llı 〕֍─\n⬡ Fitur *RPG* Tidak Aktif Silahkan Hubungi owner Untuk Mengaktifkannya\n╰─────────────────֍`,
     }[type]
-    if (rpg) return conn.sendButton(m.chat, rpg, null, ['Owner', `${usedPrefix}owner`], m)
+    if (rpg) return conn.sendButton(m.chat, rpg, null, ['Owner', `.owner`], m, { mentions: conn.parseMention(rpg)})
        
 let owner = { 
     owner: `╭─֍〔 ıll 𝐀𝐂𝐂𝐄𝐒𝐒 𝐃𝐄𝐍𝐈𝐄𝐃 llı 〕֍─\n⬡ Perintah ini hanya untuk owner bot\n╰─────────────────֍`,
     }[type]
-    if (owner) return conn.sendButtonDoc(m.chat, owner, null, ['Owner', `${usedPrefix}owner`], m)
+    if (owner) return conn.sendButtonDoc(m.chat, owner, null, ['Owner', `.owner`], m, { mentions: conn.parseMention(owner)})
     
 let premium = { 
     premium: `╭─֍〔 ıll 𝐏𝐑𝐄𝐌𝐈𝐔𝐌 𝐎𝐍𝐋𝐘 llı 〕֍─\n⬡ Fitur ini khusus untuk user *Premium*\n╰─────────────────֍`,
     }[type]
-    if (premium) return conn.sendButton(m.chat, premium, null, ['Buy Premium', `${usedPrefix}owner`], m)
+    if (premium) return conn.sendButton(m.chat, premium, null, ['Buy Premium', `.owner`], m, { mentions: conn.parseMention(premium)})
     
 let group = { 
     group: `╭֍〔 ıll 𝐆𝐑𝐎𝐔𝐏 𝐎𝐍𝐋𝐘 llı 〕֍─\n⬡ Fitur ini hanya dapat digunakan didalam grup!!\n╰─────────────────֍`,
     }[type]
-    if (group) return conn.sendButton(m.chat, group, null, ['Group-AzBoTz', `${usedPrefix}gcbot`], m)
+    if (group) return conn.sendButton(m.chat, group, null, ['Group-AzBoTz', `.gcbot`], m, { mentions: conn.parseMention(group)})
     
 let botAdmin = {
     botAdmin:  `╭֍〔 ıll 𝐀𝐂𝐂𝐄𝐒𝐒 𝐃𝐄𝐍𝐈𝐄𝐃 llı 〕֍─\n⬡ Fitur ini tidak dapat work, bot tidak menjadi admin\n╰─────────────────֍`,
     }[type]
-    if (botAdmin) return conn.sendButton(m.chat, botAdmin, null, ['Eh iya ya', 'ok'], m)
+    if (botAdmin) return conn.sendButton(m.chat, botAdmin, null, ['Eh iya ya', 'ok'], m, { mentions: conn.parseMention(botAdmin)})
     
 let unreg = {
     unreg: `┏━━━〔 ıll 𝐑𝐄𝐆𝐈𝐒𝐓𝐄𝐑 llı 〕━━❑
@@ -1859,11 +1836,79 @@ let unreg = {
 ┗━━━━━━━━━━━━━━━━━━❑
 ┏━〔 ıll DAFTAR MANUAL llı 〕━━❑
 ⬡ #daftar namamu.umurmu
-⬡ #daftar *@${m.sender.split`@`[0]}*.17
+⬡ #daftar *@${name}*.17
 ┗━━━━━━━━━━━━━━❑`
     }[type]
-    if (unreg) conn.sendButtonDoc(m.chat, unreg, '❑ Daftar cepat klik tombol dibawah', null, ['Verify', `.daftar @${m.sender.split`@`[0]}.16`], fakes, adReply)
+    if (unreg) conn.sendButton(m.chat, unreg, '❑ Daftar cepat klik tombol dibawah', null, ['Verify', `.daftar @${m.sender.split`@`[0]}.16`], m, { mentions: conn.parseMention(unreg)})
     //if (unreg) return conn.reply(m.chat, unreg, m)
+}
+
+global.set.fake = {
+// audio atau vn/ptt = true
+audio: (ptt = false, sec, par, rem) => ({
+key: { 
+fromMe: false,
+participant: par ? par.replace(/[^0-9]/g, '') + '@s.whatsapp.net' : par || `0@s.whatsapp.net`,
+remoteJid: rem || "status@broadcast"
+},
+message: { 
+audioMessage: {
+mimetype: "audio/ogg; codecs=opus",
+seconds: sec || 1222,
+ptt: ptt
+}
+} 
+}),
+// kontak
+contact: (num, nam, par, rem) => ({
+key: { 
+fromMe: false, 
+participant: par ? par.replace(/[^0-9]/g, '') + '@s.whatsapp.net' : par || `0@s.whatsapp.net`,
+remoteJid: rem || 'status@broadcast' 
+},
+message: { 
+contactMessage: {
+displayName: nam || '',
+vcard: `BEGIN: VCARD\nVERSION:3.0\nN:;a,;;;\nFN:${'0@s.whatsapp.net'}\nitem1.TEL;waid=${parseInt(num)}:${parseInt(num)}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+}
+}
+}),
+// toko
+shop: (tit, buff, par, rem) => ({ 
+key: { 
+fromMe: false, 
+participant: par || `0@s.whatsapp.net`,
+remoteJid: rem || 'status@broadcast' 
+},
+message: {
+productMessage: {
+product: {
+productImage:{
+mimetype: "image/jpeg",
+jpegThumbnail: buff // || await conn.resize("")
+},
+title: tit || set.wm + ' 2022', //Kasih namalu 
+description: "SELF BOT", 
+currencyCode: ["AUD", "USD", "INR", "IDR", "XOF", "ZAR", "EUR", "MYR"].getRandom(),
+priceAmount1000: 2022,
+retailerId: "Ghost",
+productImageCount: 1
+},
+businessOwnerJid: `0@s.whatsapp.net`
+}
+}
+}),
+// text 
+text: (tek, par, rem) => ({
+key: {
+fromMe: false,
+participant: par || '0@s.whatsapp.net',
+remoteJid: rem || "status@broadcast"
+},
+message: {
+conversation: tek
+}
+})
 }
 
 let file = __filename(import.meta.url, true)

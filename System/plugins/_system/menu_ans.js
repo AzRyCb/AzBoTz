@@ -1,11 +1,12 @@
 import fetch from 'node-fetch'
-let handler = async (m, { conn, usedPrefix: _p, args, command }) => {
+let handler = async (m, { conn, usedPrefix, args, command }) => {
 let tesxt = `
 *Hallo user Bot👋,* 
 *Saya adalah Bot WhatsApp Multi Device yang di buat oleh Creator kami.*
 Bot ini bisa membantu kamu atau mempermudah kamu membuat sesuatu atau pun mendownload sesuatu seperti:
 *Vidio tiktok , Vidio yt , membuat stiker DLL.*
-	`.trim()
+	`
+    /*
       //-------DOC TEMPLATE
       const message = {
         document: { url: set.thumb },
@@ -50,6 +51,12 @@ Bot ini bisa membantu kamu atau mempermudah kamu membuat sesuatu atau pun mendow
         ]
     }
     conn.sendMessage(m.chat, message, m)
+    */
+    conn.sendHydrated2(m.chat, tesxt.trim(), set.wm, set.logobot, set.web, 'Web', set.gcbot, '💌 Group Official', [
+        ['🐾 Donasi', `${usedPrefix}donasi`],
+        ['📮 Layanan Dan Jasa', `${usedPrefix}store`],
+        ['🏅 Owner', `${usedPrefix}owner`]
+      ], m)
   }
 //handler.tags = ['main', 'info']
 handler.command = /^(panel|help|command)$/i

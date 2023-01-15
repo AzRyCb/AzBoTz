@@ -1,5 +1,5 @@
 import db from '../lib/database.js'
-import fs from 'fs'
+import { promises } from 'fs'
 import { join } from 'path'
 import { xpRange } from '../lib/levelling.js'
 import { plugins } from '../lib/plugins.js'
@@ -7,10 +7,10 @@ import Func from '../lib/func.js'
 import { platform } from 'os'
 import fetch from 'node-fetch'
 import moment from 'moment-timezone'
+import { readFileSync } from 'fs'
 const { opts, __dirname } = (await import('../lib/helper.js')).default 
 
 let handler = async (m, { conn, usedPrefix: _p, args, command, __dirname }) => {
-//let _package = JSON.parse(await fs.promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
 let name = await conn.getName(who)
 let user = db.data.users[who]
@@ -21,7 +21,7 @@ let totalreg = Object.keys(db.data.users).length
 let rtotalreg = Object.values(db.data.users).filter(user => user.registered == true).length
 let mode = opts['self'] ? 'Private' : 'Publik'
 let platformm = platform()
-let pp = await conn.profilePictureUrl(who).catch(_ => './src/avatar_contact.png')
+let pp = await conn.profilePictureUrl(who).catch(_ => readFileSync('System/src/img/avatar_contact.png'))
 let tag = `wa.me/${m.sender.split('@')[0]}`
 m, { contextInfo: { mentionedJid: conn.parseMention(tag) }}
 let d = new Date(new Date + 3600000)
@@ -75,7 +75,7 @@ let help = Object.values(plugins).filter(plugin => !plugin.disabled).map(plugin 
 
 let tags
 let teks = `${args[0]}`.toLowerCase()
-let arrayMenu = ['all', 'user', 'edukasi', 'anonymous', 'ephoto360', 'baileys', 'convert', 'database', 'nocategory', 'primbon', 'canvas', 'absen', 'update','rpg', 'anime', 'virus', 'downloader', 'game', 'fun', 'xp', 'news', 'group', 'image', 'admin', 'info', 'internet', 'islam', 'kerang', 'maker', 'owner', 'audio', 'sound', 'premium', 'quotes', 'stalk', 'shortlink', 'sticker', 'tools', 'nsfw', 'asupan', 'random', 'textpro', 'photooxy']
+let arrayMenu = ['all', 'edukasi', 'pribadi', 'anonymous', 'ephoto360', 'baileys', 'convert', 'database', 'nocategory', 'primbon', 'canvas', 'absen', 'update','rpg', 'anime', 'virus', 'downloader', 'game', 'fun', 'xp', 'news', 'group', 'image', 'admin', 'info', 'internet', 'islam', 'kerang', 'maker', 'owner', 'audio', 'sound', 'premium', 'quotes', 'stalk', 'shortlink', 'sticker', 'tools', 'nsfw', 'asupan', 'random', 'textpro', 'photooxy']
 if (!arrayMenu.includes(teks)) teks = '404'
   if (teks == 'all') tags = {
   'main': 'Menu Utama',
@@ -96,7 +96,6 @@ if (!arrayMenu.includes(teks)) teks = '404'
   'premium': 'Premium',
   'internet': 'Internet',
   'nsfw': 'Nsfw',
-  'hentai': 'Hentai',
   'bokep': 'Bokep',
   'anonymous': 'Anonymous Chat',
   'downloader': 'Downloader',
@@ -113,13 +112,11 @@ if (!arrayMenu.includes(teks)) teks = '404'
   'nocategory': 'No Category',
 
   'convert': 'Converter',
-  'bank': 'Bank',
   'ephoto360': 'Ephoto360',
   'walpaper': 'WALPAPER',
   'image': 'IMAGE',
   'work': 'work',
   'anime': 'Anime',
-  'user': 'user',
   'canvas': 'canvas',
   'primbon': 'Primbon',
   'Baileys': 'Baileys',
@@ -179,10 +176,8 @@ if (teks == 'convert') tags = {
 if (teks == 'primbon') tags = {
   'primbon': 'primbon', 
 }
-if (teks == 'user') tags = {
-  'user': 'User',
+if (teks == 'pribadi') tags = {
   'pribadi': 'Pribadi',
-  'jadian': 'JADIAN',
 }  
 if (teks == 'game') tags = {
 'game': 'GAME',
@@ -190,6 +185,7 @@ if (teks == 'game') tags = {
 if (teks == 'group') tags = {
 'group': 'GROUP',
 'admin': 'Admin',
+'jadian': 'JADIAN'
 }
 if (teks == 'admin') tags = {
   'admin': 'Admin'
@@ -241,8 +237,7 @@ if (teks == 'quotes') tags = {
 }
 if (teks == 'rpg') tags = {
 'rpg': 'RPG',
-'work': 'WORK',
-'bank': 'Bank'
+'work': 'WORK'
 }
 if (teks == 'stalk') tags = {
 'stalk': 'STALK',
@@ -255,7 +250,6 @@ if (teks == 'tools') tags = {
 }
 if (teks == 'nsfw') tags = {
 'nsfw': 'NSFW', 
-'hentai': 'Hentai',
 'bokep': 'Bokep',
 }
 if (teks == 'asupan') tags = {
@@ -403,7 +397,7 @@ if (teks == '404') {
   title: `––––––『 Menu Beta 』––––––`,
    rows: [
     {title: `│ Virus`, rowId: `${_p}? virus`, description: "Khusus user premium Vip"},
-    {title: `│ user`, rowId: `${_p}? user`, description: "beta"},
+
     {title: `│ converter`, rowId: `${_p}? convert`, description: "coming"},
     {title: `│ Baileys`, rowId: `${_p}? baileys`, description: "coming soon"},
     {title: `🔝 update`, rowId: `${_p}? update`, description: "coming soon fitur"},
@@ -430,6 +424,7 @@ title: `––––––『 Maker 』––––––`,
     {title: `🏢 │ Group`, rowId: `${_p}? group`, description: "Hanya dapat digunakan di group"},
     {title: `🌟 │ Premium`, rowId: `${_p}? premium`, description: "khusus member premium"},
     {title: `🕌 │ Islam`, rowId: `${_p}? islam`, description: "Menu Exclusive Para Santri"},
+    {title: `│ Private`, rowId: `${_p}? pribadi`, description: "only private chat"},
     ]
   },{
   title: `––––––『 dll 』––––––`,
@@ -480,6 +475,7 @@ title: `––––––『 Maker 』––––––`,
       }),
       after
     ].join('\n')
+    //let _package = JSON.parse(await promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
     let text = typeof conn.menu == 'string' ? conn.menu : typeof conn.menu == 'object' ? _text : ''
     let replace = {
       '%': '%',
@@ -506,14 +502,14 @@ title: `––––––『 Maker 』––––––`,
       readmore: readMore
     }
     text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
-    let sipp = await conn.resize(await(await fetch(set.fla + teks)).buffer(), 300, 300)
-    /*
+    let sipp = await conn.resize(await(await npm.fetch(set.fla + teks)).buffer(), 300, 300)
+
     conn.sendHydrated2(m.chat, text.trim(), set.wm, pp, set.web, 'Web', null, null, [
       ['Donate', '/donasi'],
       ['Speed', '/ping'],
       ['Owner', '/owner']
     ], m)
-    */
+
 
     //await conn.send3TemplateButtonImg(m.chat, logo, text.trim(), `Aktif selama : ${uptime}`, `🏅Owner`, `${_p}owner`, `🎖ThanksTo`, `${_p}tqto`, `🎗  Donasi  🎗`, `${_p}infobot`)
     //conn.send3TemplateButtonImg(m.chat, await(await fetch(set.fla + teks)).buffer(), text.trim(), `Aktif selama : ${uptime}`, `🏅Owner`, `${_p}owner`, `🎖ThanksTo`, `${_p}tqto`, `🎗  Donasi  🎗`, `${_p}infobot`)
@@ -525,12 +521,13 @@ title: `––––––『 Maker 』––––––`,
         */
             //conn.sendButton(m.chat, text, set.titlebot, [['Ping', '.ping'],['Owner', '.owner'],['Donasi', '.donasi']], null, global.fakes, global.adReply)
         
-
+/*
               //-------DOC TEMPLATE
       const message = {
         document: { url: set.web },
         mimetype: set.doc, fileName: set.ucapan, fileLength: set.fsizedoc,  pageCount: set.fpagedoc,
         jpegThumbnail: sipp,
+        //image: {url: set.fla + text},
         caption: text,
         footer: `AzBoTz aktif selama : ${uptime}`,
         //contextInfo: adReply.contextInfo,
@@ -572,12 +569,12 @@ title: `––––––『 Maker 』––––––`,
           }
         //------------------- BUTTON VID
         //conn.sendButton(m.chat, text, wm, 'https://telegra.ph/file/a46ab7fa39338b1f54d5a.mp4', [['Ping', '.ping'],['Owner', '.owner'],['Donasi', '.donasi']],fakes, { gifPlayback: true, contextInfo: { externalAdReply: {title: set.namebot, body: set.bottime, sourceUrl: set.ig, thumbnail: set.thumb }}})
-  
-
+  */
+}
 handler.help = ['menu']
 handler.tags = ['main']
 handler.command = /^(menu|listmenu|menubot|\?)$/i
-handler.register = false
+handler.register = true
 handler.exp = 3
 
 export default handler

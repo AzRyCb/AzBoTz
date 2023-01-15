@@ -283,6 +283,184 @@ END:VCARD
             enumerable: true,
             writable: true,
         },
+sendcontak: {
+/**
+ * Send Contact
+ * @param {String} jid 
+ * @param {String[][]|String[]} data
+ * @param {import('@adiwajshing/baileys').proto.WebMessageInfo} quoted 
+ * @param {Object} options 
+ */
+async value(jid, data, quoted, options) {
+if (!Array.isArray(data[0]) && typeof data[0] === 'string') data = [data]
+let contacts = []
+for (let [number, name, info, label, email, region, website, other, other1, other2, other3, other4, other5] of data) {
+number = number.replace(/[^0-9]/g, '')
+let njid = number + '@s.whatsapp.net'
+let vcard = `
+BEGIN:VCARD
+VERSION:3.0
+N:Sy;Bot;;;
+FN:${name.replace(/\n/g, '\\n')}${info ? `\nitem.ORG:${info}` : ''}
+item1.TEL;waid=${number}:${PhoneNumber('+' + number).getNumber('international')}${label ? `\nitem1.X-ABLabel:${label}` : ''}${email ? `\nitem2.EMAIL;type=INTERNET:${email}` : ''}${email ? `\nitem2.X-ABLabel:📧 Email` : ''}${region ? `\nitem3.ADR:;;${region};;;;` : ''}${region ? `\nitem3.X-ABADR:ac` : ''}${region? `\nitem3.X-ABLabel:📍 Region` : ''}${website ? `\nitem4.URL:${website}` : ''}${website ? `\nitem4.X-ABLabel:Website` : ''}${other ? `\nitem5.X-ABLabel:${other}` : ''}${other1 ? `\nitem5.X-ABLabel:${other1}` : ''}${other2 ? `\nitem5.X-ABLabel:${other2}` : ''}${other3 ? `\nitem5.X-ABLabel:${other3}` : ''}${other4 ? `\nitem5.X-ABLabel:${other4}` : ''}${other5 ? `\nitem5.X-ABLabel:${other5}` : ''} 
+END:VCARD`.trim()
+contacts.push({ vcard, displayName: name })
+}
+let msg = {
+...options,
+contacts: {
+...options,
+displayName: (contacts.length >= 2 ? `${contacts.length} kontak` : contacts[0].displayName) || null,
+contacts,
+}
+}
+return await conn.sendMessage(jid, msg, { quoted, ...options }) 
+},
+enumerable: true,
+writable: true,
+},
+
+        sendkontak: {
+            /**
+             * Send Contact
+             * @param {String} jid 
+             * @param {String[][]|String[]} data
+             * @param {import('@adiwajshing/baileys').proto.WebMessageInfo} quoted 
+             * @param {Object} options 
+             */
+            async value(jid, data, quoted, options) {
+                if (!Array.isArray(data[0]) && typeof data[0] === 'string') data = [data]
+                const contacts = []
+                for (let [number, name] of data) {
+                    number = number.replace(/[^0-9]/g, '')
+                    let njid = number + '@s.whatsapp.net'
+                    let biz = await conn.getBusinessProfile(njid).catch(_ => null) || {}
+                    let vcard = `
+BEGIN:VCARD
+VERSION:3.0
+N:;${name.replace(/\n/g, '\\n')};;;
+FN:${name.replace(/\n/g, '\\n')}
+TEL;type=CELL;type=VOICE;waid=${number}:${PhoneNumber('+' + number).getNumber('international')}${biz.description ? `
+X-WA-BIZ-NAME:${(store.getContact(njid)?.vname || conn.getName(njid) || name).replace(/\n/, '\\n')}
+X-WA-BIZ-DESCRIPTION:${biz.description.replace(/\n/g, '\\n')}
+`.trim() : ''}
+END:VCARD
+`.trim()
+                    contacts.push({ vcard, displayName: name })
+
+                }
+                return await conn.sendMessage(jid, {
+                    ...options,
+                    contacts: {
+                        ...options,
+                        displayName: (contacts.length >= 2 ? `${contacts.length} kontak` : contacts[0].displayName) || null,
+                        contacts,
+                    }
+                }, { quoted, ...options })
+            },
+            enumerable: true,
+            writable: true,
+        },
+    /**
+     * Send Contact Array
+     * @param {String} jid 
+     * @param {String} number 
+     * @param {String} name 
+     * @param {Object} quoted 
+     * @param {Object} options 
+     */
+    sendContactArray: {
+        async value(jid, data, quoted, options) {
+            if (!Array.isArray(data[0]) && typeof data[0] === 'string') data = [data]
+                    let contacts = []
+            for (let [number, name, isi, isi1, isi2, isi3, isi4, isi5] of data) {
+                number = number.replace(/[^0-9]/g, '')
+                let njid = number + '@s.whatsapp.net'
+                let biz = await conn.getBusinessProfile(njid).catch(_ => null) || {}
+                // N:;${name.replace(/\n/g, '\\n').split(' ').reverse().join(';')};;;
+            let vcard = `
+BEGIN:VCARD
+VERSION:3.0
+N:Sy;Bot;;;
+FN:${name.replace(/\n/g, '\\n')}
+item.ORG:${isi}
+item1.TEL;waid=${number}:${PhoneNumber('+' + number).getNumber('international')}
+item1.X-ABLabel:${isi1}
+item2.EMAIL;type=INTERNET:${isi2}
+item2.X-ABLabel:📧 Email
+item3.ADR:;;${isi3};;;;
+item3.X-ABADR:ac
+item3.X-ABLabel:📍 Region
+item4.URL:${isi4}
+item4.X-ABLabel:Website
+item5.X-ABLabel:${isi5}
+END:VCARD`.trim()
+                contacts.push({ vcard, displayName: name })
+            }
+            return conn.sendMessage(jid, {
+                contacts: {
+                    displayName: (contacts.length > 1 ? `2013 kontak` : contacts[0].displayName) || null,
+                    contacts,
+                }
+            },
+            {
+                quoted,
+                ...options
+            })
+            },
+            enumerable: true,
+            writable: true,
+        },
+            /**
+     * Send Contact Array
+     * @param {String} jid 
+     * @param {String} number 
+     * @param {String} name 
+     * @param {Object} quoted 
+     * @param {Object} options 
+     */
+    sendContactArrayS: { 
+    async value (jid, data, quoted, options) {
+        let contacts = []
+        for (let [number, name, isi, isi1, isi2, isi3, isi4, isi5] of data) {
+            number = number.replace(/[^0-9]/g, '')
+            let njid = number + '@s.whatsapp.net'
+            let biz = await conn.getBusinessProfile(njid) || {}
+            // N:;${name.replace(/\n/g, '\\n').split(' ').reverse().join(';')};;;
+            let vcard = `
+BEGIN:VCARD
+VERSION:3.0
+N:Sy;Bot;;;
+FN:${name.replace(/\n/g, '\\n')}
+item.ORG:${isi}
+item1.TEL;waid=${number}:${PhoneNumber('+' + number).getNumber('international')}
+item1.X-ABLabel:${isi1}
+item2.EMAIL;type=INTERNET:${isi2}
+item2.X-ABLabel:📧 Email
+item3.ADR:;;${isi3};;;;
+item3.X-ABADR:ac
+item3.X-ABLabel:📍 Region
+item4.URL:${isi4}
+item4.X-ABLabel:Website
+item5.X-ABLabel:${isi5}
+END:VCARD`.trim()
+            contacts.push({ vcard, displayName: name })
+
+        }
+        return await conn.sendMessage(jid, {
+            contacts: {
+                displayName: (contacts.length > 1 ? `2013 kontak` : contacts[0].displayName) || null,
+                contacts,
+            }
+        },
+            {
+                quoted,
+                ...options
+            })
+    },
+    enumerable: true,
+    writable: true,
+},
         reply: {
             /**
              * Reply to a message
@@ -301,7 +479,8 @@ END:VCARD
                     ephemeralExpiration: ephemeral,
                     ...options
                 })
-            }
+            },
+            writable: true,
         },
         reply2: {
 async value(jid, text = '', quoted, options){
@@ -382,7 +561,9 @@ return conn.sendMessage(jid, { ...options, text }, { quoted, ephemeralExpiration
 if (thum) await file.clear()
 if (error) throw error 
 		}
-	}
+    },
+    enumerable: true,
+    writable: true,
 },
         sendStimg: {
             async value (jid, path, quoted, options = {}) {
@@ -395,7 +576,10 @@ if (error) throw error
                 }
                 await conn.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
                 return buffer
-        }},
+            },
+            enumerable: true,
+            writable: true,
+        },
                 // send sticked video
     sendStvid: {
     async value(jid, path, quoted, options = {}){
@@ -409,7 +593,9 @@ if (error) throw error
         }
         await conn.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
         return buffer
-        }
+    },
+    enumerable: true,
+    writable: true,
     },
         hy1: {
         async value(jid, capt, foot, is1, iS1, is2, iS2, btn1, id1) {
@@ -437,99 +623,11 @@ if (error) throw error
         ]
         }
         return conn.sendMessage(jid, key)
-        }
+    },
+    enumerable: true,
+    writable: true,
         },
 //rapihin
-        /**
-             * Send Contact
-             * @param {String} jid 
-             * @param {String[][]|String[]} data
-             * @param {import('@adiwajshing/baileys').proto.WebMessageInfo} quoted 
-             * @param {Object} options 
-             */
-        sendKontak: {
-            async value(jid, data, quoted, options) {
-                if (!Array.isArray(data[0]) && typeof data[0] === 'string') data = [data]
-                        let contacts = []
-                for (let [number, nama, ponsel, email] of data) {
-                    number = number.replace(/[^0-9]/g, '')
-                    let njid = number + '@s.whatsapp.net'
-                    let name = db.data.users[njid] ? db.data.users[njid].name : conn.getName(njid)
-                    let biz = await conn.getBusinessProfile(njid).catch(_ => null) || {}
-                    let vcard = `
-BEGIN:VCARD
-VERSION:3.0
-N:;${name.replace(/\n/g, '\\n')};;;
-FN:${name.replace(/\n/g, '\\n')}
-ORG:
-item1.TEL;waid=${number}:${PhoneNumber('+' + number).getNumber('international')}
-item1.X-ABLabel:📌 ${ponsel}
-item2.EMAIL;type=INTERNET:${email}
-item2.X-ABLabel:✉️ Email
-X-WA-BIZ-DESCRIPTION:${(biz.description || '').replace(/\n/g, '\\n')}
-X-WA-BIZ-NAME:${name.replace(/\n/g, '\\n')}
-END:VCARD
-`.trim()
-                    contacts.push({ vcard, displayName: name })
-        
-                }
-                return conn.sendMessage(jid, {
-                    contacts: {
-                         ...options,
-                        displayName: (contacts.length > 1 ? `${contacts.length} kontak` : contacts[0].displayName) || null,
-                        contacts,
-                    },
-                }, { quoted, ...options, ephemeralExpiration: ephemeral })
-            }
-            },
-                /**
-             * Send Contact Array
-             * @param {String} jid 
-             * @param {String} number 
-             * @param {String} name 
-             * @param {Object} quoted 
-             * @param {Object} options 
-             */
-            sendContactArray: {
-            async value(jid, data, quoted, options) {
-                if (!Array.isArray(data[0]) && typeof data[0] === 'string') data = [data]
-                        let contacts = []
-                for (let [number, name, isi, isi1, isi2, isi3, isi4, isi5] of data) {
-                    number = number.replace(/[^0-9]/g, '')
-                    let njid = number + '@s.whatsapp.net'
-                    let biz = await conn.getBusinessProfile(njid).catch(_ => null) || {}
-                    // N:;${name.replace(/\n/g, '\\n').split(' ').reverse().join(';')};;;
-                    let vcard = `
-        BEGIN:VCARD
-        VERSION:3.0
-        N:Sy;Bot;;;
-        FN:${name.replace(/\n/g, '\\n')}
-        item.ORG:${isi}
-        item1.TEL;waid=${number}:${PhoneNumber('+' + number).getNumber('international')}
-        item1.X-ABLabel:${isi1}
-        item2.EMAIL;type=INTERNET:${isi2}
-        item2.X-ABLabel:📧 Email
-        item3.ADR:;;${isi3};;;;
-        item3.X-ABADR:ac
-        item3.X-ABLabel:📍 Region
-        item4.URL:${isi4}
-        item4.X-ABLabel:Website
-        item5.X-ABLabel:${isi5}
-        END:VCARD`.trim()
-                    contacts.push({ vcard, displayName: name })
-                }
-                return conn.sendMessage(jid, {
-                    contacts: {
-                        displayName: (contacts.length > 1 ? `2013 kontak` : contacts[0].displayName) || null,
-                        contacts,
-                    }
-                },
-                {
-                    quoted,
-                    ...options
-                })
-                }
-            },
              /**
             * Send Media All Type 
             * @param {String} jid
@@ -543,7 +641,9 @@ END:VCARD
                 let messageType = mime.split("/")[0]
                 let pase = messageType.replace('application', 'document') || messageType
                 return conn.sendMessage(jid, { [`${pase}`]: data, mimetype: mime, ...options }, { quoted })
-            }
+            },
+            enumerable: true,
+            writable: true,
             },
             /**
             * Send a list message
@@ -578,7 +678,9 @@ END:VCARD
                         ...options
                     }
                 })
-              }
+            },
+            enumerable: true,
+            writable: true,
             },
             /** Resize Image
               *
@@ -624,7 +726,9 @@ END:VCARD
             let a = [1,2]
             let b = a[Math.floor(Math.random() * a.length)]
             conn.sendMessage(jid, { video: gif, gifPlayback: true, gifAttribution: b, caption: text, footer: footer, jpegThumbnail: file, templateButtons: but, ...options })
-            }
+        },
+        enumerable: true,
+        writable: true,
             },
             /**
             * Send Payment
@@ -651,7 +755,9 @@ END:VCARD
                 background: !!image ? file : undefined
             };
             return conn.relayMessage(jid, { requestPaymentMessage }, { ...options });
-        }
+        },
+        enumerable: true,
+        writable: true,
         },
         /**
             * Send Poll
@@ -668,7 +774,9 @@ END:VCARD
                             selectableOptionsCount: 1
                 }
                         return conn.relayMessage(jid, { pollCreationMessage: pollMessage }, { ...options });
-                        }
+                    },
+                    enumerable: true,
+                    writable: true,
                 },
             /**
              * By Fokus ID
@@ -802,7 +910,10 @@ END:VCARD
                 headerType: 1
               }
               conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: ephemeral, forwardingScore: global.set.fsizedoc, isForwarded: true, ...options })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send2ButtonDoc: {
             async value(jid, content, footerText, button1, id1, button2, id2, quoted, options) {
@@ -825,7 +936,10 @@ END:VCARD
                     headerType: 1
                 }
                 conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: ephemeral, contextInfo: { mentionedJid: conn.parseMention(content + footerText), forwardingScore: global.set.fsizedoc, isForwarded: true }, ...options, ephemeralExpiration: ephemeral } )
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send2ButtonImgDoc: {
             async value(jid, buffer, contentText, footerText, button1, id1, button2, id2, quoted, options) {
@@ -857,7 +971,10 @@ END:VCARD
                 }
         
                 return conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: ephemeral, contextInfo: { mentionedJid: conn.parseMention(contentText + footerText) }, ...options })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send1Button: {
             async value(jid, content, footerText, button1, id1, quoted, options) {
@@ -874,7 +991,10 @@ END:VCARD
                     headerType: 1
                 }
                 conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: ephemeral, contextInfo: { mentionedJid: conn.parseMention(content + footerText), forwardingScore: global.set.fsizedoc, isForwarded: true }, ...options })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send2Button: {
             async value(jid, content, footerText, button1, id1, button2, id2, quoted, options) {
@@ -892,7 +1012,10 @@ END:VCARD
                     headerType: 1
                 }
                 conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: ephemeral, contextInfo: { mentionedJid: conn.parseMention(content + footerText), forwardingScore: global.set.fsizedoc, isForwarded: true }, ...options })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send3Button: {
             async value(jid, content, footerText, button1, id1, button2, id2, button3, id3, quoted, options) {
@@ -911,7 +1034,10 @@ END:VCARD
                     headerType: 1
                 }
                 conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: ephemeral, contextInfo: { mentions: conn.parseMention(content + footerText), forwardingScore: global.set.fsizedoc, isForwarded: true }, ...options })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             /**
              * send Button Loc
@@ -946,7 +1072,10 @@ END:VCARD
                     mentions: await conn.parseMention(content + footer),
                     ...options
                 })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send2ButtonLoc: {
             async value(jid, buffer, content, footer, button1, row1, button2, row2, quoted, options = {}) {
@@ -972,7 +1101,10 @@ END:VCARD
                     mentions: await conn.parseMention(content + footer),
                     ...options
                 })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send3ButtonLoc: {
             async value(jid, buffer, content, footer, button1, row1, button2, row2, button3, row3, quoted, options = {}) {
@@ -999,7 +1131,10 @@ END:VCARD
                     mentions: await conn.parseMention(content + footer),
                     ...options
                 })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
         
             /**
@@ -1036,7 +1171,10 @@ END:VCARD
                 }
         
                 return conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: ephemeral, contextInfo: { mentionedJid: conn.parseMention(contentText + footerText) }, ...options })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send2ButtonImg: {
             async value(jid, buffer, contentText, footerText, button1, id1, button2, id2, quoted, options) {
@@ -1063,7 +1201,10 @@ END:VCARD
                 }
         
                 return conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: ephemeral, contextInfo: { mentionedJid: conn.parseMention(contentText + footerText) }, ...options })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send3ButtonImg: {
             async value(jid, buffer, contentText, footerText, button1, id1, button2, id2, button3, id3, quoted, options) {
@@ -1091,7 +1232,10 @@ END:VCARD
                 }
         
                 return conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: ephemeral, contextInfo: { mentionedJid: conn.parseMention(contentText + footerText) }, ...options })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
         
             /**
@@ -1131,7 +1275,10 @@ END:VCARD
                     ephemeralExpiration: ephemeral,
                     ...options
                 })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send2ButtonVid: {
             async value(jid, buffer, contentText, footerText, button1, id1, button2, id2, quoted, options) {
@@ -1160,7 +1307,10 @@ END:VCARD
                     ephemeralExpiration: ephemeral,
                     ...options
                 })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send3ButtonVid: {
             async value(jid, buffer, contentText, footerText, button1, id1, button2, id2, button3, id3, quoted, options) {
@@ -1190,7 +1340,10 @@ END:VCARD
                     ephemeralExpiration: ephemeral,
                     ...options
                 })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
         
             //========== Template Here ==========// 
@@ -1229,7 +1382,10 @@ END:VCARD
                     headerType: 1
                 }
                 conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: ephemeral, contextInfo: { mentionedJid: conn.parseMention(content + footerText), forwardingScore: global.set.fsizedoc, isForwarded: true }, ...options, ephemeralExpiration: ephemeral } )
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             sendTemplateButtonDoc: {
             async value(jid, buffer, content, footerText, button1, id1, quoted, options) {
@@ -1253,7 +1409,10 @@ END:VCARD
                     headerType: 1
                 }
                 conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: ephemeral, contextInfo: { mentionedJid: conn.parseMention(content + footerText), forwardingScore: global.set.fsizedoc, isForwarded: true }, ...options, ephemeralExpiration: ephemeral } )
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             sendTemplateButtonLoc: {
             async value(jid, buffer, contentText, footer, buttons1, row1, quoted, options) {
@@ -1285,7 +1444,10 @@ END:VCARD
               template.message,
               { messageId: template.key.id }
             )
-          }},
+                      },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             sendTemplateButtonFakeImg: {
             async value(jid, buffer, content, footerText, btn1, id1, options) {
@@ -1311,7 +1473,10 @@ END:VCARD
                     ...options
                 }
                 conn.sendMessage(jid, key, { ephemeralExpiration: ephemeral, mentions: conn.parseMention(content + footerText), contextInfo: { forwardingScore: global.set.fsizedoc, isForwarded: true }, ...options })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send2TemplateButtonFakeImg: {
             async value(jid, buffer, content, footerText, btn1, id1, btn2, id2, quoted, options) {
@@ -1337,7 +1502,10 @@ END:VCARD
                     ]
                 }
                 conn.sendMessage(jid, key, { quoted, ephemeralExpiration: ephemeral, contextInfo: { mentions: conn.parseMention(content + footerText), forwardingScore: global.set.fsizedoc, isForwarded: true } })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
             /** This Section **/
             send3TemplateButtonFakeImg: {
             async value(jid, buffer, content, footerText, btn1, id1, btn2, id2, btn3, id3, quoted, options) {
@@ -1364,11 +1532,17 @@ END:VCARD
                     ]
                 }
                 conn.sendMessage(jid, key, { quoted, ephemeralExpiration: ephemeral, contextInfo: { forwardingScore: global.set.fsizedoc, isForwarded: true, mentions: conn.parseMention(content) } })
-            }},
+                        },
+            enumerable: true,
+            writable: true,
+        },
         react: {
             async value(jid, text, key) {
             return conn.sendMessage(jid, { react: { text: text, key: key } })
-        }},
+                    },
+            enumerable: true,
+            writable: true,
+        },
         // TODO: Fix sendLocation
         // Maybe aploud buffer to whatsapp first and then send location
         sendButton: {
@@ -1524,6 +1698,7 @@ END:VCARD
                     ...options,
                     [buffer ? 'caption' : 'text']: text || '',
                     footer,
+                    viewOnce: true,
                     templateButtons,
                     ...(buffer ?
                         options.asLocation && /image/.test(file.mime) ? {
@@ -1571,8 +1746,16 @@ END:VCARD
              * @param {Object} options
              */
             async value(jid, text = '', footer = '', buffer, url, urlText, url2, urlText2, buttons, quoted, options) {
-                let type
-                if (buffer) try { (type = await conn.getFile(buffer), buffer = type.data) } catch { buffer = buffer }
+                let file
+                if (buffer) {
+                    try {
+                        file = await conn.getFile(buffer)
+                        buffer = file.data
+                    } catch (e) {
+                        console.error(e)
+                        file = buffer = null
+                    }
+                }
                 if (buffer && !Buffer.isBuffer(buffer) && (typeof buffer === 'string' || Array.isArray(buffer))) (options = quoted, quoted = buttons, buttons = callText, callText = call, call = urlText, urlText = url, url = buffer, buffer = null)
                 if (!options) options = {}
                 let templateButtons = []
@@ -1620,15 +1803,16 @@ END:VCARD
                     ...options,
                     [buffer ? 'caption' : 'text']: text || '',
                     footer,
+                    viewOnce: true,
                     templateButtons,
                     ...(buffer ?
                         options.asLocation && /image/.test(type.mime) ? {
                             location: {
                                 ...options,
-                                jpegThumbnail: buffer
+                                jpegThumbnail: await file.toBuffer()
                             }
                         } : {
-                            [/video/.test(type.mime) ? 'video' : /image/.test(type.mime) ? 'image' : 'document']: buffer
+                            [/video/.test(file.mime) ? 'video' : /image/.test(file.mime) ? 'image' : 'document']: { stream: buffer },
                         } : {})
                 }
                 return conn.sendMessage(jid, message, {
@@ -2067,7 +2251,10 @@ END:VCARD
                   construct = construct.concat(arr[i])
               }
               return construct
-          }},
+                      },
+            enumerable: true,
+            writable: true,
+        },
       
           /**
            * 
@@ -2077,7 +2264,10 @@ END:VCARD
           pickRandom: {
           async value (list)  {
               return list[Math.floor(list.length * Math.random())]
-          }},
+                      },
+            enumerable: true,
+            writable: true,
+        },
       
           /**
            * 
@@ -2087,7 +2277,10 @@ END:VCARD
           delay: {
           async value(ms) {
               return new Promise((resolve, reject) => setTimeout(resolve, ms))
-          }},
+                      },
+            enumerable: true,
+            writable: true,
+        },
     
           /**
            * 
@@ -2119,7 +2312,10 @@ END:VCARD
           format: {
           async value(...args)  {
               return util.format(...args)
-          }},
+                      },
+            enumerable: true,
+            writable: true,
+        },
       
           /**
            * 
@@ -2145,7 +2341,10 @@ END:VCARD
               } catch (e) {
                   console.log(`Error : ${e}`)
               }
-          }},
+                      },
+            enumerable: true,
+            writable: true,
+        },
         /**
          * 
          * @param {Number} ms 
@@ -2157,7 +2356,10 @@ END:VCARD
             let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
             let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
             return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
-        }},
+                    },
+            enumerable: true,
+            writable: true,
+        },
         serializeM: {
             /**
              * Serialize Message, so it easier to manipulate

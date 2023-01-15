@@ -93,7 +93,7 @@ await conn.sendButton(m.chat, caption, set.wm, null, [['Menu', '.menu']], m)
 }
 handler.help = ['ping', 'speed']
 handler.tags = ['info']
-
+handler.register = true
 handler.command = /^(ping|speed|info)$/i
 export default handler
 

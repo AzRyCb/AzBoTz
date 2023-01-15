@@ -3,7 +3,7 @@ let handler = async (m, { conn, groupMetadata, usedPrefix }) => {
     conn.absen = conn.absen ? conn.absen : {}
     if (!(id in conn.absen)) conn.sendButton(m.chat, `_*Tidak ada absen berlangsung digrup ini!*_\n\n*${usedPrefix}mulaiabsen* - untuk memulai absen`, set.wm, null, [
                 ['Mulaiabsen', `${usedPrefix}mulaiabsen`]
-            ], fakes, adReply)
+            ], m)
             
     let d = new Date
     let date = d.toLocaleDateString('id', {
@@ -23,7 +23,7 @@ ${conn.absen[id][2]}
 ${list}
 ┗┅────────┅✦
 `
-conn.sendButton(m.chat, caption, set.wm, null, [['absen', `${usedPrefix}absen`], ['cekabsen', `${usedPrefix}cekabsen`]], fakes, adReply, { mentions: conn.parseMention(caption) })
+conn.sendButton(m.chat, caption, set.wm, null, [['absen', `${usedPrefix}absen`], ['cekabsen', `${usedPrefix}cekabsen`]], m, { mentions: conn.parseMention(caption) })
 
 }
 handler.help = ['cekabsen']

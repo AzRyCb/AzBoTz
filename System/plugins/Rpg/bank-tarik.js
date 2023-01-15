@@ -13,7 +13,7 @@ let handler = async (m, { conn, command, args }) => {
   } else conn.reply(m.chat, `[❗] Uang dibank anda tidak mencukupi untuk ditarik sebesar ${count} money 💹`, m)
 }
 handler.help = ['tarik'].map(v => v + ' <jumlah>')
-handler.tags = ['bank']
+handler.tags = ['rpg']
 handler.command = /^tarik([0-9]+)|tarik|tarikall$/i
 
 export default handler

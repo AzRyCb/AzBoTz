@@ -2,7 +2,7 @@ import db from '../../lib/database.js'
 import {readFileSync} from 'fs'
 
 let handler = m => m
-handler.all = async function (m, { conn, usedPrefix: _p })  {
+handler.all = async function (m, { conn, text, isOwner, usedPrefix: _p })  {
 
 let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? this.user.jid : m.sender
 let name = await this.getName(who)
@@ -35,16 +35,22 @@ mediaUrl: set.web,
 title: '「 ❔ 」',
 body: set.wm,
 sourceUrl: set.web,
-thumbnail: await( await fetch(pp)).buffer()
+thumbnail: pp
 }
 }}, { quoted: m })
 }
 
 // sistem antiinvite
 if ((m.mtype === 'groupInviteMessage' || m.text.startsWith('https://chat') || m.text.startsWith('Buka tautan ini')) && !m.isBaileys && !m.isGroup) {
-let nyulik = `Invite Group Detected
+    let linkRegex = /chat.whatsapp.com\/([0-9A-Za-z]{20,24})( [0-9]{1,3})?/i
+    let [_, code, expired] = text.match(linkRegex) || []
+    if (!code) throw 'Link invalid'
 
-Kalo mau bot masuk ke gc mu
+    //expired = Math.floor(Math.min(999, Math.max(1, isOwner ? isNumber(expired) ? parseInt(expired) : 0 : 3)))
+let nyulik = `Berhasil join ke grup ini
+dan  menetapkan trial 3hari
+
+untuk memperpanjang masa aktif
 beli premium atau sewabot aja gan
         
 SewaBot
@@ -52,10 +58,11 @@ SewaBot
 • 30 Day / Rp 8k
 • Permanen 12k
 
-Jika berminat hubungi: @${set.owner[0]} untuk order:)
+Jika berminat hubungi: @${set.mods} untuk order:)
 `
-this.sendButton(m.chat, nyulik.trim(), set.wm, null, [['Pemilik Bot', '.owner']], global.fakes, global.adReply)
-await this.reply(set.owner[0], `Ada Yang Mau Nyulik nih :v \n\ndari: @${m.sender.split("@")[0]} \n\npesan: ${m.text}`, m, { mentions: [m.sender] })
+this.groupAcceptInvite(code)
+this.sendButton(m.chat, nyulik.trim(), set.wm, null, [['Pemilik Bot', '.owner']], m, { mentions: [m.sender] })
+await this.reply(set.mods, `Ada Yang Mau Nyulik nih :v \n\ndari: @${m.sender.split("@")[0]} \n\npesan: ${m.text}`, m, { mentions: [m.sender] })
 }
 
 // ketika ada yang kirim anu
@@ -106,7 +113,7 @@ this.reply(m.chat, `وَعَلَيْكُمْ السَّلاَمُ وَرَحْم
 
 if (/^assalam(ualaikum)?|(salamualaiku|(sa(lamu|m)liku|sala))m$/i.test(m.text)) {
 let info = ` 📚 *Wa'alaikumsalam*`
-this.send2ButtonDoc(m.chat, `${set.htki} ᴜ s ᴇ ʀ s ${set.htka}`, info, 'ℹ️ Sapa', '.tts id Waalaikumsalam', 'ℹ️ Menu', '.menu', global.fakes, global.adReply)
+this.send2ButtonDoc(m.chat, `${set.htki} ᴜ s ᴇ ʀ s ${set.htka}`, info, 'ℹ️ Sapa', '.tts id Waalaikumsalam', 'ℹ️ Menu', '.menu', m)
     await this.sendMessage(m.chat, {
         react: {
             text: '🙏',
@@ -115,7 +122,7 @@ this.send2ButtonDoc(m.chat, `${set.htki} ᴜ s ᴇ ʀ s ${set.htka}`, info, 'ℹ
 }
 
 //autoreact
-let res = JSON.parse(readFileSync('System/src/emoji.json'))
+let res = JSON.parse(readFileSync('System/src/json/emoji.json'))
 let em = res.emoji
 if (/^anjir|((bil|ad)e|dec)k|tytyd|laik|banh|nihh$/i.test(m.text)) {
 this.sendMessage(m.chat, {
@@ -126,11 +133,11 @@ this.sendMessage(m.chat, {
 }
 
 if (/^@zry|@Az|@6285795035419|6285795035419|@6285722037770|6285722037770$/i.test(m.text)) {
-this.send3ButtonImg(m.chat, 'https://telegra.ph/file/816fe31b3d02ff785dddf.jpg', "*Ada Apa Tag owner Gua Ngab?🤨*", '=====『 TAG TERDETEKSI 』=====', 'OWNER', '.owner', 'KEMBALI', '.menu', 'STORE', '.store', global.fakes, adReply)
+this.send3ButtonImg(m.chat, 'https://telegra.ph/file/816fe31b3d02ff785dddf.jpg', "*Ada Apa Tag owner Gua Ngab?🤨*", '=====『 TAG TERDETEKSI 』=====', 'OWNER', '.owner', 'KEMBALI', '.menu', 'STORE', '.store', m)
 }
 
 if (/^salken$/i.test(m.text)) {
-this.sendButton(m.chat, `Halo Kak👋\nSaya adalah AzBotZ, AzBotZ adalah Sebuah Bot yang bisa membantumu di grup ini, klik tombol dibawah ini jika kamu ingin menggunakan bot!`.trim(), null, 'Menu', '.menu', global.fakes, adReply)
+this.sendButton(m.chat, `Halo Kak👋\nSaya adalah AzBotZ, AzBotZ adalah Sebuah Bot yang bisa membantumu di grup ini, klik tombol dibawah ini jika kamu ingin menggunakan bot!`.trim(), null, 'Menu', '.menu', m)
 }
 
 if (/^canda|becanda|bejanda$/i.test(m.text)) {
@@ -206,7 +213,7 @@ if (/^(bot|robot|woi|Cok|ngab|tod|bang|hai|hi|hii)$/i.test(m.text)) {
     }
 
 if (/^bot$/i.test(m.text)) {
-    this.sendButton(m.chat, !(m.isGroup || m.isPrems) && setting.group ? 'hanya grup' : chat.isBanned ? 'chat banned' : user.banned ? 'user banned' : 'AzBoTz aktif', set.wm, !(m.isGroup || m.isPrems) && setting.group ? 'donasi' : chat.isBanned ? 'unban' : user.banned ? 'minta owner kalo mau di unban' : 'donasi', !(m.isGroup || m.isPrems) && setting.group ? '.donasi' : chat.isBanned ? '.unban' : user.banned ? '.owner' : '.donasi', global.fakes, global.adReply)
+    this.sendButton(m.chat, !(m.isGroup || m.isPrems) && setting.group ? 'hanya grup' : chat.isBanned ? 'chat banned' : user.banned ? 'user banned' : 'AzBoTz aktif', set.wm, !(m.isGroup || m.isPrems) && setting.group ? 'donasi' : chat.isBanned ? 'unban' : user.banned ? 'minta owner kalo mau di unban' : 'donasi', !(m.isGroup || m.isPrems) && setting.group ? '.donasi' : chat.isBanned ? '.unban' : user.banned ? '.owner' : '.donasi', m)
 }
 
 }

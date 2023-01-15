@@ -1,15 +1,16 @@
-// @ts-check
+
 //-- module internal
 import Connection from './lib/connection.js'
 import jadibot from './lib/mywab.js'
 import db from './lib/database.js'
+import clearTmp from './lib/clearTmp.js'
 import { protoType, serialize } from './lib/socket.js'
 import { plugins, loadPluginFiles, pluginFolder, pluginFilter } from './lib/plugins.js'
-const { opts, __dirname } = (await import('./lib/helper.js')).default 
+const { opts,  __dirname } = (await import('./lib/helper.js')).default 
 const { store, storeFile, authFolder } = (await import('./lib/connection.js')).default 
 //-- module eksternal
 import cp, {spawn, exec as _exec} from 'child_process'
-import {promises,stat, unlink, readdir, existsSync, readdirSync, open} from 'fs' //gbisa 1 1
+import fs from 'fs'
 import {promisify} from 'util'
 import chalk from 'chalk'
 import {tmpdir, platform} from 'os'
@@ -25,10 +26,9 @@ conect: Connection,
 jbot: jadibot
 }
 
-const TIME = 1000 * 60 * 3
-const __dirname1 = __dirname(import.meta)
+//const __dirname1 = __dirname(import.meta.url)
 const exec = promisify(_exec).bind(cp)
-const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
+const __dirname1 = __dirname(import.meta)
 
 protoType()
 serialize()
@@ -48,12 +48,17 @@ loadPluginFiles(pluginFolder, pluginFilter, {
 }).then(_ => console.log(Object.keys(plugins)))
   .catch(console.error)
 
+setInterval(async () => {
+    //await exec("pm2 restart System/index.js")
+    await exec("reset System/index.js")
+  }, 60 * 60 * 1000)
+
 if (opts['clearses']) {
   setInterval(async () => {
 try {
   await exec(`find ${authFolder} ! -name /creds.json -maxdepth 1 -type f -delete`)
 // @ts-ignore
-let sesi = readdirSync('System/data/jadibot').filter(v => !isNaN(v))
+let sesi = fs.readdirSync('System/data/jadibot').filter(v => !isNaN(v))
 if (!sesi.length) return 
   for (let i of sesi) {
     await exec(`find System/data/jadibot/${i} ! -name creds.json -maxdepth 1 -type f -delete`)
@@ -76,46 +81,19 @@ if (!opts['test']) {
     store.writeToFile(storeFile)
 
 // store.writeToFile(storeFile)
-if (!existsSync('System/data/jadibot')) return 
+if (!fs.existsSync('System/data/jadibot')) return 
 // @ts-ignore
-let listSampah = readdirSync('System/data/jadibot').filter(v => isNaN(v))
+let listSampah = fs.readdirSync('System/data/jadibot').filter(v => isNaN(v))
 if (!listSampah.length) return 
   for (let namaSampah of listSampah) promises.rmdir('System/data/jadibot/' + namaSampah).catch(_=>_)
   }, 60 * 1000)
 }
-if (opts['server']) (await import('./server.js')).default(conn, PORT)
+if (opts['server']) (await import('./server.js')).default(conn, process.env.PORT || process.env.SERVER_PORT || 3000)
 
-/* Clear */
-async function clearTmp() {
-  const tmp = [tmpdir(), join(__dirname1, '../tmp')]
-  const filename = []
-
-  await Promise.allSettled(tmp.map(async (dir) => {
-      const files = readdir(dir)
-      for (const file of files) filename.push(join(dir, file))
-  }))
-
-  return await Promise.allSettled(filename.map(async (file) => {
-      const stat1 = stat(file)
-      if (stat1.isFile() && (Date.now() - stat1.mtimeMs >= TIME)) {
-          // https://stackoverflow.com/questions/28588707/node-js-check-if-a-file-is-open-before-copy
-          if (platform() === 'win32') {
-              // https://github.com/nodejs/node/issues/20548
-              // https://nodejs.org/api/fs.html#filehandleclose
-              let fileHandle
-              try {
-                  fileHandle = open(file, 'r+')
-              } catch (e) {
-                console.error('[clearTmp]', e, 'Skipping', file)
-                  return e
-              } finally {
-                  await fileHandle?.close()
-              }
-          }
-          unlink(file)
-      }
-  }))
-}
+setInterval(async () => {
+	var a = await clearTmp()
+	console.log(chalk.cyanBright('Successfully clear tmp'))
+}, 180000)
 
 // Quick Test
 async function _quickTest() {
@@ -150,7 +128,7 @@ async function _quickTest() {
     gm,
     find
   }
-  // require('./System/lib/sticker').support = s
+  // require('./lib/sticker').support = s
   Object.freeze(global.set.support)
 
   if (!s.ffmpeg) (conn?.logger || console).warn('Please install ffmpeg for sending videos (pkg install ffmpeg)')

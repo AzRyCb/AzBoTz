@@ -2,7 +2,7 @@ import { readFileSync } from 'fs'
 import db from '../../lib/database.js'
 
 let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isROwner }) => {
-let res = JSON.parse(readFileSync('../../src/emoji.json'))
+let res = JSON.parse(readFileSync('System/src/json/emoji.json'))
 let em = res.emoji
 	const sections = [
    {

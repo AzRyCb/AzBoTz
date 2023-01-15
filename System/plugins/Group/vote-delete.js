@@ -7,7 +7,7 @@ let handler = async (m, { conn, usedPrefix, isAdmin, isOwner }) => {
     if (!(id in conn.vote)) await conn.sendButton(m.chat, `Tidak ada voting digrup ini!`, set.wm, null, [
     ['vote', `${usedPrefix}+vote`],
     ['menu', `${usedPrefix}menu`]
-], fakes, adReply)
+], m)
     delete conn.vote[id]
     conn.reply(m.chat, `Berhasil!`)
 }

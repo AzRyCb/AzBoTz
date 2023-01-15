@@ -17,10 +17,10 @@ Ketik ${usedPrefix}teka untuk bantuan
 Bonus: ${poin} XP
 `.trim()
     conn.tebakkata[id] = [
-        await conn.sendButton(m.chat, caption, set.wm, ['hint', `${usedPrefix}teka`], fakes, adReply),
+        await conn.sendButton(m.chat, caption, set.wm, ['hint', `${usedPrefix}teka`], m),
         json, poin,
         setTimeout(() => {
-            if (conn.tebakkata[id]) conn.sendButton(m.chat, `Waktu habis!\nJawabannya adalah *${json.jawaban}*`, set.wm, ['tebakkata', `${usedPrefix}tebakkata`], conn.tebakkata[id][0], fakes, adReply)
+            if (conn.tebakkata[id]) conn.sendButton(m.chat, `Waktu habis!\nJawabannya adalah *${json.jawaban}*`, set.wm, ['tebakkata', `${usedPrefix}tebakkata`], conn.tebakkata[id][0], m)
             delete conn.tebakkata[id]
         }, timeout)
     ]

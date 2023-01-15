@@ -6,10 +6,10 @@ export async function before(m) {
     this.skata = this.skata ? this.skata : {}
     if (/nyerah/i.test(m.text) && (id in this.skata)) {
         delete conn.skata[id]
-        return await this.sendButton(m.chat, `Mulai lagi?`, set.wm, null, [['Sambung Kata', '.skata']], fakes, adReply)
+        return await this.sendButton(m.chat, `Mulai lagi?`, set.wm, null, [['Sambung Kata', '.skata']], m)
     }
     if (!m.quoted || !m.quoted.fromMe || !m.quoted.isBaileys || !/(Mulai|Lanjut) :/i.test(m.quoted.text)) return !0
-    if (!(id in this.skata)) return await this.sendButton(m.chat, `Mulai lagi?`, set.wm, null, [['Sambung Kata', '.skata']], fakes, adReply)
+    if (!(id in this.skata)) return await this.sendButton(m.chat, `Mulai lagi?`, set.wm, null, [['Sambung Kata', '.skata']], m)
     if (m.quoted.id == this.skata[id][0].id) {
         let answerF = (m.text.toLowerCase().split` `[0]).trim()
         let res = await fetch('https://restapi.frteam.xyz/ceksambungkata?kata=' + m.text.toLowerCase().split(' ')[0] + '&apikey=Hrbot')

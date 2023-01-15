@@ -7,7 +7,7 @@ let imgr = set.fla
     conn.tebaksurah = conn.tebaksurah ? conn.tebaksurah : {}
     let id = m.chat
     if (id in conn.tebaksurah) {
-        conn.sendButton(m.chat, 'Masih ada soal belum terjawab di chat ini', set.wm, null, buttons, conn.tebaksurah[id][0],fakes, adReply)
+        conn.sendButton(m.chat, 'Masih ada soal belum terjawab di chat ini', set.wm, null, buttons, conn.tebaksurah[id][0],m)
         throw false
     }
     let ran = 6236
@@ -38,12 +38,12 @@ Type: ${json.surah.revelationType}
 `
 
     conn.tebaksurah[id] = [
-        await conn.sendButton(m.chat, caption, set.wm, `${imgr + command}`, buttons, fakes, adReply),
+        await conn.sendButton(m.chat, caption, set.wm, `${imgr + command}`, buttons, m),
         json, poin,
         setTimeout(() => {
             if (conn.tebaksurah[id]) conn.sendButton(m.chat, `Waktu habis!\nJawabannya adalah ${captu}`, set.wm, null, [
                 ['tebaksurah', '/tebaksurah']
-            ], conn.tebaksurah[id][0],fakes, adReply)
+            ], conn.tebaksurah[id][0],m)
             delete conn.tebaksurah[id]
         }, timeout)
     ]

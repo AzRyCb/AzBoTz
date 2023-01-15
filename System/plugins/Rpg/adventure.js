@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 import db from '../../lib/database.js'
 
 const cooldown = 300000
-let handler = async (m, { usedPrefix }) => {
+let handler = async (m, { conn, command, usedPrefix }) => {
 let ke = await fetch('https://random-data-api.com/api/v2/addresses')
 let v = await ke.json()
 let imgr = set.flaaa.getRandom()
@@ -75,9 +75,7 @@ ${set.cmenua}`
 handler.help = ['adventure']
 handler.tags = ['rpg']
 handler.command = /^adv(entur(es?)?)?$/i
-
 handler.cooldown = cooldown
-handler.disabled = false
 
 export default handler
 

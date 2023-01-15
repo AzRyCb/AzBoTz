@@ -20,18 +20,18 @@ const require = createRequire(__dirname) // Bring in the ability to create the '
 const { name, author, version } = require(join(__dirname, '../package.json')) // https://www.stefanjudis.com/snippets/how-to-import-json-files-in-es-modules-node-js/
 const rl = createInterface(process.stdin, process.stdout)
 const { say } = cfonts
-/*
+
 say('Lightweight\nWhatsApp Bot', {
   font: 'chrome',
   align: 'center',
   gradient: ['red', 'magenta']
 })
-say(`'${name}' By @${author.name || author\n${version}}`, {
+say(`'${name}' By @${author.name || author}\n${version}`, {
   font: 'console',
   align: 'center',
   gradient: ['red', 'magenta']
 })
-*/
+
 var isRunning = false
 /**
  * Start a js file
@@ -69,8 +69,10 @@ function start(file) {
   p.on('exit', (_, code) => {
     isRunning = false
     console.error('[❗] Exited with code:', code)
-    if (code == 1) start('./main.js')
-    if (code === 0) return 
+    //start.apply(this, arguments)
+    //if (code = 'SIGKILL') start('./main.js')
+    if (code === '1') start('./main.js')
+    if (code === '0') return 
     watchFile(args[0], () => {
       unwatchFile(args[0])
       start(file)

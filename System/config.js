@@ -1,16 +1,30 @@
-import { watchFile, unwatchFile, readFileSync } from 'fs'
-import chalk from 'chalk'
+import fs, { watchFile, unwatchFile, readFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import moment from 'moment-timezone'
 import {createRequire} from 'module'
-
-
+import axios from 'axios'
+import fetch from 'node-fetch'
+import Func from './lib/func.js'
+import chalk from 'chalk'
 // TODO: reduce global variabel usage
 // let handler = (m, { conn, command, usedPrefix })
 
 //=============『 Utama 』================== //
+//users: db.data.users[m.sender],
+//chat: db.data.chats[m.chat],
+global.npm = {
+fetch: fetch,
+moment: moment,
+chalk: chalk,
+axios: axios,
+Func: Func,
+fs: fs,
+//similarity: similarity,
 
-global.require = createRequire(import.meta.url)
+}
+
+
+//global.require = createRequire(import.meta.url)
 global.wm = set.wm
 global.set = {
   owner: [
@@ -34,14 +48,16 @@ global.set = {
     start: Date.now()
   },
   lolkey: "ed78c137a46873c5b8e5fe3b",
-  xteamkey: "5bd33b276d41d6b4",
+  xteamkey: "HIRO",
   xckey: "7iyNa0qA",
-  zenzkey: '4ea1d2c75b65', //ganti jadi apikey lu kalau expired
-  wm: '❋ཻུ۪۪⸙ Whatsapp Botz Multi-Device ❋ཻུ۪۪',
+  //zenzkey: '4ea1d2c75b65', //ganti jadi apikey lu kalau expired
+  wm: 'Whatsapp bot multi-device',
+  wm3: 'Powered by +6285722037770',
   wm2: '꒷︶꒷꒥꒷ ‧₊˚ ꒰ฅ˘օառɛʀ˘ฅ ꒱ ‧₊˚꒷︶꒷꒥꒷',
   multiplier: 69, // The higher, The harder levelup
   ephemeral: '7',// 86400 = 24jam, kalo ingin di hilangkan ganti '86400' jadi 'null' atau ''
   prems: JSON.parse(readFileSync('System/src/premium.json')), // Premium user has unlimited limit
+  repo: 'https://github.com/AzRyCb/azbot.git',
 
   name: 'AzBoTz',
   dev: 'Az',
@@ -50,7 +66,7 @@ global.set = {
   pack: 'by azbot',
   auth: '',
   lib: 'baileys',
-  gclog: "120363024208795001@g.us", 
+  gclog: "120363046304098301@g.us", 
 
   //link sosmed
   ig: 'https://www.instagram.com/notifikasi_pemberitahuan',
@@ -85,13 +101,13 @@ global.set = {
   fla: 'https://www6.flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=sketch-name&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&fillTextType=1&fillTextPattern=Warning!&text=',
   qrgc: 'https://telegra.ph/file/97eec795fd58f4d658ac6.jpg',
   giflogo: 'https://telegra.ph/file/a46ab7fa39338b1f54d5a.mp4',
-  logobot: readFileSync('System/src/chatbot.png'), // logo chatbot,
+  logobot: readFileSync('System/src/img/chatbot.png'), // logo chatbot,
   thumb: "https://telegra.ph/file/6b4b8ae2ba7f244626a6d.jpg",
-  logo: readFileSync('System/src/logo.jpg'),
+  logo: readFileSync('System/src/img/logo.jpg'),
 
   //tampilan
-  fsizedoc: '9'.repeat(14),
-  fpagedoc: '1'.repeat(10),
+  fsizedoc: '10'.repeat(10),
+  fpagedoc: '1'.repeat(5),
   //fsizedoc = '99999999999999' // default 10TB
   //fpagedoc = '999'
   doc: [
@@ -113,7 +129,7 @@ global.set = {
   ls: "┊",
   htki: "––––––『",
   htka: "』––––––",
-  htjava: "⫹⫺",
+  htjava: pickRandom(["⛶","❏","⫹⫺","☰","⎔","✦","⭔","⬟","⛊","⚝"]),
   dmenub: "┊•",
   dmenut: '❏─┅──┅〈',
   dmenub: '┊•',
@@ -125,7 +141,7 @@ global.set = {
   cmenub: '┊✦ ',
   cmenuf: '┗──┅───────┅๑\n',
   cmenua: '\n⌕ ❙❘❙❙❘❙❚❙❘❙❙❚❙❘❙❘❙❚❙❘❙❙❚❙❘❙❙❘❙❚❙❘ ⌕\n     ',
-  pmenus: '✦',
+  pmenus: pickRandom(["◈","➭","ଓ","⟆•","⳻⳻","•","↬","◈▻","⭑","ᯬ","◉","᭻","»","〆","々","⛥","✗","⚜","⚚","♪"]),
 
   flaaa: [
     "https://flamingtext.com/net-fu/proxy_form.cgi?script=chrominium-logo&_loc=generate&imageoutput=true&script=water-logo&doScale=true&scaleWidth=500&scaleHeight=500&fontsize=100&fillTextType=0&backgroundColor=%23101820&text=",  
@@ -140,8 +156,11 @@ global.set = {
 
   APIs: { // API Prefix
     // name: 'https://website'
-    amel: 'https://melcanz.com',
-    xteam: 'https://api.xteam.xyz',
+    //amel: 'https://melcanz.com', 
+    //xteam: 'https://api.xteam.xyz',
+    dzx : "https://api.dhamzxploit.my.id",
+    xcdr : "https://api-xcoders.site",
+    neoxr : "https://api.neoxr.my.id",
     males: 'https://malesin.xyz',
     lolhuman: 'https://api.lolhuman.xyz',
     violetics : 'https://violetics.pw',
@@ -149,8 +168,10 @@ global.set = {
 
   APIKeys: { // APIKey Here
     // 'https://website': 'apikey'
-    'https://api.xteam.xyz': 'd90a9e986e18778b',
-    'https://melcanz.com': 'EIr5QKC5',
+    //'https://api.xteam.xyz': 'd90a9e986e18778b',
+    //'https://melcanz.com': 'EIr5QKC5',
+    "https://api.neoxr.my.id" : "5VC9rvNx",
+    "https://api-xcoders.site" : "7iyNa0qA",
     'https://api.lolhuman.xyz': 'bukanitucuy14315195',
     'https://violetics.pw' : 'beta',
   },
@@ -172,27 +193,128 @@ global.set = {
 */
 let _uptime = process.uptime() * 1000
 let uptime = "Telah aktif selama: " + await set.clockString(_uptime)
+/*
+global.adReplyS = {
+  fileLength: "999", seconds: "999",
+    contextInfo: {
+      forwardingScore: "999",
+      externalAdReply: {
+          showAdAttribution: true,
+          title: "👋 " + Sapa() + Pagi(),
+          body: uptime,
+          mediaUrl: set.gcbot,
+          description: set.web,
+          previewType: "PHOTO",
+          thumbnail: set.logo,
+          sourceUrl: set.web,
+      }
+    }
+  }
 
+  global.adReply = {
+  fileLength: "999", seconds: "999",
+    contextInfo: {
+      forwardingScore: "999",
+      externalAdReply: {
+          body: author,
+          containsAutoReply: true,
+          mediaType: 1,
+          mediaUrl: sgc,
+          renderLargerThumbnail: true,
+          showAdAttribution: true,
+          sourceId: "WudySoft",
+          sourceType: "PDF",
+          previewType: "PDF",
+          sourceUrl: sgc,
+          thumbnail: await fs.readFileSync("./thumbnail.jpg"),
+          thumbnailUrl: logo,
+          title: "👋 " + Sapa() + Pagi()
+      }
+    }
+  }
+
+  global.fakeig = {
+      contextInfo: {
+        externalAdReply: {
+          showAdAttribution: true,
+          mediaUrl: sig,
+          mediaType: "VIDEO",
+          description: "Follow: " + sig,
+          title: "👋 " + Sapa() + Pagi(),
+          body: author,
+          thumbnailUrl: logo,
+          sourceUrl: sgc
+        }
+      }
+    }
+
+    global.fakefb = {
+      contextInfo: {
+        externalAdReply: {
+          showAdAttribution: true,
+          mediaUrl: sfb,
+          mediaType: "VIDEO",
+          description: "Follow: " + sig,
+          title: "👋 " + Sapa() + Pagi(),
+          body: author,
+          thumbnailUrl: logo,
+          sourceUrl: sgc
+        }
+      }
+    }
+
+    global.faketik = {
+      contextInfo: {
+        externalAdReply: {
+          showAdAttribution: true,
+          mediaUrl: snh,
+          mediaType: "VIDEO",
+          description: "Follow: " + sig,
+          title: "👋 " + Sapa() + Pagi(),
+          body: author,
+          thumbnailUrl: logo,
+          sourceUrl: sgc
+        }
+      }
+    }
+
+    global.fakeyt = {
+      contextInfo: {
+        externalAdReply: {
+          showAdAttribution: true,
+          mediaUrl: syt,
+          mediaType: "VIDEO",
+          description: "Follow: " + sig,
+          title: "👋 " + Sapa() + Pagi(),
+          body: author,
+          thumbnailUrl: logo,
+          sourceUrl: sgc
+        }
+      }
+    }
+*/
 global.adReply = {
-  fileLength: set.fsizedoc, 
-  seconds: set.fsizedoc,
+  fileLength: set.fsizedoc, seconds: set.fsizedoc,
   contextInfo: {
     forwardingScore: set.fsizedoc,
     //mentionedJid: [user],
     //isForwarded: true, // ini biar ada tulisannya diteruskan berkali-kali
     externalAdReply: {
       showAdAttribution: true,
+      containsAutoReply: true,
       title: set.ucapan,
       body: uptime,
       mediaUrl: set.gcbot,
       mediaType: 1,
       description: set.botdate,
       previewType: 'PHOTO',
-      //thumbnailUrl: await(await fetch(set.thumb)).buffer(),
-      //thumbnail: await(await fetch(set.thumb)).buffer(),
+      thumbnailUrl: set.thumb,
       thumbnail: set.logo,
       sourceUrl: set.web,
-      renderLargerThumbnail: false
+      renderLargerThumbnail: false,
+      sourceId: Sapa(),
+      sourceType: "PDF",
+      previewType: "PDF",
     }
   }
 }
@@ -350,3 +472,208 @@ watchFile(file, () => {
   console.log(chalk.redBright("Update 'config.js'"))
   import(`${file}?update=${Date.now()}`)
 })
+
+/* Selamat Pagi */
+function Pagi() {
+	let waktunya = moment.tz("Asia/Jakarta").format("HH")
+	let ucapin = "Selamat malam 🌙"
+	if(waktunya >= 1) {
+		ucapin = "Selamat Pagi 🗿"
+	}
+	if(waktunya >= 4) {
+		ucapin = "Selamat pagi 🌄"
+	}
+	if(waktunya > 10) {
+		ucapin = "Selamat siang ☀️"
+	}
+	if(waktunya >= 15) {
+		ucapin = "Selamat sore 🌅"
+	}
+	if(waktunya >= 18) {
+		ucapin = "Selamat malam 🌙"
+	}
+	if(waktunya >= 24) {
+		ucapin = "Selamat Begadang 🗿"
+	}
+	return ucapin
+}
+
+/* Randomizer */
+function pickRandom(list) {
+     return list[Math.floor(Math.random() * list.length)]
+  }
+  
+  /* Apa Kabar */
+function Sapa() {
+  let Apa = pickRandom(["Apa kabar ", "Halo ", "Hai "])
+  return Apa
+  }
+  
+  /* Fake Reply */
+  function Fakes() {
+let Org = pickRandom(["0", "628561122343", "6288906250517"])
+let Hai = pickRandom(["Apa kabar ", "Halo ", "Hai "])
+let Sarapan = "👋 " + Hai + Pagi()
+let Thum = "/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEABsbGxscGx4hIR4qLSgtKj04MzM4PV1CR0JHQl2NWGdYWGdYjX2Xe3N7l33gsJycsOD/2c7Z//////////////8BGxsbGxwbHiEhHiotKC0qPTgzMzg9XUJHQkdCXY1YZ1hYZ1iNfZd7c3uXfeCwnJyw4P/Zztn////////////////CABEIAEYARgMBIgACEQEDEQH/xAAvAAACAwEBAAAAAAAAAAAAAAAAAwIEBQEGAQEBAQEAAAAAAAAAAAAAAAAAAQID/9oADAMBAAIQAxAAAADEnCzTm0o6l9dSQ2tZIqAZp3lgW3R0F84n1eWZAxdnDpHLdVh6N6pToxM0GdmXql5xOhCOrw0bnmvQzTeRomNX7G5edD0dcDD9EE2UwlzkBrmwBf/EACkQAAICAQMDAwMFAAAAAAAAAAECAAMRBCExEBJBBRMiIFFhIzIzQnH/2gAIAQEAAT8AlaF2xDUi4UcmfFBtExx5j1r3DbmPRvsYylTg9UsFagDmG5i2YXc+YLHByDPefIJgvyRkSwrYCR9HY2cAGNRZ2rhDFpfO6njrkjrp0V3+XgRbFf8AbU0pwUG0tQdhjCr+1bH8y3HeSvHQdNE4S9SYtiZyvBilQISCIzDtAwJ6iEUIEAmDjPiDpQ3bah/M9pTuJgKIVyJ7GeZ6hhbVQcAQsBUF8k5i9MzQ6lbqgCfkIQTBmOyopYzVWi21mHRYnppx+o2DL9AKaO7OTKLyrVqowc7mLZ94bV8TVtmlsmFecbgQROJzfPUiRSJQM3J/vXXfwGaMhmNZGzS1PbtZfsZUJ//EABgRAAMBAQAAAAAAAAAAAAAAAAABETAg/9oACAECAQE/AEVFHMbi+P/EABwRAAEEAwEAAAAAAAAAAAAAACAAAQIREBIxQf/aAAgBAwEBPwA6CorWL+gwxT8z/9k="
+		let fpayment = {
+				key: {
+					participant: Org + "@s.whatsapp.net", remoteJid: "status@broadcast"
+				},
+				message: {
+					requestPaymentMessage: {
+						currencyCodeIso4217: "USD",
+						amount1000: "1000",
+						requestFrom: Org + "@s.whatsapp.net",
+						noteMessage: {
+							extendedTextMessage: {
+								text: Sarapan
+							}
+						},
+						expiryTimestamp: "1000",
+						amount: {
+							value: "1000",
+							offset: "1000",
+							currencyCode: "USD"
+						}
+					}
+				}
+			}
+			let fpoll = {
+			key: {
+				participant: Org + "@s.whatsapp.net", remoteJid: "status@broadcast"
+			},
+			message: {
+				pollCreationMessage: {
+					name: Sarapan
+				}
+			}
+		}
+		let ftroli = {
+			key: {
+				participant: Org + "@s.whatsapp.net", remoteJid: "status@broadcast"
+			},
+			message: {
+				orderMessage: {
+					itemCount: "1000",
+					status: 1,
+					surface: 1,
+					message: `𝗧 𝗜 𝗠 𝗘 : ${moment.tz("Asia/Makassar").format("HH:mm:ss")}`,
+					orderTitle: Sarapan,
+					sellerJid: Org + "@s.whatsapp.net"
+				}
+			}
+		}
+		let fkontak = {
+			key: {
+				participant: Org + "@s.whatsapp.net", remoteJid: "status@broadcast"
+			},
+			message: {
+				contactMessage: {
+					displayName: Sarapan,
+					vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${Sarapan},;;;\nFN:${Sarapan},\nitem1.TEL;waid=${nomorown.split("@")[0]}:${nomorown.split("@")[0]}\nitem1.X-ABLabell:Ponsel\nEND:VCARD`,
+					jpegThumbnail: Thum,
+					thumbnail: Thum,
+					sendEphemeral: true
+				}
+			}
+		}
+		let fvn = {
+			key: {
+				participant: Org + "@s.whatsapp.net", remoteJid: "status@broadcast"
+			},
+			message: {
+				audioMessage: {
+					mimetype: "audio/ogg; codecs=opus",
+					seconds: "1000",
+					ptt: true
+				}
+			}
+		}
+		let fvid = {
+			key: {
+				participant: Org + "@s.whatsapp.net", remoteJid: "status@broadcast"
+			},
+			message: {
+				videoMessage: {
+					title: Sarapan,
+					h: Sarapan,
+					seconds: "1000",
+					caption: Sarapan,
+					jpegThumbnail: Thum
+				}
+			}
+		}
+		let ftextt = {
+			key: {
+				participant: Org + "@s.whatsapp.net", remoteJid: "status@broadcast"
+			},
+			message: {
+				extendedTextMessage: {
+					text: Sarapan,
+					title: `𝗧 𝗜 𝗠 𝗘 : ${moment.tz("Asia/Makassar").format("HH:mm:ss")}`,
+					jpegThumbnail: Thum
+				}
+			}
+		}
+		let fliveLoc = {
+			key: {
+				participant: Org + "@s.whatsapp.net", remoteJid: "status@broadcast"
+			},
+			message: {
+				liveLocationMessage: {
+					caption: Sarapan,
+					h: `𝗧 𝗜 𝗠 𝗘 : ${moment.tz("Asia/Makassar").format("HH:mm:ss")}`,
+					jpegThumbnail: Thum
+				}
+			}
+		}
+		let ftoko = {
+			key: {
+				participant: Org + "@s.whatsapp.net", remoteJid: "status@broadcast"
+			},
+			message: {
+				productMessage: {
+					product: {
+						productImage: {
+							mimetype: "image/jpeg",
+							jpegThumbnail: Thum
+						},
+						title: Sarapan,
+						description: `𝗧 𝗜 𝗠 𝗘 : ${moment.tz("Asia/Makassar").format("HH:mm:ss")}`,
+						currencyCode: "USD",
+						priceAmount1000: "1000",
+						retailerId: "Ghost",
+						productImageCount: 1
+					},
+					businessOwnerJid: Org + "@s.whatsapp.net"
+				}
+			}
+		}
+		let fdocs = {
+			key: {
+				participant: Org + "@s.whatsapp.net", remoteJid: "status@broadcast"
+			},
+			message: {
+				documentMessage: {
+					title: Sarapan,
+					jpegThumbnail: Thum
+				}
+			}
+		}
+		let fgif = {
+			key: {
+				participant: Org + "@s.whatsapp.net", remoteJid: "status@broadcast"
+			},
+			message: {
+				videoMessage: {
+					title: Sarapan,
+					h: Sarapan,
+					seconds: "1000",
+					gifPlayback: true,
+					caption: `𝗧 𝗜 𝗠 𝗘 : ${moment.tz("Asia/Makassar").format("HH:mm:ss")}`,
+					jpegThumbnail: Thum
+				}
+			}
+		}
+		return pickRandom([fdocs, fgif, fkontak, fliveLoc, fpayment, fpoll, ftextt, ftoko, ftroli, fvid, fvn])
+		}

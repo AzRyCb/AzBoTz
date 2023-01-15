@@ -8,8 +8,7 @@ let handler = async (m, { conn }) => {
     conn.sendFile(m.chat, buffer, /video/.test(media.mimetype) ? 'video.mp4' : 'image.jpg', media.caption || '', m)
 }
 
-handler.help = ['readviewonce']
-handler.tags = ['tools']
-handler.command = /^readviewonce/i
+handler.help = handler.command =['readviewonce']
+handler.tags = ['Baileys']
 
 export default handler

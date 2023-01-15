@@ -6,7 +6,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
     conn.tebakgombal = conn.tebakgombal ? conn.tebakgombal : {}
     let id = m.chat
     if (id in conn.tebakgombal) {
-        conn.sendButton(m.chat, 'Masih ada soal belum terjawab di chat ini', set.wm, null, buttons, conn.tebakgombal[id][0],fakes, adReply)
+        conn.sendButton(m.chat, 'Masih ada soal belum terjawab di chat ini', set.wm, null, buttons, conn.tebakgombal[id][0], m)
         throw false
     }
     let res = await fetch(`https://sekha.me/api/game/tebakgombal?apikey=apirey`)
@@ -19,12 +19,12 @@ Ketik ${usedPrefix}hgom untuk bantuan
 Bonus: ${poin} XP
     `.trim()
     conn.tebakgombal[id] = [
-        await conn.sendButton(m.chat, caption, set.wm, `${set.fla + command}`, buttons, fakes, adReply),
+        await conn.sendButton(m.chat, caption, set.wm, `${set.fla + command}`, buttons, m),
         json, poin,
         setTimeout(() => {
             if (conn.tebakgombal[id]) conn.sendButton(m.chat, `Waktu habis!\nJawabannya adalah *${json.jawaban}*`, set.wm, null, [
                 ['tebakgombal', '/tebakgombal']
-            ], conn.tebakgombal[id][0],fakes, adReply)
+            ], conn.tebakgombal[id][0], m)
             delete conn.tebakgombal[id]
         }, timeout)
     ]

@@ -15,7 +15,7 @@ let handler = async (m, { conn, command, args }) => {
   } else conn.reply(m.chat, `[❗] Uang anda tidak mencukupi untuk menabung ${count} money 💹`, m)
 }
 handler.help = ['nabung'].map(v => v + ' <jumlah>')
-handler.tags = ['bank']
+handler.tags = ['rpg']
 handler.command = /^nabung([0-9]+)|nabung|nabungall$/i
 
 export default handler

@@ -5,7 +5,6 @@ const { __dirname } = (await import('../../lib/helper.js')).default
 
 const defaultLang = 'id'
 let handler = async (m, { conn, args, usedPrefix, command }) => {
-
   let lang = args[0]
   let text = args.slice(1).join(' ')
   if ((args[0] || '').length !== 2) {
@@ -22,7 +21,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     if (!text) throw `Use example ${usedPrefix}${command} en hello world`
     res = await tts(text, defaultLang)
   } finally {
-    if (res) conn.sendFile(m.chat, res, 'tts.opus', null, m, true)
+    if (res) await conn.sendFile(m.chat, res, '', '', fakes, null, adReply)
   }
 }
 handler.help = ['tts <lang> <teks>']
@@ -36,7 +35,7 @@ function tts(text, lang = 'id') {
   return new Promise((resolve, reject) => {
     try {
       let tts = gtts(lang)
-      let filePath = join(__dirname(import.meta.url), '../tmp', (1 * new Date) + '.wav')
+      let filePath = join(__dirname(import.meta.url), '../../../tmp', (1 * new Date) + '.wav')
       tts.save(filePath, text, () => {
         resolve(readFileSync(filePath))
         unlinkSync(filePath)

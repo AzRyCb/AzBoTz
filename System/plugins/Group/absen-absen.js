@@ -4,7 +4,7 @@ let handler = async (m, { conn, groupMetadata, usedPrefix }) => {
     if (!(id in conn.absen)) {
         conn.sendButton(m.chat, `Tidak ada absen berlangsung!`, set.wm, null, [
         ['Mulaiabsen', `${usedPrefix}mulaiabsen`]
-    ], fakes, adReply)
+    ], m)
         throw false
     }
     
@@ -30,7 +30,7 @@ ${conn.absen[id][2]}
 ${list}
 ┗┅────────┅✦
 `
-conn.sendButton(m.chat, caption, set.wm, null, [['absen', `${usedPrefix}absen`], ['cekabsen', `${usedPrefix}cekabsen`]], fakes, adReply, { mentions: conn.parseMention(caption) })
+conn.sendButton(m.chat, caption, set.wm, null, [['absen', `${usedPrefix}absen`], ['cekabsen', `${usedPrefix}cekabsen`]], m, { mentions: conn.parseMention(caption) })
 
 
 }

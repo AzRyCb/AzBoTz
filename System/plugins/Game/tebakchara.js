@@ -5,7 +5,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
     conn.tebakchara = conn.tebakchara ? conn.tebakchara : {}
     let id = m.chat
     if (id in conn.tebakchara) {
-        conn.sendButton(m.chat, 'Masih ada soal belum terjawab di chat ini', set.wm, null, buttons, conn.tebakchara[id][0], fakes, adReply)
+        conn.sendButton(m.chat, 'Masih ada soal belum terjawab di chat ini', set.wm, null, buttons, conn.tebakchara[id][0], m)
         throw false
     }
     let res = await fetch('https://api.jikan.moe/v4/characters')
@@ -20,12 +20,12 @@ Ketik ${usedPrefix}hcha untuk hint
 Bonus: ${poin} XP
     `.trim()
     conn.tebakchara[id] = [
-        await conn.sendButton(m.chat, caption, set.wm, `${json.images.jpg.image_url}`, buttons, fakes, adReply),
+        await conn.sendButton(m.chat, caption, set.wm, `${json.images.jpg.image_url}`, buttons, m),
         json, poin,
         setTimeout(() => {
             if (conn.tebakchara[id]) conn.sendButton(m.chat, `Waktu habis!\nJawabannya adalah *${json.name}*\nKanji : ${json.name_kanji}\n*Url :* ${json.url}\n*Desk :* ${json.about}`, set.wm, json.images.jpg.image_url, [
                 ['tebakchara', '/tebakchara']
-            ], conn.tebakchara[id][0], fakes, adReply)
+            ], conn.tebakchara[id][0], m)
             delete conn.tebakchara[id]
         }, timeout)
     ]

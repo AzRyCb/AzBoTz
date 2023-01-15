@@ -8,7 +8,7 @@ let ar = Object.keys(plugins)
     let ar1 = ar.map(v => v.replace('.js', ''))
     if (!text) throw `uhm.. where the text?\n\nexample:\n${usedPrefix + command} info`
     if (!ar1.includes(args[0])) return conn.reply(m.chat, `*🗃️ NOT FOUND!*\n==================================\n\n${ar1.map(v => ' ' + v).join`\n`}`)
-const file = join(__dirname, '../System/plugins/' + args[0] + '.js')
+const file = join(__dirname, '../plugins/' + args[0] + '.js')
 unlinkSync(file)
 conn.reply(m.chat, `Succes deleted "plugins/${args[0]}.js"`, m)
     

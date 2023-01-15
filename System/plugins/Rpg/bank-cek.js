@@ -15,7 +15,7 @@ ${set.dmenuf}
   conn.sendButton(m.chat, caption, set.wm, 'https://telegra.ph/file/0451b07945f7f9633b59b.jpg', [`Inventory`, '.inv'],m)
 }
 handler.help = ['bank']
-handler.tags = ['bank']
+handler.tags = ['rpg']
 handler.command = /^(bank(cek)?|cekbank)$/i
 
 export default handler

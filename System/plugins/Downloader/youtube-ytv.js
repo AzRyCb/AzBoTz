@@ -60,7 +60,6 @@ try {
      }}
   })
   } catch {
-  try {
 let res = await axios('https://violetics.pw/api/downloader/youtube?apikey=beta&url=' + text)
 let json = res.data
 let dapet = json.result.url
@@ -75,10 +74,7 @@ let dapet = json.result.url
 		footerText: set.wm
 	}
 	return conn.sendListM(m.chat, button, row, m)
-  } catch (err) {
-    conn.reply(m.chat, set.error)
-    console.error(err)
-  }}
+}
 }
 handler.help = ['mp4', 'v', ''].map(v => 'yt' + v + ` <url> <without message>`)
 handler.tags = ['downloader']

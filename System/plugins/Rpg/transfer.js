@@ -15,7 +15,7 @@ async function handler(m, { conn, args, usedPrefix, command }) {
 example ${usedPrefix}${command} money 9999 @621927237001
 
 📍 Transferable items
-${item.map(v => `${rpg.emoticon(v)}${v}`.trim()).join('\n')}
+${item.map(v => `${set.rpg.emoticon(v)}${v}`.trim()).join('\n')}
 `.trim()
     const type = (args[0] || '').toLowerCase()
     if (!item.includes(type)) return conn.reply(m.chat, lol)
@@ -23,9 +23,9 @@ ${item.map(v => `${rpg.emoticon(v)}${v}`.trim()).join('\n')}
     let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : args[2] ? (args[2].replace(/[@ .+-]/g, '') + '@s.whatsapp.net') : ''
     if (!who) return conn.reply(m.chat, 'Tag salah satu, atau ketik Nomernya!!')
     if (!(who in db.data.users)) return conn.reply(m.chat, `User ${who} not in database`)
-    if (user[type] * 1 < count) return conn.reply(m.chat, `Your *${rpg.emoticon(type)}${type}${special(type)}* is less *${count - user[type]}*`)
+    if (user[type] * 1 < count) return conn.reply(m.chat, `Your *${set.rpg.emoticon(type)}${type}${special(type)}* is less *${count - user[type]}*`)
     let confirm = `
-Are you sure you want to transfer *${count}* ${rpg.emoticon(type)}${type}${special(type)} to *@${(who || '').replace(/@s\.whatsapp\.net/g, '')}*
+Are you sure you want to transfer *${count}* ${set.rpg.emoticon(type)}${type}${special(type)} to *@${(who || '').replace(/@s\.whatsapp\.net/g, '')}*
 Timeout *60* detik
 `.trim()
     let c = set.namebot
@@ -58,11 +58,11 @@ handler.before = async m => {
         let _previous = _user[type] * 1
         user[type] -= count * 1
         _user[type] += count * 1
-        if (previous > user[type] * 1 && _previous < _user[type] * 1) this.reply(m.chat, `Succes transfer *${count}* ${rpg.emoticon(type)}${type}${special(type)} to *@${(to || '').replace(/@s\.whatsapp\.net/g, '')}*`, null, { mentions: [to] })
+        if (previous > user[type] * 1 && _previous < _user[type] * 1) this.reply(m.chat, `Succes transfer *${count}* ${set.rpg.emoticon(type)}${type}${special(type)} to *@${(to || '').replace(/@s\.whatsapp\.net/g, '')}*`, null, { mentions: [to] })
         else {
             user[type] = previous
             _user[type] = _previous
-            this.reply(m.chat, `Failted to transfer *${count}* ${rpg.emoticon(type)}${type}${special(type)} to *@${(to || '').replace(/@s\.whatsapp\.net/g, '')}*`, null, { mentions: [to] })
+            this.reply(m.chat, `Failted to transfer *${count}* ${set.rpg.emoticon(type)}${type}${special(type)} to *@${(to || '').replace(/@s\.whatsapp\.net/g, '')}*`, null, { mentions: [to] })
         }
         clearTimeout(timeout)
         delete confirmation[sender]

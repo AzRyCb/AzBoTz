@@ -30,7 +30,7 @@ ${isOwner ? `*${set.dmenub} isBotAdmin :* [ ${!!groups[i].participants.find(v =>
 *${set.dmenub} Creation :* ${new Date(groups[i].creation* 1000).toDateString()}
 *${set.dmenub} Size :* ${groups[i].size}
 ${set.dmenuf}`
-      await conn.sendButton(m.chat, str, set.wm, ppgc ? ppgc : set.logo, ['B A C K', '.menu'], fakes, adReply)
+      await conn.sendButton(m.chat, str, set.wm, ppgc ? ppgc : set.logo, ['B A C K', '.menu'], m)
        break
     default:
       if (!/[01]/.test(command)) return conn.sendList(m.chat, set.htki + ' 📺 Group List 🔎 ' + set.htka, `⚡ Silakan pilih Group List di tombol di bawah...\n*Teks yang anda kirim:* ${text ? text : 'Kosong'}\n\nKetik ulang *${usedPrefix + command}* teks anda untuk mengubah teks lagi`, set.wm, `☂️ Group List Disini ☂️`, listSections, m)

@@ -5,7 +5,7 @@ let handler = async (m, { conn }) => {
     let json = conn.tebaksurah[id][1]
     conn.sendButton(m.chat, '```' + json.surah.englishName.replace(/[AIUEOaiueo]/ig, '_') + '```', set.wm, null, [
         ['Nyerah', 'menyerah']
-    ], fakes, adReply)
+    ], m)
 }
 handler.command = /^hsur$/i
 

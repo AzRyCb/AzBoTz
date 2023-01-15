@@ -5,7 +5,7 @@ import {createServer} from 'http'
 import { Server } from 'socket.io'
 import {toBuffer} from 'qrcode'
 import fetch from 'node-fetch'
-const { opts, __dirname } = (await import('./System/lib/helper.js')).default 
+const { opts, __dirname } = (await import('./lib/helper.js')).default 
 
 function connect(conn, PORT) {
     let app = global.app = express()
@@ -30,7 +30,8 @@ function connect(conn, PORT) {
 
     server.listen(PORT, () => {
         console.log('App listened on port', PORT)
-        if (opts['keepalive']) keepAlive()
+        //if (opts['keepalive']) 
+        keepAlive()
     })
 }
 

@@ -9,12 +9,68 @@ import didyoumean from 'didyoumean'
 import similarity from 'similarity'
 import { plugins } from  '../../lib/plugins.js'
 let { downloadContentFromMessage } = (await import('@adiwajshing/baileys'));
-
+const linkRegex = /chat.whatsapp.com\/(?:invite\/)?([0-9A-Za-z]{20,24})/i
+const isSatir = /(([Kk]enao|[Bb]ims|[Aa]v)a|tumlul|Tumlul|[Gg]wejh|[Oo]kgey|[Ss]iava|[Kk]avan|tenan|[Aa](msu|f[ah])|[Mm]gak|lmao|[Pp]edo|([Bb]an|hoo)h|[Kk]nf)/i // tambahin sendiri
+const isToxic = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|a(su|sw|syu)/i // tambahin sendiri
 export async function before(m, { conn, args, usedPrefix, isAdmin, isBotAdmin, isOwner, match,  command }) {
 
 let chat = db.data.chats[m.chat]
 let setting = db.data.settings[conn.user.jid]
 let user = db.data.users[m.sender]
+
+const isGroupLink = linkRegex.exec(m.text)
+if (db.data.chats[m.chat].antiLink && isGroupLink && !isAdmin) {
+    if (m.isBaileys && m.fromMe) return !0
+    if (!m.isGroup) return !1
+    if (isBotAdmin) {
+        const linkThisGroup = `https://chat.whatsapp.com/${await this.groupInviteCode(m.chat)}`
+        if (m.text.includes(linkThisGroup)) return !0
+    }
+        await conn.sendButton(m.chat, `*Group link detect!*${isBotAdmin ? '' : '\n\n_Bot not admin_  t_t'}`, wm, ['off antilink', '/disable antilink'], m)
+        if (isBotAdmin && setting.restrict) {
+            await conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
+        } else if (!setting.restrict) return conn.reply(m.chat, 'Owner disable auto kick!')
+    }
+
+let regVirtex = /(PLHIPS|৭৭|๑๑|๒๒|[Đৡดผ๖⃝-⃟⃢-⃤㜸])/i
+let isVirtexOn = regVirtex.exec(m.text)
+if (chat.security && isVirtexOn && !m.fromMe) {
+    if (m.isBaileys && m.fromMe) return !0
+    if (!m.isGroup) return !1
+        conn.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
+            await conn.groupParticipantsUpdate(m.chat, [m.sender], "remove")
+            await conn.sendButton(m.chat, `*Font Virtext detect!*${isBotAdmin ? '' : '\n\n_Bot bukan admin_'}`, set.wm, ['off antivirtex', '/disable antivirtex'], m)
+        if (isBotAdmin && setting.restrict) {
+            conn.reply(m.chat, 'Kick!')
+                await conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
+        } else if (!setting.restrict) return conn.reply(m.chat, 'Mungkin dia atmin!')
+    }
+
+const isAntiToxic = isToxic.exec(m.text)
+if (chat.antiToxic && isAntiToxic) {
+    if (m.isBaileys && m.fromMe) return !0
+    if (!m.isGroup) return !1
+        conn.sendButton(m.chat, `*Kata Kasar Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, 'Utamakan kesopanan dalam mengetik', ['off antitoxic', '.off antitoxic'], m, adReply)
+        if (isBotAdmin && setting.restrict) {
+            // await conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
+    db.data.users[m.sender].warn += 1
+    //db.data.users[m.sender].banned = true
+    return conn.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id:  m.key.id, participant: m.key.participant }})
+        } else if (!setting.restrict) return conn.reply(m.chat, 'bertaubatlah sebelum kematian')
+    }
+
+const isAntiSatir = isSatir.exec(m.text)
+if (chat.antiSatir && isAntiSatir) {
+    if (m.isBaileys && m.fromMe) return !0
+    if (!m.isGroup) return !1
+        conn.sendButton(m.chat, `*Kata Satir Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, wm, ['off antisatir', '/disable antisatir'], m)
+        if (isBotAdmin && setting.restrict) {
+            // await conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
+    db.data.users[m.sender].warn += 1
+    //db.data.users[m.sender].banned = true
+    return conn.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
+        } else if (!setting.restrict) return conn.reply(m.chat, 'Biar ngapa kek gitu!')
+    }
 
 if (!chat.latestNews) chat.latestNews = []
 if (chat && chat.updateAnimeNews) {
@@ -116,7 +172,7 @@ let img = await m.download?.()
 if (!img) return
 stiker = await sticker(img, false, set.packname, set.author)
 } else if (/video/g.test(mime)) {
-if (/video/g.test(mime)) if ((m.msg || m).seconds > 8) return await conn.sendButton(m.chat, '*VIDEO TIDAK BOLEH LEBIH DARI 7 DETIK*', set.wm, [['NONAKTIFKAN AUTOSTIKER', '/disable autosticker']], fakes, adReply)
+if (/video/g.test(mime)) if ((m.msg || m).seconds > 8) return await conn.sendButton(m.chat, '*VIDEO TIDAK BOLEH LEBIH DARI 7 DETIK*', set.wm, [['NONAKTIFKAN AUTOSTIKER', '/disable autosticker']], m)
 let img = await m.download()
 if (!img) return
 stiker = await sticker(img, false, set.packname, set.author)

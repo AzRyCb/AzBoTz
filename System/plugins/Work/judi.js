@@ -8,12 +8,12 @@ async function handler(m, { conn, args }) {
     try {
         let user = db.data.users[m.sender]
         let count = (args[0] && number(parseInt(args[0])) ? Math.max(parseInt(args[0]), 1) : /all/i.test(args[0]) ? Math.floor(parseInt(user.money)) : 1) * 1
-        if ((user.money * 1) < count) return m.reply('💵Uang kamu tidak cukup!!')
+        if ((user.money * 1) < count) return conn.reply(m.chat, '💵Uang kamu tidak cukup!!')
         if (!(m.sender in confirm)) {
             confirm[m.sender] = {
                 sender: m.sender,
                 count,
-                timeout: setTimeout(() => (m.reply('timed out'), delete confirm[m.sender]), 60000)
+                timeout: setTimeout(() => (conn.reply(m.chat, 'timed out'), delete confirm[m.sender]), 60000)
             }
             let txt = '⚠️Warning⚠️\n*Jangan judi karena tidak akan menang, BENERAN!!*\nApakah anda yakin (pikirkan baik-baik) mau melakukan judi (Y/n) (60s Timeout)'
             return conn.sendButton(m.chat, txt, set.wm, null, [['y'], ['n']], m)
@@ -25,7 +25,7 @@ async function handler(m, { conn, args }) {
             let { timeout } = confirm[m.sender]
             clearTimeout(timeout)
             delete confirm[m.sender]
-            m.reply('Rejected')
+            conn.reply(m.chat, 'Rejected')
         }
     }
 }
@@ -51,7 +51,7 @@ handler.before = async m => {
                 status = 'Seri'
                 user.money += (Math.floor(count / 1.5)) * 1
             }
-            m.reply(`
+            this.reply(m.chat, `
 Bot roll: *${Bot}*
 Kamu roll: *${Kamu}*
 
@@ -63,7 +63,7 @@ Kamu *${status}*, kamu ${status == 'Menang' ? `Mendapatkan *+${count * 2}*` : st
         } else if (/^no?$/i.test(txt)) {
             clearTimeout(timeout)
             delete confirm[m.sender]
-            m.reply('Rejected')
+            this.reply(m.chat, 'Rejected')
             return !0
         }
 
@@ -71,7 +71,7 @@ Kamu *${status}*, kamu ${status == 'Menang' ? `Mendapatkan *+${count * 2}*` : st
         clearTimeout(timeout)
         delete confirm[m.sender]
         if (moneyDulu > (user.money * 1)) user.money = moneyDulu * 1
-        m.reply('Error saat melakukan judi (Rejected)')
+        this.reply(m.chat, 'Error saat melakukan judi (Rejected)')
         return !0
     } finally {
         clearTimeout(timeout)

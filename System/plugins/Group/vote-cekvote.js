@@ -5,7 +5,7 @@ let handler = async (m, { conn, groupMetadata, usedPrefix }) => {
     if (!(id in conn.vote)) await conn.sendButton(m.chat, `Tidak ada voting digrup ini!`, author, null, [
     ['vote', `${usedPrefix}+vote`],
     ['menu', `${usedPrefix}menu`]
-], fakes, adReply)
+], m)
 
     let [reason, upvote, devote] = conn.vote[id]
     let caption = `*${set.htjava} DAFTAR VOTE ${set.htjava}*
@@ -27,7 +27,7 @@ await conn.sendButton(m.chat, caption, set.wm, null, [
         ['upvote', `${usedPrefix}upvote`],
         ['devote', `${usedPrefix}devote`],
         ['hapusvote', `${usedPrefix}-vote`]
-    ], fakes, adReply, { mentions: conn.parseMention(caption) })
+    ], m, { mentions: conn.parseMention(caption) })
 }
 handler.help = ['cekvote']
 handler.tags = ['vote']

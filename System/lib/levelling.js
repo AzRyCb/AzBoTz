@@ -12,10 +12,10 @@ const __dirname1 = __dirname(import.meta.url)
 export function levelup(teks, level) {
     return new Promise(async (resolve, reject) => {
         if (!(global.set.support.convert || global.set.support.magick || global.set.support.gm)) return reject('Not Support!')
-        const font = join(__dirname1, '../System/src/font')
-        let fontLevel = join(font, './level_c.otf')
+        const font = join(__dirname1, '../../src/font')
+        let fontLevel = join(font, './src/level_c.otf')
         let fontTexts = join(font, './texts.otf')
-        let xtsx = join(__dirname1, '../System/src/lvlup_template.jpg')
+        let xtsx = join(__dirname1, '../../src/img/lvlup_template.jpg')
         let anotations = '+1385+260' // gapake else if kadang error
         if (level > 2) anotations = '+1370+260'
         if (level > 10) anotations = '+1330+260'

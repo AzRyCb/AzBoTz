@@ -11,7 +11,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!res.ok) throw await res.text()
     let json = await res.json()
     if (!json.results) throw 'Error!'
-    let ztick = readFileSync(`System/src/media/bronya.webp`)
+    let ztick = readFileSync(`System/src/sticker/bronya.webp`)
     try {
         const stiker = await sticker(false, json.results[0].url, global.packname, global.author)
         await conn.sendFile(m.chat, stiker, 'sticker.webp', '', m)

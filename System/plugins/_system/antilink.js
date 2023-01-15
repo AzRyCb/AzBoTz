@@ -23,7 +23,7 @@ const isAntiLinkIg = isLinkIg.exec(m.text)
 const isAntiLinkHttp = isLinkHttp.exec(m.text)
  
 if (chat.antiLinkTik && isAntiLinkTik) {
-    await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinktik', '/disable antilinktik'], fakes, adReply)
+    await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinktik', '/disable antilinktik'], m)
     if (isBotAdmin && bot.restrict) {
     user.warn += 1
     //user.banned = true
@@ -33,7 +33,7 @@ if (chat.antiLinkTik && isAntiLinkTik) {
 }
     
 if (chat.antiLinkYt && isAntiLinkYt) {
-    await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinkyt', '/disable antilinkyt'], fakes, adReply)
+    await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinkyt', '/disable antilinkyt'], m)
         if (isBotAdmin && bot.restrict) {
     user.warn += 1
     //user.banned = true
@@ -43,7 +43,7 @@ if (chat.antiLinkYt && isAntiLinkYt) {
     }
     
 if (chat.antiLinkTel && isAntiLinkTel) {
-        await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinktel', '/disable antilinktel'], fakes, adReply)
+        await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinktel', '/disable antilinktel'], m)
         if (isBotAdmin && bot.restrict) {
     user.warn += 1
     //user.banned = true
@@ -53,7 +53,7 @@ if (chat.antiLinkTel && isAntiLinkTel) {
 }
     
 if (chat.antiLinkFb && isAntiLinkFb) {
-        await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinkfb', '/disable antilinkfb'], fakes, adReply)
+        await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinkfb', '/disable antilinkfb'], m)
         if (isBotAdmin && bot.restrict) {
     user.warn += 1
     //user.banned = true
@@ -63,7 +63,7 @@ if (chat.antiLinkFb && isAntiLinkFb) {
 }
     
 if (chat.antiLinkIg && isAntiLinkIg) {
-        await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinkig', '/disable antilinkig'], fakes, adReply)
+        await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinkig', '/disable antilinkig'], m)
         if (isBotAdmin && bot.restrict) {
     user.warn += 1
     //user.banned = true
@@ -73,7 +73,7 @@ if (chat.antiLinkIg && isAntiLinkIg) {
 }
     
 if (chat.antiLinkWa && isAntiLinkWa) {
-        await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinkwa', '/disable antilinkwa'], fakes, adReply)
+        await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antilinkwa', '/disable antilinkwa'], m)
         if (isBotAdmin && bot.restrict) {
     user.warn += 1
     //user.banned = true
@@ -83,7 +83,7 @@ if (chat.antiLinkWa && isAntiLinkWa) {
 }
     
 if (chat.antiLinkHttp && isAntiLinkHttp) {
-        await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antihatetepe', '/disable antihatetepe'], fakes, adReply)
+        await conn.sendButton(m.chat, `*Link Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, set.wm, ['off antihatetepe', '/disable antihatetepe'], m)
         if (isBotAdmin && bot.restrict) {
     user.warn += 1
     //user.banned = true

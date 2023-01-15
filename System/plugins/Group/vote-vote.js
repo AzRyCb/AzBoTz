@@ -5,7 +5,7 @@ let handler = async (m, { conn, groupMetadata, usedPrefix, command }) => {
     if (!(id in conn.vote)) await conn.sendButton(m.chat, `Tidak ada voting digrup ini!`, set.wm, null, [
     ['vote', `${usedPrefix}+vote`],
     ['venu', `${usedPrefix}menu`]
-], fakes, adReply)
+], m)
     let isVote = conn.vote[id][1].concat(conn.vote[id][2])
     const wasVote = isVote.includes(m.sender)
     if (wasVote) throw 'Kamu sudah vote!'
@@ -34,7 +34,7 @@ ${set.dmenuf}
 await conn.sendButton(m.chat, caption, set.wm, null, [
         ['upvote', `${usedPrefix}upvote`],
         ['devote', `${usedPrefix}devote`]
-    ], fakes, adReply, { mentions: conn.parseMention(caption) })
+    ], m, { mentions: conn.parseMention(caption) })
 }
 handler.help = ['upvote', 'devote']
 handler.tags = ['vote']

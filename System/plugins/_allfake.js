@@ -2,7 +2,6 @@
 import fetch from 'node-fetch'
 import {readFileSync } from 'fs'
 import Func from '../lib/func.js'
-import knights from 'knights-canvas'
 
 //let handler = m => m
 //handler.all = async function (m) {
@@ -10,27 +9,14 @@ export async function all(m) {
 let who = m.sender ? m.sender : this.user.jid && this.user.jid ? this.user.jid : '0@s.whatsapp.net'
 let name = await this.getName(who)
 let curr = ['AED','AFN','ALL','AMD','ANG','AOA','ARS','AUD','AWG','AZN','BAM','BBD','BDT','BGN','BHD','BIF','BMD','BND','BOB','BOV','BRL','BSD','BTN','BWP','BYR','BZD','CAD','CDF','CHE','CHF','CHW','CLF','CLP','CNY','COP','COU','CRC','CUC','CUP','CVE','CZK','DJF','DKK','DOP','DZD','EGP','ERN','ETB','EUR','FJD','FKP','GBP','GEL','GHS','GIP','GMD','GNF','GTQ','GYD','HKD','HNL','HRK','HTG','HUF','IDR','ILS','INR','IQD','IRR','ISK','JMD','JOD','JPY','KES','KGS','KHR','KMF','KPW','KRW','KWD','KYD','KZT','LAK','LBP','LKR','LRD','LSL','LTL','LVL','LYD','MAD','MDL','MGA','MKD','MMK','MNT','MOP','MRO','MUR','MVR','MWK','MXN','MXV','MYR','MZN','NAD','NGN','NIO','NOK','NPR','NZD','OMR','PAB','PEN','PGK','PHP','PKR','PLN','PYG','QAR','RON','RSD','RUB','RWF','SAR','SBD','SCR','SDG','SEK','SGD','SHP','SLL','SOS','SRD','SSP','STD','SYP','SZL','THB','TJS','TMT','TND','TOP','TRY','TTD','TWD','TZS','UAH','UGX','USD','USN','USS','UYI','UYU','UZS','VEF','VND','VUV','WST','XAF','XAG','XAU','XBA','XBB','XBC','XBD','XCD','XDR','XFU','XOF','XPD','XPF','XPT','XTS','XXX','YER','ZAR','ZMW'].getRandom()
-let pp = await this.profilePictureUrl(who, 'image').catch(_ => readFileSync('./System/src/avatar_contact.png'))
+let pp = await this.profilePictureUrl(who).catch(_ => readFileSync('System/src/img/avatar_contact.png'))
 let _uptime = process.uptime() * 1000
 let uptime = "Telah aktif selama: " + await set.clockString(_uptime)
-/*
-// Fake Knight
-let imagea = await new knights.Jo().setImage(pp).toBuild();
-let dataa = imagea.toBuffer();
-let imageb = await new knights.Patrick().setAvatar(pp).toAttachment();
-let datab = imageb.toBuffer();
-let imagec = await new knights.Bonk().setAvatar1(pp).setAvatar2(pp).toBuild();
-let datac = imagec.toBuffer();
-let imaged = await new knights.Burn().setAvatar(pp).toAttachment();
-let datad = imaged.toBuffer();
-*/
+
 // jpegThumbnail
 let _situm = await Func.resize(set.thumbnailUrl.getRandom(), 300, 150)
 let sipp = await Func.resize(pp, 150, 150)
 		
-// Fake adReply
-
-  
 
 global.set.fakeig = {
 fileLength: set.fsizedoc, seconds: set.fsizedoc,
@@ -263,7 +249,6 @@ let fgif = {
 	}
 }
 // Global Fake
-//global.set.knimg = [dataa, datab, datac, datad].getRandom() //dataa
 global.fakes = [fdocs, fgif, fkontak, fliveLoc, fpayment, fpoll, ftextt, ftoko, ftroli, fvid, fvn].getRandom()
 global.set.fkontak = fkontak
 global.set.tumhiho = _situm

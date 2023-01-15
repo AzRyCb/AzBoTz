@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 import uploadImage from '../../lib/uploadImage.js'
-
+import { readFileSync } from 'fs'
 let toM = a => '@' + a.split('@')[0]
 let handler = async(m, { conn, groupMetadata, usedPrefix, text, args, command }) => {
 /*
@@ -240,8 +240,8 @@ let ps = groupMetadata.participants.map(v => v.id)
     let ia = `${toM(a)}`
     let ib = `${toM(b)}`
     
-    let sia = await conn.profilePictureUrl(ia).catch(_ => '../../src/avatar_contact.png')
-    let sib = await conn.profilePictureUrl(ib).catch(_ => '../../src/avatar_contact.png')
+    let sia = await conn.profilePictureUrl(ia).catch(_ =>  readFileSync('System/src/img/avatar_contact.png'))
+    let sib = await conn.profilePictureUrl(ib).catch(_ =>  readFileSync('System/src/img/avatar_contact.png'))
 
     let urla = await uploadImage(sia)
     let urlb = await uploadImage(sib)

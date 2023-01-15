@@ -9,7 +9,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         if (!audio) throw 'Can\'t download audio!'
         if (!args[0] || !args[1]) throw `example: ${usedPrefix + command} 00:00:30 00:00:30`
             let ran = (new Date * 1) + '.mp3'
-            let media = '../tmp/' + ran
+            let media = '../../../tmp/' + ran
             let filename = media + '.mp3'
             await promises.writeFile(media, audio)
             exec(`ffmpeg -ss ${args[0]} -i ${media} -t ${args[1]} -c copy ${filename}`, async (err) => {
@@ -21,7 +21,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
                 await promises.unlink(filename)
             })
 }
-handler.help = ['cut'].map(v => v + ' <text>')
+handler.help = ['cutmp3'].map(v => v + ' <text>')
 handler.tags = ['tools']
 handler.command = /^(potong(audio|mp3)|cut(audio|mp3))$/i
 

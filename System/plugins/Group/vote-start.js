@@ -6,7 +6,7 @@ let handler = async (m, { conn, text, usedPrefix, isAdmin, isOwner }) => {
     let id = m.chat
     if (id in conn.vote) await conn.sendButton(m.chat, `*Masih ada vote di chat ini!*`, set.wm, null, [
                 ['hapus', `${usedPrefix}-vote`]
-            ], fakes, adReply)
+            ], m)
             let caption = `${set.htjava} MULAI VOTE ${set.htjava}
 ${set.dmenub} *${usedPrefix}upvote* - untuk setuju
 ${set.dmenub} *${usedPrefix}devote* - untuk tidak setuju
@@ -16,7 +16,7 @@ ${set.dmenuf}`
             await conn.sendButton(m.chat, caption, set.wm, null, [
                 ['upvote', `${usedPrefix}upvote`],
                 ['devote', `${usedPrefix}devote`]
-            ], fakes, adReply)
+            ], m)
     conn.vote[id] = [
         text,
         [],

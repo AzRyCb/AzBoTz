@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 import { Sticker } from 'wa-sticker-formatter'
-
+const { API } = (await import('../../lib/helper.js')).default 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
 	let [emoji1, emoji2] = text.split`+`
 	if (emoji1 && emoji2) {

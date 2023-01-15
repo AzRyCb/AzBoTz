@@ -1,8 +1,6 @@
 
 import { youtubeSearch, youtubedl, youtubedlv2, youtubedlv3 } from '@bochilteam/scraper'
 import fetch from 'node-fetch'
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
 
 let handler = async (m, { conn, text, args, usedPrefix, command }) => {
 	if (!text) throw `Example: ${usedPrefix + command} Sia Unstopable`
@@ -101,8 +99,8 @@ let handler = async (m, { conn, text, args, usedPrefix, command }) => {
 			try {
 				let anu2 = await fetch(`https://api.lolhuman.xyz/api/ytplay?apikey=${global.api}&query=${encodeURIComponent(text)}`)
 				let anu = await anu2.json()
-				let ini_txt = `📌 *${anu.result.info.title}*\n\n`
-				ini_txt += `🪶 *Author :* ${anu.result.info.uploader}\n`
+				let ini_txt = `📌 *${anu.result.title}*\n\n`
+				ini_txt += `🪶 *Author :* ${anu.result.info.author}\n`
 				ini_txt += `⌚ *Duration :* ${anu.result.info.duration}\n`
 				ini_txt += `👁️ *Views :* ${anu.result.info.view}\n`
 				ini_txt += `🌀 *Url :* https://youtu.be/${anu.result.info.id}`
@@ -117,8 +115,8 @@ let handler = async (m, { conn, text, args, usedPrefix, command }) => {
 					let anu = await anu2.json()
 					let ini_txt = `📌 *${anu.result.title}*\n`
 					conn.sendButton(m.chat, ini_txt, set.wm, anu.result.thumbnail, [
-						[`🎧 Audio`, `${usedPrefix}yta https://youtu.be/${anu.result.thumbnail.split('/')[4]}`],
-						[`🎥 Video`, `${usedPrefix}ytv https://youtu.be/${anu.result.thumbnail.split('/')[4]}`]
+						[`🎧 Audio`, `${usedPrefix}yta https://youtu.be/${anu.result.info.thumbnail.split('/')[4]}`],
+						[`🎥 Video`, `${usedPrefix}ytv https://youtu.be/${anu.result.info.thumbnail.split('/')[4]}`]
 					], m)
 				} catch (e) {
 					console.error(e)

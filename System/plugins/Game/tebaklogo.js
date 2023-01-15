@@ -5,7 +5,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
     conn.tebaklogo = conn.tebaklogo ? conn.tebaklogo : {}
     let id = m.chat
     if (id in conn.tebaklogo) {
-        conn.sendButton(m.chat, 'Masih ada soal belum terjawab di chat ini', set.wm, null, buttons, conn.tebaklogo[id][0], fakes, adReply)
+        conn.sendButton(m.chat, 'Masih ada soal belum terjawab di chat ini', set.wm, null, buttons, conn.tebaklogo[id][0], m)
         throw false
     }
     let res = await fetch(`https://api.akuari.my.id/games/tebakapp`)
@@ -18,12 +18,12 @@ Ketik ${usedPrefix}hlog untuk hint
 Bonus: ${poin} XP
     `.trim()
     conn.tebaklogo[id] = [
-        await conn.sendButton(m.chat, caption, set.wm, json.hasil.data.image, buttons, fakes, adReply),
+        await conn.sendButton(m.chat, caption, set.wm, json.hasil.data.image, buttons, m),
         json, poin,
         setTimeout(() => {
             if (conn.tebaklogo[id]) conn.sendButton(m.chat, `Waktu habis!\nJawabannya adalah *${json.hasil.data.jawaban}*`, set.wm, null, [
                 ['tebaklogo', '/tebaklogo']
-            ], conn.tebaklogo[id][0], fakes, adReply)
+            ], conn.tebaklogo[id][0], m)
             delete conn.tebaklogo[id]
         }, timeout)
     ]

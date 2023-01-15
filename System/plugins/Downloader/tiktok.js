@@ -1,11 +1,11 @@
 import axios from 'axios'
-const { API, opts } = (await import('../../lib/helper.js')).default 
+const { API } = (await import('../../lib/helper.js')).default 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
     if (!args[0]) throw `contoh:\n ${usedPrefix}${command} https://www.tiktok.com/@omagadsus/video/7025456384175017243`
     let res = (await axios.get(API('males', '/tiktok', { url: args[0] } ))).data;
     if (res.status != 200) throw res.message;
     if (!res) throw res.message;
-    conn.sendButtonVid(m.chat, res.video, `*Judul:* ${res.title}\n${res.author ? `*Pembuat Video:* ${res.author}` : '\n' }`.trim(), 'Cara simpan digalery:\n1. Download dulu videonya\n2. Buka terus klik titik 3 pojok kanan atas\n3. lalu klik simpan!', 'menu', usedPrefix + 'menu', fakes, adReply)
+    conn.sendButtonVid(m.chat, res.video, `*Judul:* ${res.title}\n${res.author ? `*Pembuat Video:* ${res.author}` : '\n' }`.trim(), 'Cara simpan digalery:\n1. Download dulu videonya\n2. Buka terus klik titik 3 pojok kanan atas\n3. lalu klik simpan!', 'menu', usedPrefix + 'menu', m)
 }
 handler.help = ['tiktok'].map(v => v + ' <url>')
 handler.tags = ['downloader']
@@ -34,7 +34,7 @@ let p = await tiktok(args[0])
 *📒Description:* ${p.description}
 *Url:* ${p.url}
 `.trim()
-conn.send2ButtonVid(m.chat, p.link, cap, wm, `No Wm`, `.tiktoknowm ${args[0]}`, `Audio`, `.tiktokaudio ${args[0]}`, fakes, adReply)
+conn.send2ButtonVid(m.chat, p.link, cap, wm, `No Wm`, `.tiktoknowm ${args[0]}`, `Audio`, `.tiktokaudio ${args[0]}`, m)
 } catch (e) {
     throw e
     }

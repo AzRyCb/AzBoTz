@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-let handler = async (m, { usedPrefix, command }) => {
+let handler = async (m, { usedPrefix, conn, command }) => {
         let f = await fetch(`https://api.alquran.cloud/v1/surah`)
         let xx = await f.json()
         let str = xx.data.map((v, index) => {

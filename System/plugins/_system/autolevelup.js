@@ -1,44 +1,22 @@
 import { levelup, canLevelUp, xpRange } from '../../lib/levelling.js'
 import db from '../../lib/database.js'
 
-export async function before(m, { conn }) {
-    let user = db.data.users[m.sender]
-    if (!user.autolevelup)
-        return !0
-    if (!canLevelUp(user.level, user.exp, set.multiplier)) {
-        let { min, xp, max } = xpRange(user.level, set.multiplier)
-        throw `
-Level ${user.level} 📊
-*${user.exp - min} / ${xp}*
-Kurang *${max - user.exp}* lagi! ✨
-`.trim()
-    }
-    let before = user.level * 1
-    while (canLevelUp(user.level, user.exp, set.multiplier)) user.level++
-    if (before !== user.level) {
-        let teks = `Selamat ${conn.getName(m.sender)} naik 🧬level\n.             ${user.role}`
-        let str = `${conn.getName(m.sender)} naik 🧬level\n.             ${user.role}
-
-*🎉 C O N G R A T S 🎉*
-*${before}* ➔ *${user.level}* [ *${user.role}* ]
-
-• 🧬Level Sebelumnya : ${before}
-• 🧬Level Baru : ${user.level}
-• Pada Jam : ${new Date().toLocaleString('id-ID')}
-
-*Note:* _Semakin sering berinteraksi dengan bot Semakin Tinggi level kamu_
-`.trim()
-            let knights = await(await import('knights-canvas'))
-            let image = await new knights.Up()
-    .setAvatar(hwaifu.getRandom())
-    .toAttachment();
-  let data = image.toBuffer();
-            try {
-            let img = await levelup(teks, user.level)
-            conn.sendButton(m.chat, str, set.botdate, img, [['INVENTORY', '.inv']], m)
-            } catch (e) {
-            conn.sendButton(m.chat, str, set.botdate, data, [['INVENTORY', '.inv']], m)
-            }
-
-    }
-}
+ export function before(m) { 
+     let user = db.data.users[m.sender] 
+     if (!user.autolevelup) 
+         return !0 
+     let before = user.level * 1 
+     while (canLevelUp(user.level, user.exp, set.multiplier)) 
+         user.level++ 
+  
+     if (before !== user.level) { 
+         user.role = set.rpg.role(user.level).name 
+         m.reply(` 
+ ᴄᴏɴɢʀᴀᴛᴜʟᴀᴛɪᴏɴs, ${this.getName(m.sender)} ʟᴇᴠᴇʟᴇᴅ ᴜᴩ﹗ 
+ • 🏅 ᴩʀᴇᴠɪᴏᴜs ʟᴇᴠᴇʟ : ${before} 
+ • 🏅 ɴᴇᴡ ʟᴇᴠᴇʟ : ${user.level} 
+ • 🏅 ʀᴏʟᴇ : ${user.role} 
+ ᴜsᴇ *.profile* ᴛᴏ ᴄʜᴇᴄᴋ 
+         `.trim()) 
+     } 
+ } 

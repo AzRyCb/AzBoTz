@@ -104,7 +104,7 @@ function makeInMemoryStore() {
            id: jid
        }
        if (!chats[jid].imgUrl) {
-           const url = await profilePictureUrl(jid, 'image').catch(() => './src/avatar_contact.png')
+           const url = await profilePictureUrl(jid, 'image').catch(() => './src/img/avatar_contact.png')
            if (url) chats[jid].imgUrl = url
        }
        return chats[jid].imgUrl

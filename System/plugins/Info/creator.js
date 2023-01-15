@@ -101,7 +101,7 @@ const sections = [
    {
 	title: `${set.htjava} OWNER –––––––––·•`,
 	rows: [
-	    {title: "📱 • Nomor", rowId: ".owner nomor"},
+	    {title: "📱 • Nomor", rowId: ".nomorowner"},
 	{title: "🎨 • Biodata", rowId: ".owner bio"},
 	{title: "🌐 • Sosmed", rowId: ".owner sosmed"},
 	{title: "🌎 • Script", rowId: ".sc"},

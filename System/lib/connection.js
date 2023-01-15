@@ -33,7 +33,7 @@ const store = makeInMemoryStore()
 store.readFromFile(storeFile)
 
 const logger = P({
-    level: 'error', //fatal, atau debug
+    //level: 'debug', //fatal, atau debug
     timestamp: () => `,"time":"${new Date().toJSON()}"`,
     transport: {
       target: 'pino-pretty',
@@ -49,12 +49,8 @@ const logger = P({
 const hehe = async (conn, jid, options) => {
     //const peth = (await import('node-fetch')).default
     const txt = `\n[ ✅ ] Berhasil terhubung ke SC AzBoTz-MD.\n\nsaya berjanji tidak akan menjual belikan script ini.\nterimakasih @${jid.split`@`[0]}, karena sudah memberikan script gratis ini.\n\n\n📑Sumber Script:\nhttps://tinyurl.com/2apdztcj`
-    try {
         // @ts-ignore
         return conn.sendMessage(jid, { text: txt, mentions: [jid], ...options }, { quoted: set.fkontak, ephemeralExpiration: 86400, ...options })
-    } catch (e) {
-         console.error(e)
-    }
   }
 
   let [
@@ -103,7 +99,7 @@ if (requiresPatch) {
 return message;
 }
 }
-
+//  
 /** 
  * @typedef {{ 
  *  handler?: typeof import('../handler').handler; 
@@ -243,10 +239,10 @@ async function connectionUpdate(opts, update) {
     //this.logger?.info(update)
     const { qr, receivedPendingNotifications, connection, lastDisconnect, isNewLogin, isOnline } = update
     //if (isNewLogin) this.isInit = true
-    //if (connection) console.info(chalk.yellow("Connection: " + connection))
-    if (isOnline == true) console.info('📱 Status Online')
-    if (isOnline == false) console.info('📱 Status Offline')
-    if (receivedPendingNotifications == false) console.warn('💬 Loading Old Messages')
+    //if (connection) this.logger?.info(chalk.yellow("Connection: " + connection))
+    if (isOnline == true) this.logger?.info('📱 Status Online')
+    if (isOnline == false) this.logger?.info('📱 Status Offline')
+    if (receivedPendingNotifications == false) this.logger?.warn('💬 Loading Old Messages')
     if (connection == "connecting" || receivedPendingNotifications == false) console.log(chalk.redBright('🕛 Mengaktifkan Bot, Harap tunggu sebentar...'))
     if (connection == 'open') this.logger?.info(`[Connected] ` + JSON.stringify(this.user, null, 2))
     //lolcatjs.fromstring(`[Connected] ` + JSON.stringify(this.user, null, 2))
@@ -256,13 +252,13 @@ async function connectionUpdate(opts, update) {
         timestamp.connect = new Date
     }
     if (db.data == null) loadDatabase() 
-    //console.log(JSON.stringify(update, null, 4))
+    //this.logger?.info(JSON.stringify(update, null, 4))
     //this.logger?.info("MENGONEKSIKAN KE DATABASE...")
     
     try{
 	if (connection === 'close') {
 		let reason = new Boom(lastDisconnect?.error)?.output.statusCode
-        console.error('⏱️ Connection stopped and tried to reconnect...')
+        this.logger?.error('⏱️ Connection stopped and tried to reconnect...')
         //global.set.timestamp.connect = new Date
 		if (reason === DisconnectReason.badSession) {this.logger?.info(`Bad Session File, Please Delete ${authFolder} and Scan Again`); 
             this.logout(); 
@@ -318,6 +314,7 @@ this.sendButton('6281358919342@s.whatsapp.net', pesan, 'MyWA BOT HOSTING', ["MEN
 //hehe('6285722037770@s.whatsapp.net').catch(err => { return !0 }) //ubah ini masuk neraka
 
 // pale db kurang cum:v
+//if (db.data.users[who].jadibot == true) return
     if (!existsSync('System/data/jadibot')) return 
         // @ts-ignore
         let listJadiBot = readdirSync('System/data/jadibot').filter(v => !isNaN(v))
@@ -327,11 +324,11 @@ this.sendButton('6281358919342@s.whatsapp.net', pesan, 'MyWA BOT HOSTING', ["MEN
                 await delay(3000) //supaya gk load platform 
                 await jadibot.starts(jid + '@s.whatsapp.net').catch(_=>_)
 	        }
-            console.info('💬 Waiting New Messages')   
+            this.logger?.info('💬 Waiting New Messages')   
         }
         if (qr != null && qr != undefined) {
-           console.log('🚩 Scan QR Dibawah, Qr Expired Dalam 20 Detik.')
-           console.log('\nQR : ', chalk.green(qr)) // have no idea
+           this.logger?.info('🚩 Scan QR Dibawah, Qr Expired Dalam 20 Detik.')
+           this.logger?.info('\nQR : ', chalk.green(qr)) // have no idea
         }
         
 } catch (e) {
