@@ -11,9 +11,7 @@
         "System/tmp": "System/tmp"
     },
     "scripts": {
-        "start": "node . --autocleartmp --server",
-        "start2": "node . --clearses --autocleartmp --img",
-        "server": "node . --autocleartmp --server",
+        "start": "node . --clearses --autocleartmp --server --restrict --db ''",
         "test": "node test.js",
         "test2": "nodemon index.js"
     },

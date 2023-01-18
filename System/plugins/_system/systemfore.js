@@ -50,13 +50,13 @@ const isAntiToxic = isToxic.exec(m.text)
 if (chat.antiToxic && isAntiToxic) {
     if (m.isBaileys && m.fromMe) return !0
     if (!m.isGroup) return !1
-        conn.sendButton(m.chat, `*Kata Kasar Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, 'Utamakan kesopanan dalam mengetik', ['off antitoxic', '.off antitoxic'], m, adReply)
+        conn.sendButton(m.chat, `*Kata Kasar Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, 'Utamakan kesopanan!', ['off antitoxic', '.off antitoxic'], m)
         if (isBotAdmin && setting.restrict) {
             // await conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
     db.data.users[m.sender].warn += 1
     //db.data.users[m.sender].banned = true
     return conn.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id:  m.key.id, participant: m.key.participant }})
-        } else if (!setting.restrict) return conn.reply(m.chat, 'bertaubatlah sebelum kematian')
+        } else if (!setting.restrict) return conn.reply(m.chat, `Warn: +1\nbertaubatlah sebelum kematian`)
     }
 
 const isAntiSatir = isSatir.exec(m.text)
@@ -66,7 +66,7 @@ if (chat.antiSatir && isAntiSatir) {
         conn.sendButton(m.chat, `*Kata Satir Terdeteksi!* ${isBotAdmin ? '' : '\n\n_Bot bukan atmin_'}`, wm, ['off antisatir', '/disable antisatir'], m)
         if (isBotAdmin && setting.restrict) {
             // await conn.groupParticipantsUpdate(m.chat, [m.sender], 'remove')
-    db.data.users[m.sender].warn += 1
+    //db.data.users[m.sender].warn += 1
     //db.data.users[m.sender].banned = true
     return conn.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: false, id: m.key.id, participant: m.key.participant }})
         } else if (!setting.restrict) return conn.reply(m.chat, 'Biar ngapa kek gitu!')

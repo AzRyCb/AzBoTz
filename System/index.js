@@ -73,7 +73,7 @@ function start(file) {
     isRunning = false
     console.error('[❗] Exited with code:', code)
     //start.apply(this, arguments)
-    //if (code = 'SIGKILL') start('./main.js')
+    if (code = 'SIGKILL') start('./main.js')
     if (code === '1') start('./main.js')
     if (code === '0') return 
     watchFile(args[0], () => {

@@ -7,15 +7,15 @@
 <a href="#"><img title="Panduan" src="https://img.shields.io/badge/Change session & Apikey before using-red?colorA=%255ff0000&colorB=%23017e40&style=for-the-badge"></a>
 </p>
 <p align="center">
-<a href="https://github.com/AzRyCb/ForBotz/network/members"><img title="Forks" src="https://img.shields.io/github/forks/PilarV2/ZEUSBOTZ-MD?label=Forks&color=blue&style=flat-square"></a>
-<a href="https://github.com/AzRyCb/ForBotz/watchers"><img title="Watchers" src="https://img.shields.io/github/watchers/PilarV2/ZEUSBOTZ-MD?label=Watchers&color=green&style=flat-square"></a>
-<a href="https://github.com/AzRyCb/ForBotz/stargazers"><img title="Stars" src="https://img.shields.io/github/stars/PilarV2/ZEUSBOTZ-MD?label=Stars&color=yellow&style=flat-square"></a>
-<a href="https://github.com/AzRyCb/ForBotz/graphs/contributors"><img title="Contributors" src="https://img.shields.io/github/contributors/PilarV2/ZEUSBOTZ-MD?label=Contributors&color=blue&style=flat-square"></a>
-<a href="https://github.com/AzRyCb/ForBotz/issues"><img title="Issues" src="https://img.shields.io/github/issues/PilarV2/ZEUSBOTZ-MD?label=Issues&color=success&style=flat-square"></a>
-<a href="https://github.com/AzRyCb/ForBotz/issues?q=is%3Aissue+is%3Aclosed"><img title="Issues" src="https://img.shields.io/github/issues-closed/PilarV2/ZEUSBOTZ-MD?label=Issues&color=red&style=flat-square"></a>
-<a href="https://github.com/AzRyCb/ForBotz/pulls"><img title="Pull Request" src="https://img.shields.io/github/issues-pr/PilarV2/ZEUSBOTZ-MD?label=PullRequest&color=success&style=flat-square"></a>
+<a href="https://github.com/AzRyCb/azbot/network/members"><img title="Forks" src="https://img.shields.io/github/forks/PilarV2/ZEUSBOTZ-MD?label=Forks&color=blue&style=flat-square"></a>
+<a href="https://github.com/AzRyCb/azbot/watchers"><img title="Watchers" src="https://img.shields.io/github/watchers/PilarV2/ZEUSBOTZ-MD?label=Watchers&color=green&style=flat-square"></a>
+<a href="https://github.com/AzRyCb/azbot/stargazers"><img title="Stars" src="https://img.shields.io/github/stars/PilarV2/ZEUSBOTZ-MD?label=Stars&color=yellow&style=flat-square"></a>
+<a href="https://github.com/AzRyCb/azbot/graphs/contributors"><img title="Contributors" src="https://img.shields.io/github/contributors/PilarV2/ZEUSBOTZ-MD?label=Contributors&color=blue&style=flat-square"></a>
+<a href="https://github.com/AzRyCb/azbot/issues"><img title="Issues" src="https://img.shields.io/github/issues/PilarV2/ZEUSBOTZ-MD?label=Issues&color=success&style=flat-square"></a>
+<a href="https://github.com/AzRyCb/azbot/issues?q=is%3Aissue+is%3Aclosed"><img title="Issues" src="https://img.shields.io/github/issues-closed/PilarV2/ZEUSBOTZ-MD?label=Issues&color=red&style=flat-square"></a>
+<a href="https://github.com/AzRyCb/azbot/pulls"><img title="Pull Request" src="https://img.shields.io/github/issues-pr/PilarV2/ZEUSBOTZ-MD?label=PullRequest&color=success&style=flat-square"></a>
 <a href="https://www.youtube.com/channel/UC3zScvuQfMxqiTC5x_JUEng"><img src="https://img.shields.io/youtube/channel/subscribers/UC3zScvuQfMxqiTC5x_JUEng?style=social" /> <br>
-<a href="https://github.com/AzRyCb/ForBotz/pulls?q=is%3Apr+is%3Aclosed"><img title="Pull Request" src="https://img.shields.io/github/issues-pr-closed/PilarV2/ZEUSBOTZ-MD?label=PullRequest&color=red&style=flat-square"></a>
+<a href="https://github.com/AzRyCb/azbot/pulls?q=is%3Apr+is%3Aclosed"><img title="Pull Request" src="https://img.shields.io/github/issues-pr-closed/PilarV2/ZEUSBOTZ-MD?label=PullRequest&color=red&style=flat-square"></a>
 </p>
 
 ---------
@@ -25,7 +25,6 @@
  - License: [MIT](https://en.wikipedia.org/wiki/MIT_License)
  - Bot ini menggunakan apikey & scrapper
  - Default Prefixes: `!, @, #, $, %, ^, &, /, .`
- - use npm version: npm:baileys@Latest
   
 [![BOT WHATSAPP](https://img.shields.io/badge/WhatsApp%20BOT-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/6283879175089) 
 [![ONWER](https://img.shields.io/badge/Owner%20BOT-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://wa.me/6285795035419) 

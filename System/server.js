@@ -10,7 +10,7 @@ function connect(conn, PORT) {
     let app = global.app = express()
     let server = global.server = createServer(app)
     let _qr = 'invalid'
-    
+    /*
     conn.ev.on('connection.update', function appQR({ qr }) {
         if (qr) _qr = qr
     })
@@ -19,6 +19,7 @@ function connect(conn, PORT) {
         res.setHeader('content-type', 'image/png')
         res.end(await toBuffer(_qr))
     })
+    */
     app.use(express.static(path.join(Helper.__dirname(import.meta.url), 'views')))
     
     let io = new Server(server)
