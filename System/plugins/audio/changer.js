@@ -20,7 +20,7 @@ if (/smooth/.test(command)) set = '-filter:v "minterpolate=\'mi_mode=mci:mc_mode
 if (/tupai|squirrel|chipmunk/.test(command)) set = '-filter:a "atempo=0.5,asetrate=65100"'
 if (/audio/.test(mime)) {
 let ran = getRandom('.mp3')
-let filename = join(__dirname, '../tmp/' + ran)
+let filename = join(__dirname, '../../tmp/' + ran)
 let media = await q.download(true)
 exec(`ffmpeg -i ${media} ${set} ${filename}`, async (err, stderr, stdout) => {
 unlinkSync(media)

@@ -5,13 +5,13 @@
     "main": "System/index.js",
     "type": "module",
     "directories": {
-        "lib": "System/lib",
-        "src": "System/src",
-        "plugins": "System/plugins",
-        "tmp": "tmp"
+        "System/lib": "System/lib",
+        "System/src": "System/src",
+        "System/plugins": "System/plugins",
+        "System/tmp": "System/tmp"
     },
     "scripts": {
-        "start": "node . --autocleartmp",
+        "start": "node . --autocleartmp --server",
         "start2": "node . --clearses --autocleartmp --img",
         "server": "node . --autocleartmp --server",
         "test": "node test.js",
@@ -62,6 +62,7 @@
         "hxz-api": "latest",
         "human-readable": "latest",
         "image-to-base64": "latest",
+        "instagram-url-direct": "latest",
         "jsdom": "latest",
         "jimp": "latest",
         "link-preview-js": "latest",
@@ -72,6 +73,7 @@
         "moment-timezone": "latest",
         "mongoose": "latest",
         "mime-types": "latest",
+        "node-os-utils": "latest",
         "node-fetch": "^3.2.0",
         "node-webpmux": "latest",
         "node-gtts": "latest",

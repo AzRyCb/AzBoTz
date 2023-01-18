@@ -6,7 +6,7 @@ import { join } from 'path'
 const __dirname = Helper.__dirname(import.meta)
 
 export default async function clearTmp() {
-    const tmp = [tmpdir(), join(__dirname, '../../tmp')]
+    const tmp = [tmpdir(), join(__dirname, '../tmp')]
     const filename = []
 
     await Promise.allSettled(tmp.map(async (dir) => {

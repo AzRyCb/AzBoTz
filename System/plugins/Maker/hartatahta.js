@@ -41,7 +41,7 @@ import { join } from 'path'
 
 let __dirname1 = __dirname(import.meta.url)
 let src = join(__dirname1, '../../src/')
-let tmp = join(__dirname1, '../../../tmp/')
+let tmp = join(__dirname1, '../../tmp/')
 let _font = join(src, 'font')
 let aesthetic = join(src, 'Aesthetic')
 

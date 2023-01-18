@@ -17,18 +17,16 @@ import {tmpdir, platform} from 'os'
 import {join} from 'path'
 
 (async() => {
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
-process.on('uncaughtException', console.error)
 
 //-- GLOBAL NEW
+//const __dirname1 = __dirname(import.meta.url)
+const exec = promisify(_exec).bind(cp)
+const __dirname1 = __dirname(import.meta)
+
 global.set = {
 conect: Connection,
 jbot: jadibot
 }
-
-//const __dirname1 = __dirname(import.meta.url)
-const exec = promisify(_exec).bind(cp)
-const __dirname1 = __dirname(import.meta)
 
 protoType()
 serialize()
@@ -50,7 +48,7 @@ loadPluginFiles(pluginFolder, pluginFilter, {
 
 setInterval(async () => {
     //await exec("pm2 restart System/index.js")
-    await exec("reset System/index.js")
+    await exec("restart System/index.js")
   }, 60 * 60 * 1000)
 
 if (opts['clearses']) {

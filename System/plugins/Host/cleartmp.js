@@ -7,7 +7,7 @@ const TIME = 1000 * 60 * 3
 const __dirname1 = __dirname(import.meta)
 let handler = async (m, { conn, usedPrefix: _p, dirname, args }) => { //dirnamme
 
-const tmp = [tmpdir(), join(__dirname1, '../../../tmp')]
+const tmp = [tmpdir(), join(__dirname1, '../../tmp')]
 const filename = []
 
 await Promise.allSettled(tmp.map(async (dir) => {

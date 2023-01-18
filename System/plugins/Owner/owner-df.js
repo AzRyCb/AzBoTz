@@ -1,8 +1,7 @@
-
 import { join } from 'path'
 import {unlinkSync,} from 'fs'
 import {plugins} from '../../lib/plugins.js'
-let handler = async (m, { conn, usedPrefix: _p, __dirname, args, text }) => {
+let handler = async (m, { conn, usedPrefix, __dirname, args, text }) => {
 
 let ar = Object.keys(plugins)
     let ar1 = ar.map(v => v.replace('.js', ''))

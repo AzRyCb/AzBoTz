@@ -1,8 +1,10 @@
 // @ts-check
 console.log('🐾 Starting Whatsapp bot...')
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+process.on('uncaughtException', console.error)
 
 //-- module eksternal
-//import {createServer} from 'http'
+import {createServer} from 'http'
 import { join, dirname } from 'path'
 import { createRequire } from 'module'
 import { fileURLToPath } from 'url'
@@ -31,6 +33,7 @@ say(`'${name}' By @${author.name || author}\n${version}`, {
   align: 'center',
   gradient: ['red', 'magenta']
 })
+
 
 var isRunning = false
 /**

@@ -39,6 +39,7 @@ import Func from './func.js'
 import { imageToWebp, videoToWebp, writeExifImg, writeExifVid, toAudio, toPTT } from './sistem.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const __dirname2 = Helper.__dirname(import.meta.url)
 let Defaultephemeral = true
 const ephemeral = (Defaultephemeral) ? WA_DEFAULT_EPHEMERAL : global.set.ephemeral
 /** 
@@ -78,7 +79,7 @@ export function HelperConnection(conn, { store, logger }) {
             this.battery = Object.fromEntries(Object.entries(json[2][0][1]).map(v => [v[0], eval(v[1])]))
           }),
           */
-        getFile: {
+          getFile: {
             /**
              * getBuffer hehe
              * @param {fs.PathLike} PATH 
@@ -185,7 +186,7 @@ export function HelperConnection(conn, { store, logger }) {
                 const opt = {}
 
                 if (quoted) opt.quoted = quoted
-                if (!file) if (options.asDocument) options.asDocument = true
+                if (!file.ext === '.bin') options.asDocument = true
 
                 if (/webp/.test(file.mime) || (/image/.test(file.mime) && options.asSticker)) mtype = 'sticker'
                 else if (/image/.test(file.mime) || (/webp/.test(file.mime) && options.asImage)) mtype = 'image'

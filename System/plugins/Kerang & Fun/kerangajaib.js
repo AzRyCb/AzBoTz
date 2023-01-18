@@ -1,6 +1,6 @@
 let handler = async (m, { conn, text, command, usedPrefix }) => {
     if (!text) throw `Use example ${usedPrefix}${command} i'm alien?`
-   conn.reply(m,chat, `"${[
+   conn.reply(m.chat, `"${[
         'Mungkin suatu hari',
         'Tidak juga',
         'Tidak keduanya',

@@ -245,6 +245,7 @@ async function connectionUpdate(opts, update) {
     if (receivedPendingNotifications == false) this.logger?.warn('💬 Loading Old Messages')
     if (connection == "connecting" || receivedPendingNotifications == false) console.log(chalk.redBright('🕛 Mengaktifkan Bot, Harap tunggu sebentar...'))
     if (connection == 'open') this.logger?.info(`[Connected] ` + JSON.stringify(this.user, null, 2))
+    //console.log(colors.green(`Connected, you login as ${conn.user.name || client.user.verifiedName}`))
     //lolcatjs.fromstring(`[Connected] ` + JSON.stringify(this.user, null, 2))
     const code = new Boom(lastDisconnect?.error)?.output.statusCode || new Boom(lastDisconnect?.error)?.output?.payload?.statusCode
     if (code && code !== DisconnectReason.loggedOut && code !== DisconnectReason.badSession && code !== DisconnectReason.connectionReplaced && this?.ws.readyState !== ws.CONNECTING) {
@@ -326,6 +327,13 @@ this.sendButton('6281358919342@s.whatsapp.net', pesan, 'MyWA BOT HOSTING', ["MEN
 	        }
             this.logger?.info('💬 Waiting New Messages')   
         }
+        /*
+        if (lastDisconnect == 'undefined' && qr != 'undefined') {
+            qrcode.generate(qr, {
+               small: true
+            })
+         }
+         */
         if (qr != null && qr != undefined) {
            this.logger?.info('🚩 Scan QR Dibawah, Qr Expired Dalam 20 Detik.')
            this.logger?.info('\nQR : ', chalk.green(qr)) // have no idea

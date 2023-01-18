@@ -47,6 +47,18 @@ global.set = {
   timestamp: {
     start: Date.now()
   },
+
+/*Donasi*/
+saweria: "https://saweria.com/AzRyCb",
+dana: "085795035419",
+pulsa: "085722037770",
+trakteer: "https://trakteer.id/AzRyCb",
+paypal: "azry695@gmail.com",
+gopay: "085722037770",
+ovo: "085722037770",
+pulsa2: "085795035419",
+
+  openaikey: "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",
   lolkey: "ed78c137a46873c5b8e5fe3b",
   xteamkey: "HIRO",
   xckey: "7iyNa0qA",
@@ -142,7 +154,7 @@ global.set = {
   cmenuf: '┗──┅───────┅๑\n',
   cmenua: '\n⌕ ❙❘❙❙❘❙❚❙❘❙❙❚❙❘❙❘❙❚❙❘❙❙❚❙❘❙❙❘❙❚❙❘ ⌕\n     ',
   pmenus: pickRandom(["◈","➭","ଓ","⟆•","⳻⳻","•","↬","◈▻","⭑","ᯬ","◉","᭻","»","〆","々","⛥","✗","⚜","⚚","♪"]),
-
+  emojis: pickRandom(["👑", "🎗", "️🗿", "🕹", "️💡", "🪄", "🎈", "🎊", "🔖", "📍", "❤", "‍🔥", "💤", "💭", "🕚", "💬", "🚩", "🎐", "🍃", "🌿", "🥀", "✨", "⚡", "☂️"]),
   flaaa: [
     "https://flamingtext.com/net-fu/proxy_form.cgi?script=chrominium-logo&_loc=generate&imageoutput=true&script=water-logo&doScale=true&scaleWidth=500&scaleHeight=500&fontsize=100&fillTextType=0&backgroundColor=%23101820&text=",  
     "https://flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=water-logo&script=water-logo&fontsize=90&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&fillTextColor=%23000&shadowGlowColor=%23000&backgroundColor=%23000&text=",

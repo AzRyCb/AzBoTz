@@ -133,11 +133,11 @@ this.sendMessage(m.chat, {
 }
 
 if (/^@zry|@Az|@6285795035419|6285795035419|@6285722037770|6285722037770$/i.test(m.text)) {
-this.send3ButtonImg(m.chat, 'https://telegra.ph/file/816fe31b3d02ff785dddf.jpg', "*Ada Apa Tag owner Gua Ngab?🤨*", '=====『 TAG TERDETEKSI 』=====', 'OWNER', '.owner', 'KEMBALI', '.menu', 'STORE', '.store', m)
+this.sendButton(m.chat, "*Ada Apa Tag owner Gua Ngab?🤨*", '=====『 TAG TERDETEKSI 』=====', 'https://telegra.ph/file/816fe31b3d02ff785dddf.jpg', [['OWNER', '.owner'], ['KEMBALI', '.menu'], ['STORE', '.store']], m)
 }
 
 if (/^salken$/i.test(m.text)) {
-this.sendButton(m.chat, `Halo Kak👋\nSaya adalah AzBotZ, AzBotZ adalah Sebuah Bot yang bisa membantumu di grup ini, klik tombol dibawah ini jika kamu ingin menggunakan bot!`.trim(), null, 'Menu', '.menu', m)
+this.sendButton(m.chat, `Halo Kak👋\nSaya adalah AzBotZ, AzBotZ adalah Sebuah Bot yang bisa membantumu di grup ini, klik tombol dibawah ini jika kamu ingin menggunakan bot!`.trim(), null, null, ['Menu', '.menu'], m)
 }
 
 if (/^canda|becanda|bejanda$/i.test(m.text)) {
@@ -213,7 +213,7 @@ if (/^(bot|robot|woi|Cok|ngab|tod|bang|hai|hi|hii)$/i.test(m.text)) {
     }
 
 if (/^bot$/i.test(m.text)) {
-    this.sendButton(m.chat, !(m.isGroup || m.isPrems) && setting.group ? 'hanya grup' : chat.isBanned ? 'chat banned' : user.banned ? 'user banned' : 'AzBoTz aktif', set.wm, !(m.isGroup || m.isPrems) && setting.group ? 'donasi' : chat.isBanned ? 'unban' : user.banned ? 'minta owner kalo mau di unban' : 'donasi', !(m.isGroup || m.isPrems) && setting.group ? '.donasi' : chat.isBanned ? '.unban' : user.banned ? '.owner' : '.donasi', m)
+    this.send1Button(m.chat, !(m.isGroup || m.isPrems) && setting.group ? 'hanya grup' : chat.isBanned ? 'chat banned' : user.banned ? 'user banned' : 'AzBoTz aktif', set.wm, !(m.isGroup || m.isPrems) && setting.group ? 'donasi' : chat.isBanned ? 'unban' : user.banned ? 'minta owner kalo mau di unban' : 'donasi', !(m.isGroup || m.isPrems) && setting.group ? '.donasi' : chat.isBanned ? '.unban' : user.banned ? '.owner' : '.donasi', m)
 }
 
 }

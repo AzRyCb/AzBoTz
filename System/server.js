@@ -1,11 +1,10 @@
-// @ts-check
-import express from 'express' //gk bs
-import {join} from 'path'
-import {createServer} from 'http'
+import express from 'express'
+import path from 'path'
+import { createServer } from 'http'
 import { Server } from 'socket.io'
-import {toBuffer} from 'qrcode'
+import { toBuffer } from 'qrcode'
 import fetch from 'node-fetch'
-const { opts, __dirname } = (await import('./lib/helper.js')).default 
+import Helper from './lib/helper.js'
 
 function connect(conn, PORT) {
     let app = global.app = express()
@@ -20,7 +19,7 @@ function connect(conn, PORT) {
         res.setHeader('content-type', 'image/png')
         res.end(await toBuffer(_qr))
     })
-    app.use(express.static(join(__dirname(import.meta.url), 'views')))
+    app.use(express.static(path.join(Helper.__dirname(import.meta.url), 'views')))
     
     let io = new Server(server)
     io.on('connection', socket => {
@@ -28,9 +27,17 @@ function connect(conn, PORT) {
         socket.once('disconnect', unpipeEmit)
     })
 
+    app.set('json spaces', 2)
+    app.get('*', async (req, res) => {
+       res.json({
+          online: true,
+          msg: `Server running with port ${PORT}`,
+          server: await (await fetch('http://ip-api.com/json')).json()
+       })
+    })
+
     server.listen(PORT, () => {
         console.log('App listened on port', PORT)
-        //if (opts['keepalive']) 
         keepAlive()
     })
 }
@@ -55,6 +62,5 @@ function keepAlive() {
         fetch(url).catch(console.error)
     }, 5 * 1000 * 60)
 }
-
 
 export default connect

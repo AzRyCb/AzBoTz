@@ -1,9 +1,9 @@
 import db from '../../lib/database.js'
 
-let handler = async (m, { args, usedPrefix, __dirname }) => {
+let handler = async (m, { conn, args, usedPrefix, __dirname }) => {
 let imgr = set.flaaa.getRandom()
     let user = db.data.users[m.sender]
-    if (user.health >= 100) return m.reply(`
+    if (user.health >= 100) return conn.reply(m.chat, `
 Your ❤️health is full!
 `.trim())
     const heal = 40 + (user.cat * 4)

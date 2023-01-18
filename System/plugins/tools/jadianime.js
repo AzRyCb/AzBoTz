@@ -1,28 +1,46 @@
+/* Recode By Wudysoft */
+
+import Jimp from 'jimp'
 import axios from 'axios';
 import md5 from 'md5';
-import { v4 as v4uuid } from 'uuid';
-//https://github.com/lmcsu/qq-neural-anime-tg
+import pkg from 'uuid';
+const { v4: v4uuid } = pkg
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
+let handler = async (m, { conn, text, args, usedPrefix, command }) => {
+await conn.sendMessage(m.chat, {
+          react: {
+            text: '⏳',
+            key: m.key,
+          }})
     let q = m.quoted ? m.quoted : m
     let mime = (q.msg || q).mimetype || q.mediaType || ''
-    if (!/image/g.test(mime)) throw `Balas gambar dengan perintah ${usedPrefix + command}`
-        let img = await q.download?.()
-    let res = await jadianime(img)
-    conn.sendFile(m.chat, res.img_urls[0], 'jadianime.jpg', 'Done!', m)
+    if (!/image/g.test(mime)) throw `Balas/Kirim Gambar Dengan Perintah ${usedPrefix + command}!`
+    let image = await q.download?.()
+    let anime = await ToAnime(image)
+    let vid = anime.video_urls
+    let img = anime.img_urls
+    let res = [...vid, ...img]
+    let spas = "                "
+    let listSections = []
+    Object.keys(res).map((v, index) => {
+	listSections.push([spas + "[ RESULT " + ++index + " ]", [
+          ["G E T", usedPrefix + "get " + res[v], "Type: " + res[v].slice(-3)]
+        ]])
+        })
+	return conn.sendList(m.chat, set.htki + " 📺 AI MANGA 🔎 " + set.htka, `⚡ Silakan pilih Model di tombol di bawah...\n*Teks yang anda kirim:* ${text}\n\nKetik ulang *${usedPrefix + command}* teks anda untuk mengubah teks lagi`, set.wm, "☂️ M O D E L ☂️", listSections, m)
 }
 handler.help = ['jadianime'].map(v => v + ' (Balas foto)')
 handler.tags = ['tools']
-handler.command = /^jadianime$/i
-
+handler.command = /^jadianime|toanime$/i
+handler.limit = true
 export default handler
 
-async function jadianime(buffer) {
+async function ToAnime(buffer) {
     try {
         let imgData = buffer.toString('base64')
 
         const obj = {
-            busiId: 'different_dimension_me_img_entry',
+            busiId: 'aiplay_ai_painting_anime_entry',
             extra: JSON.stringify({
                 face_rects: [],
                 version: 2,
@@ -41,7 +59,7 @@ async function jadianime(buffer) {
             (str.length + (encodeURIComponent(str).match(/%[89ABab]/g)?.length || 0)) +
             'HQ31X02e',
             );
-        const response = await axios.request({
+        const response = await axios({
             method: 'POST',
             url: 'https://ai.tu.qq.com/trpc.shadow_cv.ai_processor_cgi.AIProcessorCgi/Process',
             data: obj,
@@ -66,12 +84,12 @@ async function jadianime(buffer) {
             throw 'Couldn\'t pass the censorship. Try another photo.'
         }
         if (response.data.code === 1001) {
-            throw 'Face not found. Try another photo.'
+            throw 'Muka Tertutup oleh sesuatu/Muka Tidak Terlihat, Harap Gunakan Foto Lain!.'
         }
         if (response.data.code === -2100) { // request image is invalid
-            throw 'Try another photo.'
+            throw 'Coba Foto Lain Kak.'
         }
-        if (response.data.code === 2119  /* user_ip_country | service upgrading / response.data.code === -2111 / AUTH_FAILED */) {
+        if (response.data.code === 2119 || /* user_ip_country | service upgrading */ response.data.code === -2111 /* AUTH_FAILED */) {
             throw `Blocked ${JSON.stringify(response.data)}`
         }
         if (!response.data.extra) {
@@ -81,4 +99,10 @@ async function jadianime(buffer) {
     } catch (err) {
         throw err
     }
+}
+
+async function Crop(img, x, y, lebar, tinggi) {
+  let po = await Jimp.read(img);
+  let tong = await po.crop(Number(x), Number(y), Number(lebar), Number(tinggi)).getBufferAsync(Jimp.MIME_JPEG)
+  return tong
 }

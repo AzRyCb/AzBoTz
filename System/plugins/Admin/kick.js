@@ -1,22 +1,25 @@
-import { areJidsSameUser } from '@adiwajshing/baileys'
-let handler = async (m, { conn, participants }) => {
-let users = m.quoted ? [m.quoted.sender] : m.mentionedJid.filter(u => !areJidsSameUser(u, conn.user.id))
-    let kickedUser = []
-    for (let user of users)
-        if (user.endsWith('@s.whatsapp.net') && !(participants.find(v => areJidsSameUser(v.id, user)) || { admin: true }).admin) {
-            const res = await conn.groupParticipantsUpdate(m.chat, [user], "remove")
-            kickedUser.concat(res)
-            await delay(1 * 1000)
-        }
-    conn.reply(m.chat, `*Succes kick* ${kickedUser.map(v => '@' + v.split('@')[0])}`, null, { mentions: kickedUser })
-
+let handler = async (m, { conn, groupMetadata, args, usedPrefix, command }) => {
+let ids = groupMetadata.pbarticipants.filter(p => !p.admin || p.superadmin).map((v) => v.id)
+let text
+let listSections = []
+	Object.keys(ids).map((v, index) => {
+	listSections.push(["Result [ " + ++index + ' ]', [
+          ['❌ KICK ' + conn.getName(ids[v]), usedPrefix + command + ' ' + ids[v], '']
+        ]])
+	})
+	if (args.length >= 1) {
+		text = args.slice(0).join(" ")
+	} else if (m.quoted && m.quoted.sender) {
+		text = m.quoted.sender
+	} else return conn.sendList(m.chat, set.htki + " 📺 Models 🔎 " + set.htka, '⚡ Silakan pilih User', set.wm, "☂️ M O D E L ☂️", listSections, m)
+	
+	if (!ids.includes(text)) throw 'Dia Sudah Out'
+	return conn.groupParticipantsUpdate(m.chat, [text], 'remove')
 }
-handler.help = ['kick', '-'].map(v => 'o' + v + ' @user')
+handler.help = ['kick', '-'].map(v => 'g' + v + ' @user')
 handler.tags = ['admin']
-handler.command = /^(gkick|g-)$/i
+handler.command = /^g?kick$/i
 
-handler.botAdmin = handler.group = handler.admin = true
+handler.group = handler.botAdmin = true
 
 export default handler
-
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
