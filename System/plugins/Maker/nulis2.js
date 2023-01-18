@@ -8,7 +8,7 @@ let handler = async (m, { conn, args }) => {
     if (!set.support.convert &&
         !set.support.magick &&
         !set.support.gm) return handler.disabled = true // Disable if doesnt support
-    let inputPath = './src/kertas/magernulis1.jpg'
+    let inputPath = './src/img/magernulis1.jpg'
     let d = new Date
     let tgl = d.toLocaleDateString('id-Id')
     let hari = d.toLocaleDateString('id-Id', { weekday: 'long' })
