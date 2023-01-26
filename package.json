@@ -36,7 +36,7 @@
     "awesome-phonenumber": "^2.70.0",
     "brainly-scraper-v2": "^2.0.9",
     "cfonts": "^2.10.0",
-    "chalk": "^4.1.1",
+    "chalk": "^5.0.0",
     "cheerio": "^1.0.0-rc.10",
     "emoji-api": "^2.0.1",
     "express": "^4.17.3",
